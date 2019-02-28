@@ -1,0 +1,5 @@
+*.cbp
+*.layout
+*.depend
+Makefile
+build/*
