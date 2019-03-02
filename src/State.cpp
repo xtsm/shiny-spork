@@ -23,6 +23,10 @@ void State::ProcessEvents(sf::Window& window) {
         }
         break;
 
+      case sf::Event::Closed:
+        window.close();
+        break;
+
       default:ProcessEvent(event);
     }
   }
