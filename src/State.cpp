@@ -10,6 +10,10 @@ void State::ProcessEvents(sf::Window& window) {
     switch (event.type) {
 
       case sf::Event::MouseButtonPressed:
+      case sf::Event::MouseButtonReleased:
+      case sf::Event::MouseMoved:
+      case sf::Event::MouseEntered:
+      case sf::Event::MouseLeft:
         for (const auto priority_widget : WidgetPriorityQueue) {
           if (priority_widget.widget.PointCheck(event.mouseButton.x,
                                                 event.mouseButton.y)) {
