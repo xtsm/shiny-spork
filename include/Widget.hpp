@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <State.hpp>
+
+class State;
 
 class Widget {
  public:
@@ -11,7 +12,7 @@ class Widget {
   virtual void ProcessEvent(sf::Event& event) = 0;
 
 //  Проверяет приналдежность точки виджету
-  virtual bool PointCheck(int x, int y) = 0;
+  virtual const bool PointCheck(int x, int y) = 0;
 
  protected:
   State& state;
