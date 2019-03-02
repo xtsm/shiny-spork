@@ -6,5 +6,5 @@ class MainMenuState: public State {
   MainMenuState(StateManager& states);
   void Tick();
   void Draw(sf::RenderTarget &target);
-  void ProcessEvents(sf::Window &wnd);
+  void ProcessEvent(sf::Event &event);
 };
