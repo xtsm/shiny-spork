@@ -12,7 +12,6 @@ int main() {
     states.GetActiveState()->Tick();
     states.GetActiveState()->Draw(wnd);
     wnd.display();
-    states.CommitStateChange();
   }
   return 0;
 }

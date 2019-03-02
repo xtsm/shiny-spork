@@ -6,10 +6,8 @@ class StateManager {
   StateManager();
   ~StateManager();
   State* GetActiveState();
-  void QueryStateChange(State* state);
-  void CommitStateChange();
+  void ChangeState(State* state);
  protected:
   MainMenuState* main_menu;
   State* active_state;
-  State* new_active_state;
 };
