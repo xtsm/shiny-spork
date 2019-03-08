@@ -10,4 +10,7 @@ class StateManager {
  protected:
   MainMenuState* main_menu;
   State* active_state;
+ private:
+  StateManager(const StateManager&) = delete;
+  StateManager& operator=(const StateManager&) = delete;
 };

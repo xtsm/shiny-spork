@@ -1,12 +1,14 @@
 #include <State.hpp>
 
-State::State(StateManager& states) : states(states) {}
+State::State(StateManager& states) :
+    states_(states),
+    draw_queue_(),
+    selected_(nullptr),
+    clicked_(nullptr) {}
 
 void State::ProcessEvents(sf::Window& window) {
-  sf::Event event{};
-
+  sf::Event event;
   while (window.pollEvent(event)) {
-
     switch (event.type) {
 
       case sf::Event::MouseButtonPressed:
@@ -14,10 +16,9 @@ void State::ProcessEvents(sf::Window& window) {
       case sf::Event::MouseMoved:
       case sf::Event::MouseEntered:
       case sf::Event::MouseLeft:
-        for (const auto priority_widget : WidgetPriorityQueue) {
-          if (priority_widget.widget.PointCheck(event.mouseButton.x,
-                                                event.mouseButton.y)) {
-            priority_widget.widget.ProcessEvent(event);
+        for (Widget* widget : draw_queue_) {
+          if (widget->PointCheck(event.mouseButton.x, event.mouseButton.y)) {
+            widget->ProcessEvent(event);
             break;
           }
         }
@@ -31,3 +32,5 @@ void State::ProcessEvents(sf::Window& window) {
     }
   }
 }
+
+State::~State() {}

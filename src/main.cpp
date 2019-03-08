@@ -2,7 +2,8 @@
 #include <StateManager.hpp>
 
 int main() {
-  sf::RenderWindow wnd(sf::VideoMode(800,600),"",sf::Style::Titlebar);
+  sf::RenderWindow wnd(sf::VideoMode(800,600),"",
+      sf::Style::Titlebar);
   wnd.setVerticalSyncEnabled(true);
   StateManager states;
 

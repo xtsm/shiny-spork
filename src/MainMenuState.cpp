@@ -4,7 +4,7 @@ MainMenuState::MainMenuState(StateManager& states) : State(states) {
 }
 void MainMenuState::Tick() {
 }
-void MainMenuState::Draw(sf::RenderTarget &target) {
+void MainMenuState::Draw(sf::RenderTarget&) {
 }
-void MainMenuState::ProcessEvent(sf::Event &event) {
+void MainMenuState::ProcessEvent(sf::Event&) {
 }
