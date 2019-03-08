@@ -1,5 +1,6 @@
+assets/raw
 *.cbp
 *.layout
 *.depend
 Makefile
-build/*
+build
