@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(shiny-spork)
 find_package(SFML 2.4 COMPONENTS network graphics audio window system REQUIRED)
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Weffc++ -pedantic")
 
 file(GLOB INCLUDE include/*.hpp)
 file(GLOB SOURCE src/*.cpp)
