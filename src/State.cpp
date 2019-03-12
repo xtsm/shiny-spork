@@ -1,4 +1,6 @@
 #include <iostream>
+#include <State.hpp>
+
 #include "State.hpp"
 
 State::State(StateManager& states) :
@@ -78,3 +80,7 @@ void State::ProcessEvents(sf::Window& window) {
 }
 
 State::~State() {}
+
+MockState::MockState(StateManager& manager) : State(manager) {
+
+}

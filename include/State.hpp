@@ -38,5 +38,9 @@ class State : public sf::Drawable {
   State& operator=(const State&) = delete;
 };
 
-
-
+class MockState : public State {
+ public:
+  MockState(StateManager&);
+  void Tick() final {}
+  void ProcessEvent(sf::Event& ) final {}
+};

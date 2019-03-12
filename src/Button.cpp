@@ -36,18 +36,23 @@ Button::Button(State& state, int x, int y, const sf::String& caption) :
                   (text_bounds.height - btn_tile.y) / 2 + 5);
   text_.move(x, y);
 }
+
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(bg_sprite_, states);
   target.draw(text_, states);
 }
+
 void Button::Click() {
 }
+
 void Button::MouseIn() {
   bg_sprite_.setColor(sf::Color::Magenta);
 }
+
 void Button::MouseOut() {
   bg_sprite_.setColor(sf::Color::White);
 }
+
 bool Button::PointCheck(int x, int y) const {
   return bg_sprite_.getGlobalBounds().contains(x, y);
 }
