@@ -1,27 +1,71 @@
-#include <State.hpp>
+#include <iostream>
+#include "State.hpp"
 
 State::State(StateManager& states) :
     states_(states),
     draw_queue_(),
-    selected_(nullptr),
-    clicked_(nullptr) {}
+    hovered_(nullptr),
+    clicked_(nullptr) {
+}
+
+
+void State::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  for (Widget* widget : draw_queue_) {
+    target.draw(*widget, states);
+  }
+}
 
 void State::ProcessEvents(sf::Window& window) {
   sf::Event event;
   while (window.pollEvent(event)) {
     switch (event.type) {
 
-      case sf::Event::MouseButtonPressed:
-      case sf::Event::MouseButtonReleased:
-      case sf::Event::MouseMoved:
-      case sf::Event::MouseEntered:
-      case sf::Event::MouseLeft:
+      case sf::Event::MouseButtonPressed: {
+        if (clicked_ != nullptr) {
+          throw std::logic_error("pressed_ isn't nullptr on mouse press event,\
+                                  do you have two mouses or something?");
+        }
         for (Widget* widget : draw_queue_) {
           if (widget->PointCheck(event.mouseButton.x, event.mouseButton.y)) {
-            widget->ProcessEvent(event);
+            clicked_ = widget;
+            clicked_->SetClicked(true);
             break;
           }
         }
+        break;
+      }
+      case sf::Event::MouseButtonReleased: {
+        if (clicked_ != nullptr) {
+          clicked_->SetClicked(false);
+          if (clicked_->PointCheck(event.mouseButton.x, event.mouseButton.y)) {
+            clicked_->Click();
+          }
+          clicked_ = nullptr;
+        }
+        break;
+      }
+
+      case sf::Event::MouseMoved: {
+        if (hovered_ != nullptr &&
+            hovered_->PointCheck(event.mouseMove.x, event.mouseMove.y)) {
+          break;
+        }
+        Widget* new_hovered = nullptr;
+        for (Widget* widget : draw_queue_) {
+          if (widget->PointCheck(event.mouseMove.x, event.mouseMove.y)) {
+            new_hovered = widget;
+            break;
+          }
+        }
+        if (hovered_ != nullptr) hovered_->MouseOut();
+        hovered_ = new_hovered;
+        if (hovered_ != nullptr) hovered_->MouseIn();
+        break;
+      }
+
+      case sf::Event::MouseLeft:
+        if (hovered_ != nullptr) hovered_->MouseOut();
+        hovered_ = nullptr;
         break;
 
       case sf::Event::Closed:

@@ -5,11 +5,11 @@
 
 class StateManager;
 
-class State {
+class State : public sf::Drawable {
  public:
   State(StateManager& states);
   virtual void Tick() = 0;
-  virtual void Draw(sf::RenderTarget&) = 0;
+  void draw(sf::RenderTarget&, sf::RenderStates) const;
 
   //  Для обработки глобальных событий (т.е. не привязанных к курсору мыши)
   virtual void ProcessEvent(sf::Event& ) = 0;
@@ -28,7 +28,7 @@ class State {
 //  Непосредственно Widget-ы, отсортированные по приоритету
   StateManager& states_;
   std::set<Widget*, State::QueueCmp> draw_queue_;
-  Widget* selected_;
+  Widget* hovered_;
   Widget* clicked_;
 
   virtual ~State();
