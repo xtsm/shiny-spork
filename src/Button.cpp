@@ -9,7 +9,7 @@ Button::Button(State& state, int x, int y, const sf::String& caption) :
     text_() {
 
   //  TODO(tsmx): absolute crap, replace with proper resource manager ASAP
-  sf::Texture tex_l, tex_m, tex_r;
+  sf::Image tex_l, tex_m, tex_r;
 
   tex_l.loadFromFile("assets/ui/btn_l.png");
   tex_m.loadFromFile("assets/ui/btn_m.png");
