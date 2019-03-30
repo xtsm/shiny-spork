@@ -2,7 +2,8 @@
 
 StateManager::StateManager() :
     main_menu(new MainMenuState(*this)),
-    active_state(main_menu) {
+    active_state(main_menu),
+    closed_(false) {
 }
 
 State* StateManager::GetActiveState() {
@@ -12,6 +13,14 @@ State* StateManager::GetActiveState() {
 void StateManager::ChangeState(State* state) {
   //  TODO(tsmx): clean clicked_/hovered_ at active_state
   active_state = state;
+}
+
+void StateManager::Close() {
+  closed_ = true;
+}
+
+bool StateManager::Closed() {
+  return closed_;
 }
 
 StateManager::~StateManager() {

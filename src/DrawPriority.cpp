@@ -1,9 +1,10 @@
 #include "DrawPriority.hpp"
+#include <tuple>
 
-DrawPriority::DrawPriority(int priority) :
-    priority_(priority) {
+DrawPriority::DrawPriority(int priority, void* obj_ptr) :
+    priority_(priority), obj_ptr_(obj_ptr) {
 }
 bool DrawPriority::operator<(const DrawPriority& oth) const {
-  return priority_ < oth.priority_;
+  return std::tie(priority_,obj_ptr_) < std::tie(oth.priority_,oth.obj_ptr_);
 }
 

@@ -7,15 +7,13 @@ int main() {
       sf::Style::Titlebar);
   wnd.setVerticalSyncEnabled(true);
   StateManager states;
-  MockState state(states);
-  ExitButton exit(state, 0, 0, "Exit", wnd);
-  while (wnd.isOpen()) {
+  while (!states.Closed()) {
     wnd.clear();
-    wnd.draw(exit);
     states.GetActiveState()->ProcessEvents(wnd);
     states.GetActiveState()->Tick();
     wnd.draw(*states.GetActiveState());
     wnd.display();
   }
+  wnd.close();
   return 0;
 }

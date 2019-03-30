@@ -17,6 +17,8 @@ class State : public sf::Drawable {
   //  Для обработки вообще всех событий, вызывается из main
   void ProcessEvents(sf::Window& window);
 
+  void Close();
+
  protected:
 //  Компаратор для очереди рисования
   struct QueueCmp {
@@ -30,7 +32,7 @@ class State : public sf::Drawable {
   std::set<Widget*, State::QueueCmp> draw_queue_;
   Widget* hovered_;
   Widget* clicked_;
-
+  bool closed_;
   virtual ~State();
 
  private:

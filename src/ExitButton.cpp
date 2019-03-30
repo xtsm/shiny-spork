@@ -1,22 +1,12 @@
-
-#include <ExitButton.hpp>
+#include "ExitButton.hpp"
+#include "State.hpp"
 #include <iostream>
 
+ExitButton::ExitButton(State& state, int x, int y) :
+    Button(state, x, y, "Exit") {
+}
+
 void ExitButton::Click() {
-  std::cout << "Close" << std::endl;
-  parent_.close();
+  std::cerr << "Exit button clicked\n";
+  state_.Close();
 }
-
-void ExitButton::MouseOut() {
-  Button::MouseOut();
-}
-
-void ExitButton::MouseIn() {
-  Button::MouseIn();
-}
-
-ExitButton::ExitButton(State& state, int x, int y, const sf::String& title,
-                       sf::RenderWindow& parent)
-    : Button(state, x, y, title), parent_(parent) {}
-
-

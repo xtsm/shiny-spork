@@ -7,7 +7,8 @@ State::State(StateManager& states) :
     states_(states),
     draw_queue_(),
     hovered_(nullptr),
-    clicked_(nullptr) {
+    clicked_(nullptr),
+    closed_(false) {
 }
 
 
@@ -24,13 +25,14 @@ void State::ProcessEvents(sf::Window& window) {
 
       case sf::Event::MouseButtonPressed: {
         if (clicked_ != nullptr) {
-          throw std::logic_error("pressed_ isn't nullptr on mouse press event,\
-                                  do you have two mouses or something?");
+          throw std::logic_error("pressed_ isn't nullptr on mouse press event, "
+                                 "do you have two mouses or something?");
         }
         for (Widget* widget : draw_queue_) {
           if (widget->PointCheck(event.mouseButton.x, event.mouseButton.y)) {
             clicked_ = widget;
             clicked_->SetClicked(true);
+            clicked_->MouseIn();
             break;
           }
         }
@@ -41,6 +43,7 @@ void State::ProcessEvents(sf::Window& window) {
           clicked_->SetClicked(false);
           if (clicked_->PointCheck(event.mouseButton.x, event.mouseButton.y)) {
             clicked_->Click();
+            clicked_->MouseIn();
           }
           clicked_ = nullptr;
         }
@@ -77,6 +80,10 @@ void State::ProcessEvents(sf::Window& window) {
       default:ProcessEvent(event);
     }
   }
+}
+
+void State::Close() {
+  closed_ = true;
 }
 
 State::~State() {}

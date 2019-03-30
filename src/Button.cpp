@@ -2,7 +2,7 @@
 #include "Button.hpp"
 
 Button::Button(State& state, int x, int y, const sf::String& caption) :
-    Widget(state, DrawPriority(3)),
+    Widget(state, DrawPriority(3,this)),
     bg_sprite_tex_(),
     bg_sprite_(),
     font_(),
@@ -19,7 +19,9 @@ Button::Button(State& state, int x, int y, const sf::String& caption) :
   text_.setFont(font_);
   text_.setString(caption);
   text_.setOutlineColor(sf::Color::White);
+  text_.setCharacterSize(22);
   sf::FloatRect text_bounds = text_.getLocalBounds();
+  text_bounds.width+=24;
   sf::Vector2u btn_tile = tex_m.getSize();
   int tile_count = (text_bounds.width + btn_tile.x - 1) / btn_tile.x;
 
@@ -32,7 +34,7 @@ Button::Button(State& state, int x, int y, const sf::String& caption) :
   bg_sprite_.setTexture(bg_sprite_tex_);
 
   bg_sprite_.move(x, y);
-  text_.setOrigin((text_bounds.width - tile_count * btn_tile.x) / 2,
+  text_.setOrigin((text_bounds.width-24 - tile_count * btn_tile.x) / 2,
                   (text_bounds.height - btn_tile.y) / 2 + 5);
   text_.move(x, y);
 }
@@ -43,10 +45,11 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 void Button::Click() {
+  std::cerr << "Button clicked\n";
 }
 
 void Button::MouseIn() {
-  bg_sprite_.setColor(sf::Color::Magenta);
+  bg_sprite_.setColor(clicked_? sf::Color(255,0,255):sf::Color(200,200,255));
 }
 
 void Button::MouseOut() {
