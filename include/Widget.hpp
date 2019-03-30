@@ -10,18 +10,18 @@ class Widget : public sf::Drawable {
   explicit Widget(State& state, const DrawPriority&);
 
   //  Проверяет приналдежность точки виджету
-  virtual bool PointCheck(int x, int y) const = 0;
+  virtual bool PointCheck(int, int) const { return false; };
 
-  virtual void Click() = 0;
-  virtual void MouseIn() = 0;
-  virtual void MouseOut() = 0;
+  virtual void Click() {}
+  virtual void MouseIn() {}
+  virtual void MouseOut() {}
 
   void SetClicked(bool);
 
   //  Получает проиоритет в очереди рисования и обработки событий
   const DrawPriority& GetPriority() const;
  protected:
-  virtual ~Widget();
+  ~Widget() override;
   State& state_;
   DrawPriority priority_;
   bool clicked_;

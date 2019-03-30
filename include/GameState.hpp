@@ -1,17 +1,18 @@
 #ifndef SHINY_SPORK_GAMESTATE_HPP
 #define SHINY_SPORK_GAMESTATE_HPP
 #include <State.hpp>
+#include <Backgound.hpp>
 
 class GameState: public State {
  public:
-  GameState(StateManager& states);
-  void Load(sf::String file_name);
+  explicit GameState(StateManager& states);
+  void Load(std::string file_name);
 
-  void Tick();
-  void ProcessEvent(sf::Event&);
+  void Tick() override;
+  void ProcessEvent(sf::Event&) override;
 
  protected:
   int width_, height_;
-  sf::Texture background_;
+  Background background_;
 };
 #endif //SHINY_SPORK_GAMESTATE_HPP

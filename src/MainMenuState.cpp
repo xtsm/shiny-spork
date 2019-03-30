@@ -4,7 +4,7 @@
 
 MainMenuState::MainMenuState(StateManager& states) :
     State(states),
-    new_game_button_(*this, 50, 200, "New game"),
+    new_game_button_(*this, 50, 200),
     load_game_button_(*this, 50, 250, "Load game"),
     settings_button_(*this, 50, 300, "Settings"),
     exit_button_(*this, 50, 350) {
