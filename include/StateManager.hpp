@@ -1,5 +1,6 @@
 #pragma once
 #include <MainMenuState.hpp>
+#include <GameState.hpp>
 
 class StateManager {
  public:
@@ -9,9 +10,10 @@ class StateManager {
   void ChangeState(State* state);
   bool Closed();
   void Close();
- protected:
   MainMenuState* main_menu;
+  GameState* game;
   State* active_state;
+ protected:
   bool closed_;
  private:
   StateManager(const StateManager&) = delete;

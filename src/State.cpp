@@ -87,6 +87,9 @@ void State::Close() {
 }
 
 State::~State() {}
+StateManager& State::GetStateManager() {
+  return states_;
+}
 
 MockState::MockState(StateManager& manager) : State(manager) {
 

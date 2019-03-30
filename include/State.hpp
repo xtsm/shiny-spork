@@ -17,6 +17,8 @@ class State : public sf::Drawable {
   //  Для обработки вообще всех событий, вызывается из main
   void ProcessEvents(sf::Window& window);
 
+  StateManager& GetStateManager();
+
   void Close();
 
  protected:
