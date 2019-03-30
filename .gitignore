@@ -4,3 +4,5 @@ assets/raw
 *.depend
 Makefile
 build
+.idea
+cmake-build-debug
