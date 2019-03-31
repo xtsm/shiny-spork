@@ -16,6 +16,8 @@ class Background : public Widget {
 
   void SetSize(int w, int h);
 
+  void SetDim(bool value);
+
   void SetPosition(int x, int y) override;
 
  private:

@@ -5,6 +5,7 @@
 PauseState::PauseState(StateManager& states) :
     State(states),
     background_(*this) {
+  background_.SetDim(true);
   draw_queue_.insert(&background_);
 }
 void PauseState::Tick() {
