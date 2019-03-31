@@ -1,7 +1,8 @@
-#ifndef SHINY_SPORK_GAMESTATE_HPP
-#define SHINY_SPORK_GAMESTATE_HPP
-#include <State.hpp>
-#include <Background.hpp>
+#ifndef INCLUDE_GAMESTATE_H_
+#define INCLUDE_GAMESTATE_H_
+#include <string>
+#include "State.h"
+#include "Background.h"
 
 class GameState: public State {
  public:
@@ -15,4 +16,5 @@ class GameState: public State {
   int width_, height_;
   Background background_, panel_side_;
 };
-#endif //SHINY_SPORK_GAMESTATE_HPP
+
+#endif  // INCLUDE_GAMESTATE_H_

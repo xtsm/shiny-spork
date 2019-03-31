@@ -1,8 +1,7 @@
-#ifndef SHINY_SPORK_NEWGAMEBUTTON_HPP
-#define SHINY_SPORK_NEWGAMEBUTTON_HPP
-
-#include "Button.hpp"
+#ifndef INCLUDE_NEWGAMEBUTTON_H_
+#define INCLUDE_NEWGAMEBUTTON_H_
 #include <memory>
+#include "Button.h"
 
 class NewGameButton : public Button {
  public:
@@ -11,4 +10,4 @@ class NewGameButton : public Button {
   void Click() override;
 };
 
-#endif //SHINY_SPORK_NEWGAMEBUTTON_HPP
+#endif  // INCLUDE_NEWGAMEBUTTON_H_

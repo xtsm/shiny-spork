@@ -1,6 +1,5 @@
-#ifndef SHINY_SPORK_RESOURSEMANAGER_H
-#define SHINY_SPORK_RESOURSEMANAGER_H
-
+#ifndef INCLUDE_UTILITY_RESOURCEMANAGER_H_
+#define INCLUDE_UTILITY_RESOURCEMANAGER_H_
 #include <vector>
 
 class ResourceManager<T> {
@@ -39,4 +38,4 @@ class ResourceManager<T> {
   std::vector<T> resources_;
 };
 
-#endif //SHINY_SPORK_RESOURSEMANAGER_H
+#endif  // INCLUDE_UTILITY_RESOURCEMANAGER_H_

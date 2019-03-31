@@ -1,4 +1,4 @@
-#include "Widget.hpp"
+#include "Widget.h"
 
 Widget::Widget(State& state, const DrawPriority& priority) :
     state_(state),
@@ -15,7 +15,7 @@ void Widget::SetClicked(bool clicked) {
   clicked_ = clicked;
 }
 
-void Widget::SetPosition(int x,int y) {
+void Widget::SetPosition(int x, int y) {
   x_ = x;
   y_ = y;
 }

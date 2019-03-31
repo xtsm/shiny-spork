@@ -1,6 +1,6 @@
-#include "NewGameButton.hpp"
-#include <State.hpp>
-#include <StateManager.hpp>
+#include "NewGameButton.h"
+#include "State.h"
+#include "StateManager.h"
 
 NewGameButton::NewGameButton(State& state, int x, int y) :
     Button(state, x, y, "New Game") {

@@ -1,6 +1,6 @@
-#include "MainMenuState.hpp"
-#include "Button.hpp"
-#include "StateManager.hpp"
+#include "MainMenuState.h"
+#include "Button.h"
+#include "StateManager.h"
 
 MainMenuState::MainMenuState(StateManager& states) :
     State(states),

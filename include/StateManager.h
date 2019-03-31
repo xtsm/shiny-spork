@@ -1,6 +1,7 @@
-#pragma once
-#include <MainMenuState.hpp>
-#include <GameState.hpp>
+#ifndef INCLUDE_STATEMANAGER_H_
+#define INCLUDE_STATEMANAGER_H_
+#include "MainMenuState.h"
+#include "GameState.h"
 
 class StateManager {
  public:
@@ -19,3 +20,5 @@ class StateManager {
   StateManager(const StateManager&) = delete;
   StateManager& operator=(const StateManager&) = delete;
 };
+
+#endif  // INCLUDE_STATEMANAGER_H_

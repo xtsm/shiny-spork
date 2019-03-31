@@ -1,4 +1,4 @@
-#include "DrawPriority.hpp"
+#include "DrawPriority.h"
 #include <tuple>
 
 DrawPriority::DrawPriority(int priority, void* obj_ptr) :

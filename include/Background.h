@@ -1,8 +1,8 @@
-#ifndef SHINY_SPORK_BACKGOUND_HPP
-#define SHINY_SPORK_BACKGOUND_HPP
-#include <Widget.hpp>
-#include <State.hpp>
+#ifndef INCLUDE_BACKGROUND_H_
+#define INCLUDE_BACKGROUND_H_
 #include <string>
+#include "Widget.h"
+#include "State.h"
 
 class Background : public Widget {
  public:
@@ -14,11 +14,11 @@ class Background : public Widget {
 
   void SetSize(int w, int h);
 
-  void SetPosition(int x,int y) override;
+  void SetPosition(int x, int y) override;
 
  private:
   sf::Texture bg_;
   sf::Sprite bg_sprite_;
 };
 
-#endif //SHINY_SPORK_BACKGOUND_HPP
+#endif  // INCLUDE_BACKGROUND_H_

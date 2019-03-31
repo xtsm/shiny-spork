@@ -1,18 +1,19 @@
-#pragma once
+#ifndef INCLUDE_STATE_H_
+#define INCLUDE_STATE_H_
 #include <SFML/Graphics.hpp>
-#include <Widget.hpp>
 #include <set>
+#include "Widget.h"
 
 class StateManager;
 
 class State : public sf::Drawable {
  public:
-  State(StateManager& states);
+  explicit State(StateManager& states);
   virtual void Tick() = 0;
   void draw(sf::RenderTarget&, sf::RenderStates) const;
 
   //  Для обработки глобальных событий (т.е. не привязанных к курсору мыши)
-  virtual void ProcessEvent(sf::Event& ) = 0;
+  virtual void ProcessEvent(sf::Event& event) = 0;
 
   //  Для обработки вообще всех событий, вызывается из main
   void ProcessEvents(sf::Window& window);
@@ -44,7 +45,9 @@ class State : public sf::Drawable {
 
 class MockState : public State {
  public:
-  MockState(StateManager&);
+  explicit MockState(StateManager&);
   void Tick() final {}
-  void ProcessEvent(sf::Event& ) final {}
+  void ProcessEvent(sf::Event&) final {}
 };
+
+#endif  // INCLUDE_STATE_H_

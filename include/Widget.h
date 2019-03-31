@@ -1,6 +1,7 @@
-#pragma once
+#ifndef INCLUDE_WIDGET_H_
+#define INCLUDE_WIDGET_H_
 #include <SFML/Graphics.hpp>
-#include "DrawPriority.hpp"
+#include "DrawPriority.h"
 
 class State;
 
@@ -10,14 +11,14 @@ class Widget : public sf::Drawable {
   explicit Widget(State& state, const DrawPriority&);
 
   //  Проверяет приналдежность точки виджету
-  virtual bool PointCheck(int, int) const { return false; };
+  virtual bool PointCheck(int, int) const { return false; }
 
   virtual void Click() {}
   virtual void MouseIn() {}
   virtual void MouseOut() {}
 
   void SetClicked(bool);
-  virtual void SetPosition(int x,int y);
+  virtual void SetPosition(int x, int y);
 
   //  Получает проиоритет в очереди рисования и обработки событий
   const DrawPriority& GetPriority() const;
@@ -28,3 +29,5 @@ class Widget : public sf::Drawable {
   bool clicked_;
   int x_, y_;
 };
+
+#endif  // INCLUDE_WIDGET_H_

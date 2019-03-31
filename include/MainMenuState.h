@@ -1,9 +1,10 @@
-#pragma once
-#include "State.hpp"
-#include "Button.hpp"
-#include "ExitButton.hpp"
-#include "NewGameButton.hpp"
-#include "Background.hpp"
+#ifndef INCLUDE_MAINMENUSTATE_H_
+#define INCLUDE_MAINMENUSTATE_H_
+#include "State.h"
+#include "Button.h"
+#include "ExitButton.h"
+#include "NewGameButton.h"
+#include "Background.h"
 
 class MainMenuState: public State {
  public:
@@ -17,3 +18,5 @@ class MainMenuState: public State {
   ExitButton exit_button_;
   Background background_;
 };
+
+#endif  // INCLUDE_MAINMENUSTATE_H_

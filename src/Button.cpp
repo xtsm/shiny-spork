@@ -1,14 +1,13 @@
 #include <iostream>
-#include "Button.hpp"
+#include "Button.h"
 
 Button::Button(State& state, int x, int y, const sf::String& caption) :
-    Widget(state, DrawPriority(3,this)),
+    Widget(state, DrawPriority(3, this)),
     bg_sprite_tex_(),
     bg_sprite_(),
     font_(),
     text_() {
-
-  //  TODO(tsmx): absolute crap, replace with proper resource manager ASAP
+  // TODO(tsmx): absolute crap, replace with proper resource manager ASAP
   sf::Image tex_l, tex_m, tex_r;
 
   tex_l.loadFromFile("assets/ui/btn_l.png");
@@ -49,7 +48,11 @@ void Button::Click() {
 }
 
 void Button::MouseIn() {
-  bg_sprite_.setColor(clicked_? sf::Color(255,0,255):sf::Color(200,200,255));
+  if (clicked_) {
+    bg_sprite_.setColor(sf::Color(255, 0, 255));
+  } else {
+    bg_sprite_.setColor(sf::Color(200, 200, 255));
+  }
 }
 
 void Button::MouseOut() {

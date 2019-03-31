@@ -1,5 +1,6 @@
-#include "GameState.hpp"
+#include "GameState.h"
 #include <fstream>
+#include <string>
 
 GameState::GameState(StateManager& states) :
     State(states),
@@ -8,7 +9,7 @@ GameState::GameState(StateManager& states) :
     background_(*this),
     panel_side_(*this) {
   panel_side_.LoadFromFile("assets/ui/panel_side.png");
-  panel_side_.SetPosition(600,0);
+  panel_side_.SetPosition(600, 0);
 }
 void GameState::Load(std::string file_name) {
   std::ifstream fin(file_name);
@@ -21,8 +22,7 @@ void GameState::Load(std::string file_name) {
 }
 
 void GameState::Tick() {
-
 }
-void GameState::ProcessEvent(sf::Event&) {
 
+void GameState::ProcessEvent(sf::Event&) {
 }

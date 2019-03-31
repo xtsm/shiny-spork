@@ -1,10 +1,13 @@
-#pragma once
+#ifndef INCLUDE_DRAWPRIORITY_H_
+#define INCLUDE_DRAWPRIORITY_H_
 
 class DrawPriority {
-public:
+ public:
   DrawPriority(int, void*);
   bool operator<(const DrawPriority&) const;
-private:
+ private:
   int priority_;
   void* obj_ptr_;
 };
+
+#endif  // INCLUDE_DRAWPRIORITY_H_

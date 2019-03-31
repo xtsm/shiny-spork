@@ -1,5 +1,5 @@
-#include "ExitButton.hpp"
-#include "State.hpp"
+#include "ExitButton.h"
+#include "State.h"
 #include <iostream>
 
 ExitButton::ExitButton(State& state, int x, int y) :

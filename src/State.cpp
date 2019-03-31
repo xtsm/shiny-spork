@@ -1,6 +1,6 @@
 #include <iostream>
-#include "StateManager.hpp"
-#include "State.hpp"
+#include "StateManager.h"
+#include "State.h"
 
 State::State(StateManager& states) :
     states_(states),
@@ -24,7 +24,6 @@ void State::ProcessEvents(sf::Window& window) {
   sf::Event event;
   while (window.pollEvent(event)) {
     switch (event.type) {
-
       case sf::Event::MouseButtonPressed: {
         if (clicked_ != nullptr) {
           throw std::logic_error("pressed_ isn't nullptr on mouse press event, "
@@ -94,5 +93,4 @@ StateManager& State::GetStateManager() {
 }
 
 MockState::MockState(StateManager& manager) : State(manager) {
-
 }

@@ -1,5 +1,6 @@
-#pragma once
-#include "Widget.hpp"
+#ifndef INCLUDE_BUTTON_H_
+#define INCLUDE_BUTTON_H_
+#include "Widget.h"
 
 class Button : public Widget {
  public:
@@ -15,3 +16,4 @@ class Button : public Widget {
   sf::Font font_;
   sf::Text text_;
 };
+#endif  // INCLUDE_BUTTON_H_
