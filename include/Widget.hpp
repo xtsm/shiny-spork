@@ -17,6 +17,7 @@ class Widget : public sf::Drawable {
   virtual void MouseOut() {}
 
   void SetClicked(bool);
+  virtual void SetPosition(int x,int y);
 
   //  Получает проиоритет в очереди рисования и обработки событий
   const DrawPriority& GetPriority() const;
@@ -25,4 +26,5 @@ class Widget : public sf::Drawable {
   State& state_;
   DrawPriority priority_;
   bool clicked_;
+  int x_, y_;
 };

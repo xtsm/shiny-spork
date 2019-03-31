@@ -12,6 +12,10 @@ class Background : public Widget {
 
   void LoadFromFile(const std::string& file_name);
 
+  void SetSize(int w, int h);
+
+  void SetPosition(int x,int y) override;
+
  private:
   sf::Texture bg_;
   sf::Sprite bg_sprite_;

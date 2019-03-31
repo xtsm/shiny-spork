@@ -13,6 +13,6 @@ class GameState: public State {
 
  protected:
   int width_, height_;
-  Background background_;
+  Background background_, panel_side_;
 };
 #endif //SHINY_SPORK_GAMESTATE_HPP

@@ -1,6 +1,5 @@
 #include <iostream>
-#include <State.hpp>
-
+#include "StateManager.hpp"
 #include "State.hpp"
 
 State::State(StateManager& states) :
@@ -13,8 +12,11 @@ State::State(StateManager& states) :
 
 
 void State::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  for (Widget* widget : draw_queue_) {
-    target.draw(*widget, states);
+  auto it = draw_queue_.end();
+  for (;;) {
+    it--;
+    target.draw(*(*it), states);
+    if (it == draw_queue_.begin()) break;
   }
 }
 
@@ -74,7 +76,7 @@ void State::ProcessEvents(sf::Window& window) {
         break;
 
       case sf::Event::Closed:
-        window.close();
+        states_.Close();
         break;
 
       default:ProcessEvent(event);

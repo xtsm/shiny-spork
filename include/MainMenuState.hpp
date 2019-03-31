@@ -3,6 +3,7 @@
 #include "Button.hpp"
 #include "ExitButton.hpp"
 #include "NewGameButton.hpp"
+#include "Backgound.hpp"
 
 class MainMenuState: public State {
  public:
@@ -14,4 +15,5 @@ class MainMenuState: public State {
   Button load_game_button_;
   Button settings_button_;
   ExitButton exit_button_;
+  Background background_;
 };
