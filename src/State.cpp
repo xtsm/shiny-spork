@@ -13,10 +13,9 @@ State::State(StateManager& states) :
 
 void State::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   auto it = draw_queue_.end();
-  for (;;) {
+  while (it != draw_queue_.begin()) {
     it--;
-    target.draw(*(*it), states);
-    if (it == draw_queue_.begin()) break;
+    target.draw(**it, states);
   }
 }
 
