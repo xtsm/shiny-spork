@@ -1,4 +1,4 @@
-#include "Backgound.hpp"
+#include "Background.hpp"
 
 Background::Background(State& state) :
     Widget(state, DrawPriority(5, this)),

@@ -1,7 +1,7 @@
 #ifndef SHINY_SPORK_GAMESTATE_HPP
 #define SHINY_SPORK_GAMESTATE_HPP
 #include <State.hpp>
-#include <Backgound.hpp>
+#include <Background.hpp>
 
 class GameState: public State {
  public:
