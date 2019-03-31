@@ -3,6 +3,7 @@
 #include "MainMenuState.h"
 #include "GameState.h"
 #include "PauseState.h"
+#include "SettingsState.h"
 
 class StateManager {
  public:
@@ -15,13 +16,13 @@ class StateManager {
 
   MainMenuState* main_menu;
   GameState* game;
-  PauseState* pause_state;
+  PauseState* pause;
+  SettingsState* settings;
   State* active_state;
- protected:
-  bool closed_;
- private:
   StateManager(const StateManager&) = delete;
   StateManager& operator=(const StateManager&) = delete;
+ protected:
+  bool closed_;
 };
 
 #endif  // INCLUDE_STATEMANAGER_H_
