@@ -6,7 +6,7 @@ MainMenuState::MainMenuState(StateManager& states) :
     State(states),
     new_game_button_(*this, 50, 200),
     load_game_button_(*this, 50, 250),
-    settings_button_(*this, 50, 300, "Settings"),
+    settings_button_(*this, 50, 300),
     exit_button_(*this, 50, 350),
     background_(*this) {
   draw_queue_.insert(&new_game_button_);

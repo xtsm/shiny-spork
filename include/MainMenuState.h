@@ -6,6 +6,7 @@
 #include "NewGameButton.h"
 #include "Background.h"
 #include "LoadGameButton.h"
+#include "SettingsButton.h"
 
 class MainMenuState: public State {
  public:
@@ -15,7 +16,7 @@ class MainMenuState: public State {
  protected:
   NewGameButton new_game_button_;
   LoadGameButton load_game_button_;
-  Button settings_button_;
+  SettingsButton settings_button_;
   ExitButton exit_button_;
   Background background_;
 };
