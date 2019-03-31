@@ -9,7 +9,6 @@ SettingsButton::SettingsButton(State& state, int x, int y) :
 void SettingsButton::Click() {
   StateManager& states = state_.GetStateManager();
   states.ChangeState(states.settings);
-  states.settings->Load("assets/levels/1.txt");
 }
 
 

@@ -8,16 +8,17 @@
 #include "Background.h"
 #include "LoadGameButton.h"
 #include "SettingsButton.h"
+#include "MainMenuButton.h"
 
 class SettingsState : public State {
  public:
   explicit SettingsState(StateManager& states);
-  void Load(std::string file_name);
 
   void Tick() override;
   void ProcessEvent(sf::Event& event) override;
  protected:
   int width_, height_;
+  MainMenuButton main_menu_button_;
   Background background_;
 };
 
