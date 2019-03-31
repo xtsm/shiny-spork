@@ -12,6 +12,8 @@ class Background : public Widget {
 
   void LoadFromFile(const std::string& file_name);
 
+  void LoadFromTexture(const sf::Texture& texture);
+
   void SetSize(int w, int h);
 
   void SetPosition(int x, int y) override;

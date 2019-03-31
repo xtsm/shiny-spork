@@ -3,6 +3,7 @@
 StateManager::StateManager() :
     main_menu(new MainMenuState(*this)),
     game(new GameState(*this)),
+    pause_state(new PauseState(*this)),
     active_state(main_menu),
     closed_(false) {
 }

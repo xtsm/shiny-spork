@@ -2,6 +2,7 @@
 #define INCLUDE_STATEMANAGER_H_
 #include "MainMenuState.h"
 #include "GameState.h"
+#include "PauseState.h"
 
 class StateManager {
  public:
@@ -11,8 +12,10 @@ class StateManager {
   void ChangeState(State* state);
   bool Closed();
   void Close();
+
   MainMenuState* main_menu;
   GameState* game;
+  PauseState* pause_state;
   State* active_state;
  protected:
   bool closed_;

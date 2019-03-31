@@ -15,6 +15,8 @@ class State : public sf::Drawable {
   //  Для обработки глобальных событий (т.е. не привязанных к курсору мыши)
   virtual void ProcessEvent(sf::Event& event) = 0;
 
+  void Render();
+
   //  Для обработки вообще всех событий, вызывается из main
   void ProcessEvents(sf::Window& window);
 
@@ -32,10 +34,12 @@ class State : public sf::Drawable {
 
 //  Непосредственно Widget-ы, отсортированные по приоритету
   StateManager& states_;
+  sf::RenderTexture render_;
   std::set<Widget*, State::QueueCmp> draw_queue_;
   Widget* hovered_;
   Widget* clicked_;
   bool closed_;
+
   virtual ~State();
 
  private:

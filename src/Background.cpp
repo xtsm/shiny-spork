@@ -25,3 +25,9 @@ void Background::LoadFromFile(const std::string& file_name) {
   bg_.setRepeated(true);
   bg_sprite_.setTexture(bg_);
 }
+
+void Background::LoadFromTexture(const sf::Texture& texture) {
+  bg_ = texture;
+  bg_sprite_.setTexture(bg_);
+  bg_sprite_.setColor(sf::Color(120,120,120));
+}

@@ -11,6 +11,7 @@ int main() {
     wnd.clear();
     states.GetActiveState()->ProcessEvents(wnd);
     states.GetActiveState()->Tick();
+    states.GetActiveState()->Render();
     wnd.draw(*states.GetActiveState());
     wnd.display();
   }

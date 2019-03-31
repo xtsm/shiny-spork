@@ -4,19 +4,27 @@
 
 State::State(StateManager& states) :
     states_(states),
+    render_(),
     draw_queue_(),
     hovered_(nullptr),
     clicked_(nullptr),
     closed_(false) {
+  render_.create(800, 600);
 }
 
-
-void State::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void State::Render() {
+  render_.clear();
   auto it = draw_queue_.end();
   while (it != draw_queue_.begin()) {
     it--;
-    target.draw(**it, states);
+    render_.draw(**it);
   }
+  render_.display();
+}
+
+void State::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  sf::Sprite tmp(render_.getTexture());
+  target.draw(tmp, states);
 }
 
 void State::ProcessEvents(sf::Window& window) {

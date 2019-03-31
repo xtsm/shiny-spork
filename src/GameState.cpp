@@ -1,6 +1,7 @@
 #include "GameState.h"
 #include <fstream>
 #include <string>
+#include "StateManager.h"
 
 GameState::GameState(StateManager& states) :
     State(states),
@@ -24,5 +25,19 @@ void GameState::Load(std::string file_name) {
 void GameState::Tick() {
 }
 
-void GameState::ProcessEvent(sf::Event&) {
+void GameState::ProcessEvent(sf::Event& event) {
+  switch (event.type) {
+    case sf::Event::KeyReleased: {
+        switch (event.key.code) {
+          case sf::Keyboard::Escape: {
+            states_.pause_state->UpdateBackground(render_.getTexture());
+            states_.ChangeState(states_.pause_state);
+            break;
+          }
+          default: break;
+        }
+        break;
+    }
+    default: break;
+  }
 }
