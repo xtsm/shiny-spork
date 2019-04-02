@@ -1,33 +1,33 @@
 #ifndef INCLUDE_UTILITY_RESOURCEMANAGER_H_
 #define INCLUDE_UTILITY_RESOURCEMANAGER_H_
-#include <vector>
 
-class ResourceManager<T> {
+#include <SFML/Graphics.hpp>
+#include <map>
+#include <string>
+#include <stdexcept>
+#include <cassert>
+
+template<typename T>
+class ResourceManager {
  public:
-  ResourceManager() = default;
-
-  ResourceManager(const std::initializer_list<T>&);
-
-  void AddNewResource(T resource) {
-    resources_.push_back(resource);
+  ResourceManager()
+      : resources_() {
+    assert(typeid(T) == typeid(sf::Image)
+                      || typeid(T) == typeid(sf::Texture)
+                      || typeid(T) == typeid(sf::Font));
   }
 
-  std::vector<T> GetAllResources() const {
+  std::map<std::string, T> GetAllResources() const {
     return resources_;
   }
 
-  T& operator[](size_t index) {
-    if (index >= resources_.size()) {
-      throw std::illegal_argument("Wrong index to ResourceManager!");
+  T& GetOrLoadResource(const std::string& path) {
+    if (resources_.count(path) == 0) {
+      T new_resource;
+      new_resource.loadFromFile(path);
+      resources_.emplace(path, new_resource);
     }
-    return resources_[index];
-  }
-
-  const T& operator[](size_t index) const {
-    if (index >= resources_.size()) {
-      throw std::illegal_argument("Wrong index to ResourceManager!");
-    }
-    return resources_[index];
+    return resources_.at(path);
   }
 
   void Clear() {
@@ -35,7 +35,7 @@ class ResourceManager<T> {
   }
 
  private:
-  std::vector<T> resources_;
+  std::map<std::string, T> resources_;
 };
 
 #endif  // INCLUDE_UTILITY_RESOURCEMANAGER_H_

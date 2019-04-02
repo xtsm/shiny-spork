@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <set>
 #include "Widget.h"
+#include "utility/ResourceManager.h"
 
 class StateManager;
 
@@ -23,6 +24,12 @@ class State : public sf::Drawable {
   StateManager& GetStateManager();
 
   void Close();
+
+  static ResourceManager<sf::Image>& GetImageResourceManager();
+
+  static ResourceManager<sf::Font>& GetFontResourceManager();
+
+  static ResourceManager<sf::Texture>& GetTextureResourceManager();
 
  protected:
 //  Компаратор для очереди рисования
@@ -45,6 +52,9 @@ class State : public sf::Drawable {
  private:
   State(const State&) = delete;
   State& operator=(const State&) = delete;
+  static ResourceManager<sf::Texture> textures_manager_;
+  static ResourceManager<sf::Font> fonts_manager_;
+  static ResourceManager<sf::Image> images_manager_;
 };
 
 class MockState : public State {

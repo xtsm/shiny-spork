@@ -3,6 +3,7 @@
 #include <string>
 #include "State.h"
 #include "Background.h"
+#include "PauseButton.h"
 
 class GameState: public State {
  public:
@@ -15,6 +16,7 @@ class GameState: public State {
  protected:
   int width_, height_;
   Background background_, panel_side_;
+  PauseButton pause_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_

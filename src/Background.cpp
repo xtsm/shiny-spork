@@ -21,7 +21,7 @@ void Background::SetPosition(int x, int y) {
 }
 
 void Background::LoadFromFile(const std::string& file_name) {
-  bg_.loadFromFile(file_name);
+  bg_ = State::GetTextureResourceManager().GetOrLoadResource(file_name);
   bg_.setRepeated(true);
   bg_sprite_.setTexture(bg_);
 }

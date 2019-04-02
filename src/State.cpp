@@ -1,4 +1,6 @@
 #include <iostream>
+#include <State.h>
+
 #include "StateManager.h"
 #include "State.h"
 
@@ -94,9 +96,25 @@ void State::Close() {
   closed_ = true;
 }
 
+ResourceManager<sf::Image> State::images_manager_;
+ResourceManager<sf::Font> State::fonts_manager_;
+ResourceManager<sf::Texture> State::textures_manager_;
+
 State::~State() {}
 StateManager& State::GetStateManager() {
   return states_;
+}
+
+ResourceManager<sf::Image>& State::GetImageResourceManager() {
+  return images_manager_;
+}
+
+ResourceManager<sf::Font>& State::GetFontResourceManager() {
+  return fonts_manager_;
+}
+
+ResourceManager<sf::Texture>& State::GetTextureResourceManager() {
+  return textures_manager_;
 }
 
 MockState::MockState(StateManager& manager) : State(manager) {
