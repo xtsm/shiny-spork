@@ -7,8 +7,8 @@
 #include "Tower.h"
 #include <iostream>
 
-Tower::Tower(State& state, const DrawPriority& priority, std::ifstream& source, int x, int y) :
-    Widget(state, priority),
+Tower::Tower(State& state, std::string&& source, int x, int y) :
+    Widget(state, DrawPriority(4, this)),
     tower_sprite_tex_(),
     tower_sprite_(),
     source_(source),
@@ -28,10 +28,8 @@ Tower::Tower(State& state, const DrawPriority& priority, std::ifstream& source, 
 
   std::string tower_image_path;
   source_ >> tower_image_path;
-  sf::Image tower_image;
   tower_sprite_tex_.loadFromFile(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
-
   tower_sprite_.move(x, y);
 
   //TODO

@@ -5,8 +5,9 @@
 #include <iostream>
 #include "Projectile.h"
 
-class Tower : Widget {
-  Tower(State&, const DrawPriority&, std::ifstream& source, int, int);
+class Tower : public Widget {
+ public:
+  explicit Tower(State&, std::string&& source, int, int);
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
   void Click() override;
   void MouseIn() override;
@@ -24,7 +25,7 @@ class Tower : Widget {
   sf::Texture tower_sprite_tex_;
   sf::Sprite tower_sprite_;
   //Поток из файла с описанием уровней башни
-  std::ifstream& source_;
+  std::ifstream source_;
   // Уровень башни
   int level_;
   //Максимальный возможный уровель башни

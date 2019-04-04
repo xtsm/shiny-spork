@@ -7,7 +7,7 @@ class State;
 
 class Widget : public sf::Drawable {
  public:
-  //  Принимает state, кооторому принадлежит Widget
+  //  Принимает state, которому принадлежит Widget
   explicit Widget(State& state, const DrawPriority&);
 
   //  Проверяет приналдежность точки виджету
