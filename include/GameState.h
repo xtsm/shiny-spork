@@ -16,8 +16,8 @@ class GameState: public State {
   void Tick() override;
   void ProcessEvent(sf::Event&) override;
 
-  void BuildTower(std::string&& tower_path, int x, int y);
-  void BuildMenu();
+  void BuildTower(const std::string& tower_path, int x, int y);
+  void BuildMenu(const std::string& source);
 
  protected:
   int width_, height_;

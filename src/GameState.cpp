@@ -10,7 +10,7 @@ GameState::GameState(StateManager& states) :
     height_(0),
     background_ptr_(new Background(*this)),
     panel_side_ptr_(new Background(*this)),
-    build_button_ptr_(new BuildButton(*this, 650, 50)) {
+    build_button_ptr_(new BuildButton(*this, 650, 50, std::string("tower1.txt"))) {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -45,10 +45,10 @@ void GameState::ProcessEvent(sf::Event& event) {
   }
 }
 
-void GameState::BuildTower(std::string&& tower_path, int x, int y) {
-  draw_queue_.insert(std::make_shared<Tower>(*this, std::move(tower_path), x, y));
+void GameState::BuildTower(const std::string& tower_path, int x, int y) {
+  draw_queue_.insert(std::make_shared<Tower>(*this, tower_path, x, y));
 }
 
-void GameState::BuildMenu() {
-  BuildTower("tower1.txt", 50, 50);
+void GameState::BuildMenu(const std::string& source) {
+  BuildTower(source, 50, 50);
 }

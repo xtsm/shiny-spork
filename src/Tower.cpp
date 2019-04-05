@@ -7,7 +7,7 @@
 #include "Tower.h"
 #include <iostream>
 
-Tower::Tower(State& state, std::string&& source, int x, int y) :
+Tower::Tower(State& state, const std::string& source, int x, int y) :
     Widget(state, DrawPriority(4, this)),
     tower_sprite_tex_(),
     tower_sprite_(),

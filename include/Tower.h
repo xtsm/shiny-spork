@@ -7,7 +7,7 @@
 
 class Tower : public Widget {
  public:
-  explicit Tower(State&, std::string&& source, int, int);
+  explicit Tower(State&, const std::string& source, int, int);
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
   void Click() override;
   void MouseIn() override;

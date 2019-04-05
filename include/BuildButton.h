@@ -5,12 +5,13 @@
 
 class BuildButton : public Button {
  public:
-  explicit BuildButton(State&, int, int);
+  explicit BuildButton(State&, int, int, const std::string& source);
 
   void Click() override;
 
  private:
   State& state_;
+  std::string source_;
 };
 
 #endif //SHINY_SPORK_BUILDBUTTON_H
