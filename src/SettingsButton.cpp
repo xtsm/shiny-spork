@@ -7,7 +7,7 @@ SettingsButton::SettingsButton(State& state, int x, int y) :
 
 void SettingsButton::Click() {
   StateManager& states = state_.GetStateManager();
-  states.ChangeState(states.settings);
+  states.ChangeState(states.settings_ptr_);
 }
 
 

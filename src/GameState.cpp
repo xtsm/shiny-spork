@@ -33,8 +33,8 @@ void GameState::ProcessEvent(sf::Event& event) {
     case sf::Event::KeyReleased: {
         switch (event.key.code) {
           case sf::Keyboard::Escape: {
-            states_.pause->UpdateBackground(render_.getTexture());
-            states_.ChangeState(states_.pause);
+            states_.pause_ptr_->UpdateBackground(render_.getTexture());
+            states_.ChangeState(states_.pause_ptr_);
             break;
           }
           default: break;

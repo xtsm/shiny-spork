@@ -1,21 +1,23 @@
+#include <utility>
+
 #include "StateManager.h"
 
 StateManager::StateManager() :
-    main_menu(new MainMenuState(*this)),
-    game(new GameState(*this)),
-    pause(new PauseState(*this)),
-    settings(new SettingsState(*this)),
-    active_state(main_menu),
+    main_menu_ptr_(new MainMenuState(*this)),
+    game_ptr_(new GameState(*this)),
+    pause_ptr_(new PauseState(*this)),
+    settings_ptr_(new SettingsState(*this)),
+    active_state_ptr_(main_menu_ptr_),
     closed_(false) {
 }
 
-State* StateManager::GetActiveState() {
-  return active_state;
+std::shared_ptr<State> StateManager::GetActiveState() {
+  return active_state_ptr_;
 }
 
-void StateManager::ChangeState(State* state) {
+void StateManager::ChangeState(std::shared_ptr<State> state) {
   // TODO(tsmx): clean clicked_/hovered_ at active_state
-  active_state = state;
+  active_state_ptr_ = std::move(state);
 }
 
 void StateManager::Close() {
@@ -26,6 +28,4 @@ bool StateManager::Closed() {
   return closed_;
 }
 
-StateManager::~StateManager() {
-  delete main_menu;
-}
+StateManager::~StateManager() = default;

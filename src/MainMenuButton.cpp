@@ -8,5 +8,5 @@ MainMenuButton::MainMenuButton(State& state, int x, int y) :
 
 void MainMenuButton::Click() {
   StateManager& states = state_.GetStateManager();
-  states.ChangeState(states.main_menu);
+  states.ChangeState(states.main_menu_ptr_);
 }

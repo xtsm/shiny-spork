@@ -8,6 +8,6 @@ NewGameButton::NewGameButton(State& state, int x, int y) :
 
 void NewGameButton::NewGameButton::Click() {
   StateManager& states = state_.GetStateManager();
-  states.ChangeState(states.game);
-  states.game->Load("assets/levels/1.txt");
+  states.ChangeState(states.game_ptr_);
+  states.game_ptr_->Load("assets/levels/1.txt");
 }
