@@ -1,8 +1,9 @@
-#include "GameState.h"
 #include <fstream>
 #include <string>
 #include <memory>
+#include <UpdateTowerButton.h>
 #include "StateManager.h"
+#include "GameState.h"
 
 GameState::GameState(StateManager& states) :
     State(states),
@@ -51,4 +52,8 @@ void GameState::BuildTower(const std::string& tower_path, int x, int y) {
 
 void GameState::BuildMenu(const std::string& source) {
   BuildTower(source, 50, 50);
+}
+
+void GameState::InfoMenuForTower(Tower& tower) {
+  draw_queue_.insert(std::make_shared<UpdateTowerButton>(*this, 650, 450, tower));
 }

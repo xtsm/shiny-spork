@@ -20,6 +20,8 @@ class Tower : public Widget {
   void Find_Aim();
   //Пытается сделать выстрел
   void Shot();
+  //Проверяет можно ли обновить башню
+  bool Updatable() const;
 
  protected:
   //Спрайт и текстура самой башни

@@ -10,14 +10,18 @@
 
 class GameState: public State {
  public:
-  explicit GameState(StateManager& states);
-  void Load(const std::string& file_name);
+  explicit GameState(StateManager&);
+  void Load(const std::string&);
 
   void Tick() override;
   void ProcessEvent(sf::Event&) override;
 
-  void BuildTower(const std::string& tower_path, int x, int y);
-  void BuildMenu(const std::string& source);
+  //Строит башню с характеристиками из файла
+  void BuildTower(const std::string&, int, int);
+  //Вызывает меню постройки башни
+  void BuildMenu(const std::string&);
+  //Создаёт меню информации для башни
+  void InfoMenuForTower(Tower&);
 
  protected:
   int width_, height_;

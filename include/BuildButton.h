@@ -5,12 +5,11 @@
 
 class BuildButton : public Button {
  public:
-  explicit BuildButton(State&, int, int, const std::string& source);
+  explicit BuildButton(State&, int, int, const std::string&);
 
   void Click() override;
 
  private:
-  State& state_;
   std::string source_;
 };
 

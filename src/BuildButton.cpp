@@ -4,7 +4,6 @@
 
 BuildButton::BuildButton(State& state, int x, int y, const std::string& source) :
     Button(state, x, y, "Build"),
-    state_(state),
     source_(source) {
 }
 

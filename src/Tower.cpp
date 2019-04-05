@@ -4,13 +4,16 @@
 //speed range damage tower_image_path //Характеристики второго уровня
 //...................................
 //speed range damage tower_image_path //Характеристики max_level уровня
-#include "Tower.h"
 #include <iostream>
+#include "Tower.h"
+#include "StateManager.h"
 
 Tower::Tower(State& state, const std::string& source, int x, int y) :
     Widget(state, DrawPriority(4, this)),
     tower_sprite_tex_(),
     tower_sprite_(),
+    font_(),
+    text_(),
     is_mouse_in_(false),
     source_(source),
     level_(0),
@@ -50,7 +53,8 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 void Tower::Click() {
-  std::cerr << "Tower clicked\n";
+  StateManager& states = state_.GetStateManager();
+  states.game_ptr_->InfoMenuForTower(*this);
   //TODO[Nicksechko] Отображение информации о башне на панели
 }
 
@@ -78,6 +82,7 @@ void Tower::Update() {
   source_ >> tower_image_path;
   tower_sprite_tex_.loadFromFile(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
+  text_.setString("LVL" + std::to_string(level_));
   //TODO[Nicksechko] Обновление текстуры снаряда
 }
 
@@ -87,4 +92,8 @@ void Tower::Find_Aim() {
 
 void Tower::Shot() {
   //TODO[Nicksechko] Выстрел по цели
+}
+
+bool Tower::Updatable() const {
+  return level_ < max_level_;
 }
