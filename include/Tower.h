@@ -1,8 +1,9 @@
 #ifndef SHINY_SPORK_TOWER_H
 #define SHINY_SPORK_TOWER_H
 
-#include "Widget.h"
 #include <iostream>
+#include <string>
+#include "Widget.h"
 #include "Projectile.h"
 
 class Tower : public Widget {
@@ -24,6 +25,11 @@ class Tower : public Widget {
   //Спрайт и текстура самой башни
   sf::Texture tower_sprite_tex_;
   sf::Sprite tower_sprite_;
+  //Текст и шрифт надписи над башней
+  sf::Font font_;
+  sf::Text text_;
+  //Флаг, указывающий находится ли указатель над башней
+  bool is_mouse_in_;
   //Поток из файла с описанием уровней башни
   std::ifstream source_;
   // Уровень башни

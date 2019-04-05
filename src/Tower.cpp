@@ -11,6 +11,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     Widget(state, DrawPriority(4, this)),
     tower_sprite_tex_(),
     tower_sprite_(),
+    is_mouse_in_(false),
     source_(source),
     level_(0),
     max_level_(0),
@@ -20,6 +21,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     speed_(0),
     range_(0),
     damage_(0) {
+
   SetPosition(x, y);
 
   source_ >> max_level_;
@@ -31,10 +33,20 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   tower_sprite_tex_.loadFromFile(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
   tower_sprite_.move(x, y);
+
+  text_.setFont(font_);
+  text_.setString("LVL" + std::to_string(level_));
+  text_.setOutlineColor(sf::Color::White);
+  text_.setCharacterSize(10);
+  font_.loadFromFile("assets/font/default.ttf");
+  text_.move(x, y);
   //TODO[Nicksechko] Загрузка тексстуры снаряда
 }
 void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(tower_sprite_, states);
+  if (is_mouse_in_) {
+    target.draw(text_, states);
+  }
 }
 
 void Tower::Click() {
@@ -48,11 +60,11 @@ void Tower::MouseIn() {
   } else {
     tower_sprite_.setColor(sf::Color(200, 200, 255));
   }
-  //TODO[Nicksechko] Отображение уровня башни над ней при наведении мыши
+  is_mouse_in_ = true;
 }
 void Tower::MouseOut() {
   tower_sprite_.setColor(sf::Color::White);
-  //TODO[Nicksechko] Удаление надписи, созданной в MouseIn
+  is_mouse_in_ = false;
 }
 
 bool Tower::PointCheck(int x, int y) const {
