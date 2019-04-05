@@ -1,12 +1,14 @@
 #include <GameState.h>
+#include <StateManager.h>
 #include "BuildButton.h"
 
-BuildButton::BuildButton(GameState& game_state, int x, int y) :
-    Button(game_state, x, y, "Build"),
-    game_state_(game_state) {
+BuildButton::BuildButton(State& state, int x, int y) :
+    Button(state, x, y, "Build"),
+    state_(state) {
 }
 
 void BuildButton::Click() {
-  game_state_.BuildMenu();
+  StateManager& states = state_.GetStateManager();
+  states.game_ptr_->BuildMenu();
 }
 

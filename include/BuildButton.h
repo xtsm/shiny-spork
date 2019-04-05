@@ -3,15 +3,14 @@
 
 #include "Button.h"
 
-class GameState;
-
 class BuildButton : public Button {
  public:
-  explicit BuildButton(GameState&, int, int);
+  explicit BuildButton(State&, int, int);
 
   void Click() override;
+
  private:
-  GameState& game_state_;
+  State& state_;
 };
 
 #endif //SHINY_SPORK_BUILDBUTTON_H

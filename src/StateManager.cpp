@@ -1,5 +1,3 @@
-#include <utility>
-
 #include "StateManager.h"
 
 StateManager::StateManager() :
