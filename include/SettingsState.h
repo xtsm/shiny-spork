@@ -18,8 +18,8 @@ class SettingsState : public State {
   void ProcessEvent(sf::Event& event) override;
  protected:
   int width_, height_;
-  MainMenuButton main_menu_button_;
-  Background background_;
+  std::shared_ptr<MainMenuButton> main_menu_button_ptr_;
+  std::shared_ptr<Background> background_ptr_;
 };
 
 #endif //SHINY_SPORK_SETTINGSSTATE_H

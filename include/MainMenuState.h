@@ -14,11 +14,11 @@ class MainMenuState: public State {
   void Tick() override;
   void ProcessEvent(sf::Event& event) override;
  protected:
-  NewGameButton new_game_button_;
-  LoadGameButton load_game_button_;
-  SettingsButton settings_button_;
-  ExitButton exit_button_;
-  Background background_;
+  std::shared_ptr<NewGameButton> new_game_button_ptr_;
+  std::shared_ptr<LoadGameButton> load_game_button_ptr_;
+  std::shared_ptr<SettingsButton> settings_button_ptr_;
+  std::shared_ptr<ExitButton> exit_button_ptr_;
+  std::shared_ptr<Background> background_ptr_;
 };
 
 #endif  // INCLUDE_MAINMENUSTATE_H_

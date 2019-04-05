@@ -31,17 +31,15 @@ Tower::Tower(State& state, std::string&& source, int x, int y) :
   tower_sprite_tex_.loadFromFile(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
   tower_sprite_.move(x, y);
-
-  //TODO
+  //TODO[Nicksechko] Загрузка тексстуры снаряда
 }
-
 void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(tower_sprite_, states);
 }
 
 void Tower::Click() {
   std::cerr << "Tower clicked\n";
-  //TODO
+  //TODO[Nicksechko] Отображение информации о башне на панели
 }
 
 void Tower::MouseIn() {
@@ -50,10 +48,11 @@ void Tower::MouseIn() {
   } else {
     tower_sprite_.setColor(sf::Color(200, 200, 255));
   }
+  //TODO[Nicksechko] Отображение уровня башни над ней при наведении мыши
 }
-
 void Tower::MouseOut() {
   tower_sprite_.setColor(sf::Color::White);
+  //TODO[Nicksechko] Удаление надписи, созданной в MouseIn
 }
 
 bool Tower::PointCheck(int x, int y) const {
@@ -61,13 +60,19 @@ bool Tower::PointCheck(int x, int y) const {
 }
 
 void Tower::Update() {
-  //TODO
+  level_++;
+  source_ >> speed_ >> range_ >> damage_;
+  std::string tower_image_path;
+  source_ >> tower_image_path;
+  tower_sprite_tex_.loadFromFile(tower_image_path);
+  tower_sprite_.setTexture(tower_sprite_tex_);
+  //TODO[Nicksechko] Обновление текстуры снаряда
 }
 
 void Tower::Find_Aim() {
-  //TODO
+  //TODO[Nicksechko] Поск цели
 }
 
 void Tower::Shot() {
-  //TODO
+  //TODO[Nicksechko] Выстрел по цели
 }

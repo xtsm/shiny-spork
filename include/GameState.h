@@ -21,8 +21,8 @@ class GameState: public State {
 
  protected:
   int width_, height_;
-  Background background_, panel_side_;
-  BuildButton build_button;
+  std::shared_ptr<Background> background_ptr_, panel_side_ptr_;
+  std::shared_ptr<BuildButton> build_button_ptr_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_

@@ -28,7 +28,7 @@ void State::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 void State::ProcessEvents(sf::Window& window) {
-  sf::Event event;
+  sf::Event event{};
   while (window.pollEvent(event)) {
     switch (event.type) {
       case sf::Event::MouseButtonPressed: {
@@ -36,7 +36,7 @@ void State::ProcessEvents(sf::Window& window) {
           throw std::logic_error("pressed_ isn't nullptr on mouse press event, "
                                  "do you have two mouses or something?");
         }
-        for (Widget* widget : draw_queue_) {
+        for (const std::shared_ptr<Widget>& widget : draw_queue_) {
           if (widget->PointCheck(event.mouseButton.x, event.mouseButton.y)) {
             clicked_ = widget;
             clicked_->SetClicked(true);
@@ -63,8 +63,8 @@ void State::ProcessEvents(sf::Window& window) {
             hovered_->PointCheck(event.mouseMove.x, event.mouseMove.y)) {
           break;
         }
-        Widget* new_hovered = nullptr;
-        for (Widget* widget : draw_queue_) {
+        std::shared_ptr<Widget> new_hovered = nullptr;
+        for (const std::shared_ptr<Widget>& widget : draw_queue_) {
           if (widget->PointCheck(event.mouseMove.x, event.mouseMove.y)) {
             new_hovered = widget;
             break;
@@ -94,7 +94,8 @@ void State::Close() {
   closed_ = true;
 }
 
-State::~State() {}
+State::~State() = default;
+
 StateManager& State::GetStateManager() {
   return states_;
 }
