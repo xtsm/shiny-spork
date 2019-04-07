@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "StateManager.h"
 #include "State.h"
 
@@ -10,6 +11,17 @@ State::State(StateManager& states) :
     clicked_(nullptr),
     closed_(false) {
   render_.create(800, 600);
+}
+
+void State::CleanMouseFlags() {
+  if (clicked_ != nullptr) {
+    clicked_->SetClicked(false);
+    clicked_ = nullptr;
+  }
+  if (hovered_ != nullptr) {
+    hovered_->MouseOut();
+    hovered_ = nullptr;
+  }
 }
 
 void State::Render() {
@@ -51,7 +63,7 @@ void State::ProcessEvents(sf::Window& window) {
           clicked_->SetClicked(false);
           if (clicked_->PointCheck(event.mouseButton.x, event.mouseButton.y)) {
             clicked_->Click();
-            clicked_->MouseIn();
+            if (this == states_.active_state) clicked_->MouseIn();
           }
           clicked_ = nullptr;
         }
@@ -94,9 +106,25 @@ void State::Close() {
   closed_ = true;
 }
 
+ResourceManager<sf::Image> State::images_manager_;
+ResourceManager<sf::Font> State::fonts_manager_;
+ResourceManager<sf::Texture> State::textures_manager_;
+
 State::~State() {}
 StateManager& State::GetStateManager() {
   return states_;
+}
+
+ResourceManager<sf::Image>& State::GetImageResourceManager() {
+  return images_manager_;
+}
+
+ResourceManager<sf::Font>& State::GetFontResourceManager() {
+  return fonts_manager_;
+}
+
+ResourceManager<sf::Texture>& State::GetTextureResourceManager() {
+  return textures_manager_;
 }
 
 MockState::MockState(StateManager& manager) : State(manager) {

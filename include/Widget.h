@@ -2,6 +2,7 @@
 #define INCLUDE_WIDGET_H_
 #include <SFML/Graphics.hpp>
 #include "DrawPriority.h"
+#include "utility/ResourceManager.h"
 
 class State;
 
