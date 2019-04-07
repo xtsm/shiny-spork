@@ -33,7 +33,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
 
   std::string tower_image_path;
   source_ >> tower_image_path;
-  tower_sprite_tex_.loadFromFile(tower_image_path);
+  tower_sprite_tex_ = state_.GetTextureResourceManager().GetOrLoadResource(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
   tower_sprite_.move(x, y);
 
@@ -41,7 +41,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   text_.setString("LVL" + std::to_string(level_));
   text_.setOutlineColor(sf::Color::White);
   text_.setCharacterSize(10);
-  font_.loadFromFile("assets/font/default.ttf");
+  font_ = state_.GetFontResourceManager().GetOrLoadResource("assets/font/default.ttf");
   text_.move(x, y);
   //TODO[Nicksechko] Загрузка тексстуры снаряда
 }
@@ -80,7 +80,7 @@ void Tower::Update() {
   source_ >> speed_ >> range_ >> damage_;
   std::string tower_image_path;
   source_ >> tower_image_path;
-  tower_sprite_tex_.loadFromFile(tower_image_path);
+  tower_sprite_tex_ = state_.GetTextureResourceManager().GetOrLoadResource(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
   text_.setString("LVL" + std::to_string(level_));
   //TODO[Nicksechko] Обновление текстуры снаряда
