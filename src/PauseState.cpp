@@ -7,8 +7,8 @@
 PauseState::PauseState(StateManager& states) :
     State(states),
     background_(*this),
-    main_menu_(*this, 0, 400),
-    exit_button_(*this, 0, 500) {
+    main_menu_(*this, 50, 200),
+    exit_button_(*this, 50, 250) {
   background_.SetDim(true);
   draw_queue_.insert(&background_);
   draw_queue_.insert(&main_menu_);

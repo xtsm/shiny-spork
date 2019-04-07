@@ -9,7 +9,7 @@ class GameState: public State {
  public:
   explicit GameState(StateManager& states);
   void Load(std::string file_name);
-
+  void Pause();
   void Tick() override;
   void ProcessEvent(sf::Event&) override;
 

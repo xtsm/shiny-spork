@@ -26,14 +26,16 @@ void GameState::Load(std::string file_name) {
 
 void GameState::Tick() {
 }
-
+void GameState::Pause() {
+  states_.pause->UpdateBackground(render_.getTexture());
+  states_.ChangeState(states_.pause);
+}
 void GameState::ProcessEvent(sf::Event& event) {
   switch (event.type) {
     case sf::Event::KeyReleased: {
         switch (event.key.code) {
           case sf::Keyboard::Escape: {
-            states_.pause->UpdateBackground(render_.getTexture());
-            states_.ChangeState(states_.pause);
+            Pause();
             break;
           }
           default: break;
