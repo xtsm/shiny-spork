@@ -11,7 +11,7 @@ GameState::GameState(StateManager& states) :
     height_(0),
     background_ptr_(new Background(*this)),
     panel_side_ptr_(new Background(*this)),
-    build_button_ptr_(new BuildButton(*this, 650, 50, std::string("tower1.txt"))),
+    build_button_ptr_(new BuildButton(*this, 650, 50, std::string("assets/tower/1.txt"))),
     pause_button_ptr_(new PauseButton(*this, 700, 525))  {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
