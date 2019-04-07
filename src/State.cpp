@@ -35,11 +35,13 @@ void State::Render() {
 }
 
 void State::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  sf::Sprite tmp(render_.getTexture());
-  target.draw(tmp, states);
+  sf::Sprite sprite(render_.getTexture());
+  sf::Vector2u size = target.getSize();
+  sprite.setScale(size.x / 800.0, size.y / 600.0);
+  target.draw(sprite, states);
 }
 
-void State::ProcessEvents(sf::Window& window) {
+void State::ProcessEvents(sf::RenderWindow& window) {
   sf::Event event;
   while (window.pollEvent(event)) {
     switch (event.type) {
@@ -49,7 +51,11 @@ void State::ProcessEvents(sf::Window& window) {
                                  "do you have two mouses or something?");
         }
         for (Widget* widget : draw_queue_) {
-          if (widget->PointCheck(event.mouseButton.x, event.mouseButton.y)) {
+          sf::Vector2u click_point(event.mouseButton.x, event.mouseButton.y);
+          sf::Vector2u size = window.getSize();
+          click_point.x /= size.x / 800.0;
+          click_point.y /= size.y / 600.0;
+          if (widget->PointCheck(click_point.x, click_point.y)) {
             clicked_ = widget;
             clicked_->SetClicked(true);
             clicked_->MouseIn();
@@ -61,7 +67,11 @@ void State::ProcessEvents(sf::Window& window) {
       case sf::Event::MouseButtonReleased: {
         if (clicked_ != nullptr) {
           clicked_->SetClicked(false);
-          if (clicked_->PointCheck(event.mouseButton.x, event.mouseButton.y)) {
+          sf::Vector2u click_point(event.mouseButton.x, event.mouseButton.y);
+          sf::Vector2u size = window.getSize();
+          click_point.x /= size.x / 800.0;
+          click_point.y /= size.y / 600.0;
+          if (clicked_->PointCheck(click_point.x, click_point.y)) {
             clicked_->Click();
             if (this == states_.active_state) clicked_->MouseIn();
           }
@@ -71,13 +81,17 @@ void State::ProcessEvents(sf::Window& window) {
       }
 
       case sf::Event::MouseMoved: {
+        sf::Vector2u hover_point(event.mouseMove.x, event.mouseMove.y);
+        sf::Vector2u size = window.getSize();
+        hover_point.x /= size.x / 800.0;
+        hover_point.y /= size.y / 600.0;
         if (hovered_ != nullptr &&
-            hovered_->PointCheck(event.mouseMove.x, event.mouseMove.y)) {
+            hovered_->PointCheck(hover_point.x, hover_point.y)) {
           break;
         }
         Widget* new_hovered = nullptr;
         for (Widget* widget : draw_queue_) {
-          if (widget->PointCheck(event.mouseMove.x, event.mouseMove.y)) {
+          if (widget->PointCheck(hover_point.x, hover_point.y)) {
             new_hovered = widget;
             break;
           }
@@ -96,6 +110,15 @@ void State::ProcessEvents(sf::Window& window) {
       case sf::Event::Closed:
         states_.Close();
         break;
+
+      case sf::Event::Resized: {
+        // не имею понятия, что эта хренотень делает,
+        // но ресайз без этого не работает
+        int w = event.size.width;
+        int h = event.size.height;
+        window.setView(sf::View(sf::FloatRect(0, 0, w, h)));
+        break;
+      }
 
       default:ProcessEvent(event);
     }

@@ -3,7 +3,7 @@
 #include "ExitButton.h"
 
 int main() {
-  sf::RenderWindow wnd(sf::VideoMode(800, 600), "", sf::Style::Titlebar);
+  sf::RenderWindow wnd(sf::VideoMode(800, 600), "");
   wnd.setVerticalSyncEnabled(true);
   wnd.setPosition(sf::Vector2i(250, 50));
   StateManager states;

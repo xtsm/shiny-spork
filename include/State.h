@@ -19,7 +19,7 @@ class State : public sf::Drawable {
   void Render();
 
   //  Для обработки вообще всех событий, вызывается из main
-  void ProcessEvents(sf::Window& window);
+  void ProcessEvents(sf::RenderWindow& window);
 
   StateManager& GetStateManager();
 
