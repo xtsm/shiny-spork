@@ -25,6 +25,9 @@ class State : public sf::Drawable {
 
   void Close();
 
+  // Очистка clicked_ и hovered_ при переходе между стейтами
+  void CleanMouseFlags();
+
   static ResourceManager<sf::Image>& GetImageResourceManager();
 
   static ResourceManager<sf::Font>& GetFontResourceManager();

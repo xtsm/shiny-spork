@@ -13,6 +13,17 @@ State::State(StateManager& states) :
   render_.create(800, 600);
 }
 
+void State::CleanMouseFlags() {
+  if (clicked_ != nullptr) {
+    clicked_->SetClicked(false);
+    clicked_ = nullptr;
+  }
+  if (hovered_ != nullptr) {
+    hovered_->MouseOut();
+    hovered_ = nullptr;
+  }
+}
+
 void State::Render() {
   render_.clear();
   auto it = draw_queue_.end();
@@ -52,7 +63,7 @@ void State::ProcessEvents(sf::Window& window) {
           clicked_->SetClicked(false);
           if (clicked_->PointCheck(event.mouseButton.x, event.mouseButton.y)) {
             clicked_->Click();
-            clicked_->MouseIn();
+            if (this == states_.active_state) clicked_->MouseIn();
           }
           clicked_ = nullptr;
         }
