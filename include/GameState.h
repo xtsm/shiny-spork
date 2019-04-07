@@ -4,6 +4,7 @@
 #include "State.h"
 #include "Background.h"
 #include "PauseButton.h"
+#include "ContinueButton.h"
 
 class GameState: public State {
  public:
