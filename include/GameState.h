@@ -7,12 +7,13 @@
 #include "Background.h"
 #include "Tower.h"
 #include "BuildButton.h"
+#include "PauseButton.h"
 
 class GameState: public State {
  public:
   explicit GameState(StateManager&);
   void Load(const std::string&);
-
+  void Pause();
   void Tick() override;
   void ProcessEvent(sf::Event&) override;
 
@@ -27,6 +28,7 @@ class GameState: public State {
   int width_, height_;
   std::shared_ptr<Background> background_ptr_, panel_side_ptr_;
   std::shared_ptr<BuildButton> build_button_ptr_;
+  std::shared_ptr<PauseButton> pause_button_ptr_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_

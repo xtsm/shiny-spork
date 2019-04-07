@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Button.h"
+#include "State.h"
 
 Button::Button(State& state, int x, int y, const sf::String& caption) :
     Widget(state, DrawPriority(3, this)),
@@ -11,17 +12,17 @@ Button::Button(State& state, int x, int y, const sf::String& caption) :
   // TODO(tsmx): absolute crap, replace with proper resource manager ASAP
   sf::Image tex_l, tex_m, tex_r;
 
-  tex_l.loadFromFile("assets/ui/btn_l.png");
-  tex_m.loadFromFile("assets/ui/btn_m.png");
-  tex_r.loadFromFile("assets/ui/btn_r.png");
-  font_.loadFromFile("assets/font/default.ttf");
+  tex_l = State::GetImageResourceManager().GetOrLoadResource("assets/ui/btn_l.png");
+  tex_m = State::GetImageResourceManager().GetOrLoadResource("assets/ui/btn_m.png");
+  tex_r = State::GetImageResourceManager().GetOrLoadResource("assets/ui/btn_r.png");
+  font_ = State::GetFontResourceManager().GetOrLoadResource("assets/font/default.ttf");
 
   text_.setFont(font_);
   text_.setString(caption);
   text_.setOutlineColor(sf::Color::White);
   text_.setCharacterSize(22);
   sf::FloatRect text_bounds = text_.getLocalBounds();
-  text_bounds.width+=24;
+  text_bounds.width += 24;
   sf::Vector2u btn_tile = tex_m.getSize();
   int tile_count = static_cast<int>((text_bounds.width + btn_tile.x - 1) / btn_tile.x);
 

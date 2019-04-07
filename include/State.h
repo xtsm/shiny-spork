@@ -4,6 +4,7 @@
 #include <set>
 #include <memory>
 #include "Widget.h"
+#include "utility/ResourceManager.h"
 
 class StateManager;
 
@@ -19,7 +20,7 @@ class State : public sf::Drawable {
   void Render();
 
   //  Для обработки вообще всех событий, вызывается из main
-  void ProcessEvents(sf::Window& window);
+  void ProcessEvents(sf::RenderWindow& window);
 
   StateManager& GetStateManager();
 
@@ -28,6 +29,15 @@ class State : public sf::Drawable {
   State(const State&) = delete;
 
   State& operator=(const State&) = delete;
+
+  // Очистка clicked_ и hovered_ при переходе между стейтами
+  void CleanMouseFlags();
+
+  static ResourceManager<sf::Image>& GetImageResourceManager();
+
+  static ResourceManager<sf::Font>& GetFontResourceManager();
+
+  static ResourceManager<sf::Texture>& GetTextureResourceManager();
 
  protected:
 //  Компаратор для очереди рисования
@@ -46,6 +56,11 @@ class State : public sf::Drawable {
   bool closed_;
 
   ~State() override;
+
+ private:
+  static ResourceManager<sf::Texture> textures_manager_;
+  static ResourceManager<sf::Font> fonts_manager_;
+  static ResourceManager<sf::Image> images_manager_;
 };
 
 class MockState : public State {

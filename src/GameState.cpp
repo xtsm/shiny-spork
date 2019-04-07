@@ -11,7 +11,8 @@ GameState::GameState(StateManager& states) :
     height_(0),
     background_ptr_(new Background(*this)),
     panel_side_ptr_(new Background(*this)),
-    build_button_ptr_(new BuildButton(*this, 650, 50, std::string("tower1.txt"))) {
+    build_button_ptr_(new BuildButton(*this, 650, 50, std::string("tower1.txt"))),
+    pause_button_ptr_(new PauseButton(*this, 700, 525))  {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -24,18 +25,21 @@ void GameState::Load(const std::string& file_name) {
   draw_queue_.insert(background_ptr_);
   draw_queue_.insert(panel_side_ptr_);
   draw_queue_.insert(build_button_ptr_);
+  draw_queue_.insert(pause_button_ptr_);
 }
 
 void GameState::Tick() {
 }
-
+void GameState::Pause() {
+  states_.pause_ptr_->UpdateBackground(render_.getTexture());
+  states_.ChangeState(states_.pause_ptr_);
+}
 void GameState::ProcessEvent(sf::Event& event) {
   switch (event.type) {
     case sf::Event::KeyReleased: {
         switch (event.key.code) {
           case sf::Keyboard::Escape: {
-            states_.pause_ptr_->UpdateBackground(render_.getTexture());
-            states_.ChangeState(states_.pause_ptr_);
+            Pause();
             break;
           }
           default: break;

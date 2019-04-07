@@ -1,7 +1,11 @@
 #ifndef INCLUDE_PAUSESTATE_H_
 #define INCLUDE_PAUSESTATE_H_
+
 #include "State.h"
 #include "Background.h"
+#include "MainMenuButton.h"
+#include "ExitButton.h"
+#include "ContinueButton.h"
 
 class PauseState : public State {
  public:
@@ -11,6 +15,9 @@ class PauseState : public State {
   void ProcessEvent(sf::Event& event) override;
  protected:
   std::shared_ptr<Background> background_ptr_;
+  std::shared_ptr<ContinueButton> continue_button_ptr_;
+  std::shared_ptr<MainMenuButton> main_menu_ptr_;
+  std::shared_ptr<ExitButton> exit_button_ptr_;
 };
 
 #endif  // INCLUDE_PAUSESTATE_H_
