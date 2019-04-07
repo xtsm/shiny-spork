@@ -1,5 +1,5 @@
-#ifndef SHINY_SPORK_PAUSEBUTTON_H
-#define SHINY_SPORK_PAUSEBUTTON_H
+#ifndef INCLUDE_PAUSEBUTTON_H_
+#define INCLUDE_PAUSEBUTTON_H_
 
 #include "Button.h"
 #include "State.h"
@@ -10,4 +10,4 @@ class PauseButton : public Button {
   void Click() final;
 };
 
-#endif //SHINY_SPORK_PAUSEBUTTON_H
+#endif  // INCLUDE_PAUSEBUTTON_H_

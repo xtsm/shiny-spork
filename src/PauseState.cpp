@@ -18,7 +18,6 @@ PauseState::PauseState(StateManager& states) :
 }
 
 void PauseState::Tick() {
-
 }
 
 void PauseState::UpdateBackground(const sf::Texture& texture) {
@@ -26,5 +25,4 @@ void PauseState::UpdateBackground(const sf::Texture& texture) {
 }
 
 void PauseState::ProcessEvent(sf::Event&) {
-
 }

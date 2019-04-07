@@ -1,5 +1,5 @@
-#ifndef SHINY_SPORK_UPDATETOWERBUTTON_H
-#define SHINY_SPORK_UPDATETOWERBUTTON_H
+#ifndef INCLUDE_UPDATETOWERBUTTON_H_
+#define INCLUDE_UPDATETOWERBUTTON_H_
 
 #include "Button.h"
 #include "Tower.h"
@@ -14,4 +14,4 @@ class UpdateTowerButton : public Button {
   Tower& tower_;
 };
 
-#endif //SHINY_SPORK_UPDATETOWERBUTTON_H
+#endif  // INCLUDE_UPDATETOWERBUTTON_H_

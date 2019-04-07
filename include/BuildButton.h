@@ -1,7 +1,8 @@
-#ifndef SHINY_SPORK_BUILDBUTTON_H
-#define SHINY_SPORK_BUILDBUTTON_H
+#ifndef INCLUDE_BUILDBUTTON_H_
+#define INCLUDE_BUILDBUTTON_H_
 
 #include "Button.h"
+#include <string>
 
 class BuildButton : public Button {
  public:
@@ -13,4 +14,4 @@ class BuildButton : public Button {
   std::string source_;
 };
 
-#endif //SHINY_SPORK_BUILDBUTTON_H
+#endif  // INCLUDE_BUILDBUTTON_H_

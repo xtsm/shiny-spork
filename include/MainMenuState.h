@@ -7,6 +7,7 @@
 #include "Background.h"
 #include "LoadGameButton.h"
 #include "SettingsButton.h"
+#include <memory>
 
 class MainMenuState: public State {
  public:

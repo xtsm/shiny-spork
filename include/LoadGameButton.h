@@ -1,5 +1,5 @@
-#ifndef SHINY_SPORK_LOADGAMEBUTTON_H
-#define SHINY_SPORK_LOADGAMEBUTTON_H
+#ifndef INCLUDE_LOADGAMEBUTTON_H_
+#define INCLUDE_LOADGAMEBUTTON_H_
 #include <memory>
 #include "Button.h"
 
@@ -10,4 +10,4 @@ class LoadGameButton : public Button {
   void Click() override;
 };
 
-#endif //SHINY_SPORK_LOADGAMEBUTTON_H
+#endif  // INCLUDE_LOADGAMEBUTTON_H_

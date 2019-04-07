@@ -1,12 +1,13 @@
-//Source файл должен иметь следующий формат:
-//max_level
-//speed range damage tower_image_path //Характеристики первого уровня
-//speed range damage tower_image_path //Характеристики второго уровня
-//...................................
-//speed range damage tower_image_path //Характеристики max_level уровня
-#include <iostream>
+// Source файл должен иметь следующий формат:
+// max_level
+// speed range damage tower_image_path // Характеристики первого уровня
+// speed range damage tower_image_path // Характеристики второго уровня
+// ...................................
+// speed range damage tower_image_path // Характеристики max_level уровня
 #include "Tower.h"
 #include "StateManager.h"
+#include <iostream>
+#include <string>
 
 Tower::Tower(State& state, const std::string& source, int x, int y) :
     Widget(state, DrawPriority(4, this)),
@@ -24,7 +25,6 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     speed_(0),
     range_(0),
     damage_(0) {
-
   SetPosition(x, y);
 
   source_ >> max_level_;
@@ -33,7 +33,8 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
 
   std::string tower_image_path;
   source_ >> tower_image_path;
-  tower_sprite_tex_ = state_.GetTextureResourceManager().GetOrLoadResource(tower_image_path);
+  tower_sprite_tex_ = state_.GetTextureResourceManager()
+      .GetOrLoadResource(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
   tower_sprite_.move(x, y);
 
@@ -41,9 +42,10 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   text_.setString("LVL" + std::to_string(level_));
   text_.setOutlineColor(sf::Color::White);
   text_.setCharacterSize(10);
-  font_ = state_.GetFontResourceManager().GetOrLoadResource("assets/font/default.ttf");
+  font_ = state_.GetFontResourceManager()
+      .GetOrLoadResource("assets/font/default.ttf");
   text_.move(x, y);
-  //TODO[Nicksechko] Загрузка тексстуры снаряда
+  // TODO(Nicksechko): Загрузка тексстуры снаряда
 }
 void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(tower_sprite_, states);
@@ -55,7 +57,7 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 void Tower::Click() {
   StateManager& states = state_.GetStateManager();
   states.game_ptr_->InfoMenuForTower(*this);
-  //TODO[Nicksechko] Отображение информации о башне на панели
+  // TODO(Nicksechko): Отображение информации о башне на панели
 }
 
 void Tower::MouseIn() {
@@ -80,18 +82,19 @@ void Tower::Update() {
   source_ >> speed_ >> range_ >> damage_;
   std::string tower_image_path;
   source_ >> tower_image_path;
-  tower_sprite_tex_ = state_.GetTextureResourceManager().GetOrLoadResource(tower_image_path);
+  tower_sprite_tex_ = state_.GetTextureResourceManager()
+      .GetOrLoadResource(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
   text_.setString("LVL" + std::to_string(level_));
-  //TODO[Nicksechko] Обновление текстуры снаряда
+  // TODO(Nicksechko): Обновление текстуры снаряда
 }
 
 void Tower::Find_Aim() {
-  //TODO[Nicksechko] Поск цели
+  // TODO(Nicksechko): Поск цели
 }
 
 void Tower::Shot() {
-  //TODO[Nicksechko] Выстрел по цели
+  // TODO(Nicksechko): Выстрел по цели
 }
 
 bool Tower::Updatable() const {

@@ -2,6 +2,7 @@
 
 #include "StateManager.h"
 #include "State.h"
+#include <memory>
 
 State::State(StateManager& states) :
     states_(states),

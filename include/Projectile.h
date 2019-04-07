@@ -1,5 +1,5 @@
-#ifndef SHINY_SPORK_CARTRIDGE_H
-#define SHINY_SPORK_CARTRIDGE_H
+#ifndef INCLUDE_PROJECTILE_H_
+#define INCLUDE_PROJECTILE_H_
 
 #include "Widget.h"
 #include <fstream>
@@ -9,13 +9,13 @@ class Projectile : public Widget {
   Projectile(State&, const DrawPriority&, int, int);
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
  protected:
-  //Текстуры снаряда
+  // Текстуры снаряда
   sf::Texture sprite_tex_;
   sf::Sprite sprite_;
-  //Урон, который нанесёт снаряд
+  // Урон, который нанесёт снаряд
   int damage_;
-  //Цель, в которую летит снаряд
-  //TODO
+  // Цель, в которую летит снаряд
+  // TODO(Nicksechko)
 };
 
-#endif //SHINY_SPORK_CARTRIDGE_H
+#endif  // INCLUDE_PROJECTILE_H_

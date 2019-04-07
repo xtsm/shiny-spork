@@ -1,5 +1,5 @@
-#ifndef SHINY_SPORK_SETTINGSBUTTON_H
-#define SHINY_SPORK_SETTINGSBUTTON_H
+#ifndef INCLUDE_SETTINGSBUTTON_H_
+#define INCLUDE_SETTINGSBUTTON_H_
 
 #include <memory>
 #include "Button.h"
@@ -11,4 +11,4 @@ class SettingsButton : public Button {
   void Click() override;
 };
 
-#endif //SHINY_SPORK_SETTINGSBUTTON_H
+#endif  // INCLUDE_SETTINGSBUTTON_H_

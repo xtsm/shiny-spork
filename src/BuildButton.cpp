@@ -1,8 +1,10 @@
 #include <GameState.h>
 #include <StateManager.h>
 #include "BuildButton.h"
+#include <string>
 
-BuildButton::BuildButton(State& state, int x, int y, const std::string& source) :
+BuildButton::BuildButton(State& state, int x, int y,
+    const std::string& source) :
     Button(state, x, y, "Build"),
     source_(source) {
 }

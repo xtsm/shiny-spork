@@ -11,7 +11,8 @@ GameState::GameState(StateManager& states) :
     height_(0),
     background_ptr_(new Background(*this)),
     panel_side_ptr_(new Background(*this)),
-    build_button_ptr_(new BuildButton(*this, 650, 50, std::string("assets/tower/1.txt"))),
+    build_button_ptr_(new BuildButton(*this, 650, 50,
+    std::string("assets/tower/1.txt"))),
     pause_button_ptr_(new PauseButton(*this, 700, 525))  {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
@@ -59,5 +60,6 @@ void GameState::BuildMenu(const std::string& source) {
 }
 
 void GameState::InfoMenuForTower(Tower& tower) {
-  draw_queue_.insert(std::make_shared<UpdateTowerButton>(*this, 650, 450, tower));
+  draw_queue_.insert(
+    std::make_shared<UpdateTowerButton>(*this, 650, 450, tower));
 }

@@ -1,5 +1,5 @@
-#ifndef SHINY_SPORK_TOWER_H
-#define SHINY_SPORK_TOWER_H
+#ifndef INCLUDE_TOWER_H_
+#define INCLUDE_TOWER_H_
 
 #include <iostream>
 #include <string>
@@ -14,41 +14,41 @@ class Tower : public Widget {
   void MouseIn() override;
   void MouseOut() override;
   bool PointCheck(int, int) const override;
-  //Считывает данные обновления
+  // Считывает данные обновления
   void Update();
-  //Находит ближайшего врага в радиусе дальнобойности
+  // Находит ближайшего врага в радиусе дальнобойности
   void Find_Aim();
-  //Пытается сделать выстрел
+  // Пытается сделать выстрел
   void Shot();
-  //Проверяет можно ли обновить башню
+  // Проверяет можно ли обновить башню
   bool Updatable() const;
 
  protected:
-  //Спрайт и текстура самой башни
+  // Спрайт и текстура самой башни
   sf::Texture tower_sprite_tex_;
   sf::Sprite tower_sprite_;
-  //Текст и шрифт надписи над башней
+  // Текст и шрифт надписи над башней
   sf::Font font_;
   sf::Text text_;
-  //Флаг, указывающий находится ли указатель над башней
+  // Флаг, указывающий находится ли указатель над башней
   bool is_mouse_in_;
-  //Поток из файла с описанием уровней башни
+  // Поток из файла с описанием уровней башни
   std::ifstream source_;
   // Уровень башни
   int level_;
-  //Максимальный возможный уровель башни
+  // Максимальный возможный уровель башни
   int max_level_;
-  //Спрайт и текстура снаряда
+  // Спрайт и текстура снаряда
   sf::Texture projectile_sprite_tex_;
   sf::Sprite projectile_sprite_;
-  //Количество тиков, прошедших с предыдущего выстрела
+  // Количество тиков, прошедших с предыдущего выстрела
   int timer_;
-  //Скорострельность в формате тик/выстрел
+  // Скорострельность в формате тик/выстрел
   int speed_;
-  //Дальнобойность
+  // Дальнобойность
   int range_;
-  //Урон от снаряда
+  // Урон от снаряда
   int damage_;
 };
 
-#endif //SHINY_SPORK_TOWER_H
+#endif  // INCLUDE_TOWER_H_

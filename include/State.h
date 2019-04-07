@@ -42,7 +42,8 @@ class State : public sf::Drawable {
  protected:
 //  Компаратор для очереди рисования
   struct QueueCmp {
-    bool operator()(const std::shared_ptr<Widget>& lhs, const std::shared_ptr<Widget>& rhs) const {
+    bool operator()(const std::shared_ptr<Widget>& lhs,
+        const std::shared_ptr<Widget>& rhs) const {
       return lhs->GetPriority() < rhs->GetPriority();
     }
   };

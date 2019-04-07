@@ -1,4 +1,6 @@
 #include "StateManager.h"
+#include <memory>
+#include <utility>
 
 StateManager::StateManager() :
     main_menu_ptr_(new MainMenuState(*this)),

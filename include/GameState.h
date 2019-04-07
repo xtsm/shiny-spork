@@ -1,13 +1,14 @@
 #ifndef INCLUDE_GAMESTATE_H_
 #define INCLUDE_GAMESTATE_H_
 
-#include <string>
-#include <iostream>
 #include "State.h"
 #include "Background.h"
 #include "Tower.h"
 #include "BuildButton.h"
 #include "PauseButton.h"
+#include <string>
+#include <iostream>
+#include <memory>
 
 class GameState: public State {
  public:
@@ -17,11 +18,11 @@ class GameState: public State {
   void Tick() override;
   void ProcessEvent(sf::Event&) override;
 
-  //Строит башню с характеристиками из файла
+  // Строит башню с характеристиками из файла
   void BuildTower(const std::string&, int, int);
-  //Вызывает меню постройки башни
+  // Вызывает меню постройки башни
   void BuildMenu(const std::string&);
-  //Создаёт меню информации для башни
+  // Создаёт меню информации для башни
   void InfoMenuForTower(Tower&);
 
  protected:

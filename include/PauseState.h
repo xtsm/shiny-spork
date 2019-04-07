@@ -6,6 +6,7 @@
 #include "MainMenuButton.h"
 #include "ExitButton.h"
 #include "ContinueButton.h"
+#include <memory>
 
 class PauseState : public State {
  public:

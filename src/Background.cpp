@@ -28,9 +28,9 @@ void Background::LoadFromFile(const std::string& file_name) {
 
 void Background::SetDim(bool value) {
   if (value) {
-    bg_sprite_.setColor(sf::Color(120,120,120));
+    bg_sprite_.setColor(sf::Color(120, 120, 120));
   } else {
-    bg_sprite_.setColor(sf::Color(255,255,255));
+    bg_sprite_.setColor(sf::Color(255, 255, 255));
   }
 }
 
