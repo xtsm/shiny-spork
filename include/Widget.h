@@ -20,6 +20,9 @@ class Widget : public sf::Drawable {
 
   void SetClicked(bool);
   virtual void SetPosition(int x, int y);
+  long long GetID() {
+    return id_;
+  }
 
   //  Получает проиоритет в очереди рисования и обработки событий
   const DrawPriority& GetPriority() const;
@@ -29,6 +32,8 @@ class Widget : public sf::Drawable {
   DrawPriority priority_;
   bool clicked_;
   int x_, y_;
+  long long id_;
+  static long long last_id_;
 };
 
 #endif  // INCLUDE_WIDGET_H_

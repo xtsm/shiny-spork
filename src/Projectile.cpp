@@ -7,10 +7,10 @@ Projectile::Projectile(State& state, const DrawPriority& priority,
     sprite_(),
     damage_(0) {
   SetPosition(x, y);
-  // TODO(Nicksechko)
+  // TODO(Nicksechko): Цель
 }
 void Projectile::draw(sf::RenderTarget&, sf::RenderStates) const {
-  // TODO(Nicksechko)
+  // TODO(Nicksechko): Полёт
 }
 
 

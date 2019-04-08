@@ -1,11 +1,14 @@
 #include "Widget.h"
 
+long long Widget::last_id_ = 0;
+
 Widget::Widget(State& state, const DrawPriority& priority) :
     state_(state),
     priority_(priority),
     clicked_(false),
     x_(0),
-    y_(0) {}
+    y_(0),
+    id_(last_id_++) {}
 
 const DrawPriority& Widget::GetPriority() const {
   return priority_;
@@ -20,4 +23,4 @@ void Widget::SetPosition(int x, int y) {
   y_ = y;
 }
 
-Widget::~Widget() {}
+Widget::~Widget() = default;

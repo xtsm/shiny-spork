@@ -33,7 +33,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
 
   std::string tower_image_path;
   source_ >> tower_image_path;
-  tower_sprite_tex_ = state_.GetTextureResourceManager()
+  tower_sprite_tex_ = State::GetTextureResourceManager()
       .GetOrLoadResource(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
   tower_sprite_.move(x, y);
@@ -42,11 +42,12 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   text_.setString("LVL" + std::to_string(level_));
   text_.setOutlineColor(sf::Color::White);
   text_.setCharacterSize(10);
-  font_ = state_.GetFontResourceManager()
+  font_ = State::GetFontResourceManager()
       .GetOrLoadResource("assets/font/default.ttf");
   text_.move(x, y);
   // TODO(Nicksechko): Загрузка тексстуры снаряда
 }
+
 void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(tower_sprite_, states);
   if (is_mouse_in_) {
@@ -56,7 +57,7 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 void Tower::Click() {
   StateManager& states = state_.GetStateManager();
-  states.game_ptr_->InfoMenuForTower(*this);
+  states.game_ptr_->InfoMenuForTower(id_);
   // TODO(Nicksechko): Отображение информации о башне на панели
 }
 
@@ -82,7 +83,7 @@ void Tower::Update() {
   source_ >> speed_ >> range_ >> damage_;
   std::string tower_image_path;
   source_ >> tower_image_path;
-  tower_sprite_tex_ = state_.GetTextureResourceManager()
+  tower_sprite_tex_ = State::GetTextureResourceManager()
       .GetOrLoadResource(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
   text_.setString("LVL" + std::to_string(level_));

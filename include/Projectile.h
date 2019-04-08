@@ -15,7 +15,7 @@ class Projectile : public Widget {
   // Урон, который нанесёт снаряд
   int damage_;
   // Цель, в которую летит снаряд
-  // TODO(Nicksechko)
+  // TODO(Nicksechko): Цель
 };
 
 #endif  // INCLUDE_PROJECTILE_H_

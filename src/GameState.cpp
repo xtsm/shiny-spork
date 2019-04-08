@@ -1,7 +1,8 @@
 #include <fstream>
 #include <string>
 #include <memory>
-#include <UpdateTowerButton.h>
+#include "UpdateTowerButton.h"
+#include "RemoveTowerButton.h"
 #include "StateManager.h"
 #include "GameState.h"
 
@@ -13,7 +14,9 @@ GameState::GameState(StateManager& states) :
     panel_side_ptr_(new Background(*this)),
     build_button_ptr_(new BuildButton(*this, 650, 50,
     std::string("assets/tower/1.txt"))),
-    pause_button_ptr_(new PauseButton(*this, 700, 525))  {
+    pause_button_ptr_(new PauseButton(*this, 700, 525)),
+    towers_{},
+    info_menu_{} {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -52,14 +55,42 @@ void GameState::ProcessEvent(sf::Event& event) {
 }
 
 void GameState::BuildTower(const std::string& tower_path, int x, int y) {
-  draw_queue_.insert(std::make_shared<Tower>(*this, tower_path, x, y));
+  std::shared_ptr<Tower> tower(new Tower(*this, tower_path, x, y));
+  towers_.push_back(tower);
+  draw_queue_.insert(tower);
 }
 
 void GameState::BuildMenu(const std::string& source) {
   BuildTower(source, 50, 50);
+//  TODO(Nicksechko): Меню постройки
 }
 
-void GameState::InfoMenuForTower(Tower& tower) {
-  draw_queue_.insert(
-    std::make_shared<UpdateTowerButton>(*this, 650, 450, tower));
+void GameState::InfoMenuForTower(long long id) {
+  std::shared_ptr<Tower> tower;
+  for (auto& item : towers_) {
+    if (item->GetID() == id) {
+      tower = item;
+      break;
+    }
+  }
+  info_menu_.emplace_back(new UpdateTowerButton(*this, 650, 450, tower));
+  info_menu_.emplace_back(new RemoveTowerButton(*this, 650, 400, tower));
+  for (auto& item : info_menu_) {
+    draw_queue_.insert(item);
+  }
+//  TODO(Nicksechko): Информация о башне на боковой панели
 }
+
+void GameState::RemoveTower(const std::shared_ptr<Tower>& tower_ptr) {
+  draw_queue_.erase(tower_ptr);
+  RemoveInfoMenu();
+}
+
+void GameState::RemoveInfoMenu() {
+  for (auto& item : info_menu_) {
+    draw_queue_.erase(item);
+  }
+  info_menu_.clear();
+}
+
+
