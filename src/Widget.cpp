@@ -23,4 +23,8 @@ void Widget::SetPosition(int x, int y) {
   y_ = y;
 }
 
+long long Widget::GetID() const {
+  return id_;
+}
+
 Widget::~Widget() = default;

@@ -56,7 +56,7 @@ void GameState::ProcessEvent(sf::Event& event) {
 
 void GameState::BuildTower(const std::string& tower_path, int x, int y) {
   std::shared_ptr<Tower> tower(new Tower(*this, tower_path, x, y));
-  towers_.push_back(tower);
+  towers_[tower->GetID()] = tower;
   draw_queue_.insert(tower);
 }
 
@@ -66,29 +66,28 @@ void GameState::BuildMenu(const std::string& source) {
 }
 
 void GameState::InfoMenuForTower(long long id) {
-  std::shared_ptr<Tower> tower;
-  for (auto& item : towers_) {
-    if (item->GetID() == id) {
-      tower = item;
-      break;
-    }
-  }
-  info_menu_.emplace_back(new UpdateTowerButton(*this, 650, 450, tower));
-  info_menu_.emplace_back(new RemoveTowerButton(*this, 650, 400, tower));
+  std::shared_ptr<Tower> tower = towers_[id];
+  std::shared_ptr<UpdateTowerButton>
+      update_tower_button(new UpdateTowerButton(*this, 650, 450, tower));
+  std::shared_ptr<RemoveTowerButton>
+      remove_tower_button(new RemoveTowerButton(*this, 650, 400, tower));
+  info_menu_.emplace(update_tower_button->GetID(), update_tower_button);
+  info_menu_.emplace(remove_tower_button->GetID(), remove_tower_button);
   for (auto& item : info_menu_) {
-    draw_queue_.insert(item);
+    draw_queue_.insert(item.second);
   }
 //  TODO(Nicksechko): Информация о башне на боковой панели
 }
 
 void GameState::RemoveTower(const std::shared_ptr<Tower>& tower_ptr) {
   draw_queue_.erase(tower_ptr);
+  towers_.erase(tower_ptr->GetID());
   RemoveInfoMenu();
 }
 
 void GameState::RemoveInfoMenu() {
   for (auto& item : info_menu_) {
-    draw_queue_.erase(item);
+    draw_queue_.erase(item.second);
   }
   info_menu_.clear();
 }

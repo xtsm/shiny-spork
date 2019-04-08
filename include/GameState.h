@@ -34,8 +34,8 @@ class GameState: public State {
   std::shared_ptr<Background> background_ptr_, panel_side_ptr_;
   std::shared_ptr<BuildButton> build_button_ptr_;
   std::shared_ptr<PauseButton> pause_button_ptr_;
-  std::vector<std::shared_ptr<Tower>> towers_;
-  std::vector<std::shared_ptr<Widget>> info_menu_;
+  std::map<long long, std::shared_ptr<Tower>> towers_;
+  std::map<long long, std::shared_ptr<Widget>> info_menu_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_
