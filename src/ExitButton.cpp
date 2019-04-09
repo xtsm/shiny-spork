@@ -7,7 +7,7 @@ ExitButton::ExitButton(State& state, int x, int y) :
     Button(state, x, y, "Exit") {
 }
 
-void ExitButton::Click(int x, int y) {
+void ExitButton::Click(int, int) {
   std::cerr << "Exit button clicked\n";
   state_.GetStateManager().Close();
 }

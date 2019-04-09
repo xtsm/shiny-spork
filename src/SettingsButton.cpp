@@ -5,7 +5,7 @@
 SettingsButton::SettingsButton(State& state, int x, int y) :
     Button(state, x, y, "Settings") {}
 
-void SettingsButton::Click(int x, int y) {
+void SettingsButton::Click(int, int) {
   StateManager& states = state_.GetStateManager();
   states.ChangeState(states.settings_ptr_);
 }

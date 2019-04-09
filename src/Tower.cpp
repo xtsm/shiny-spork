@@ -55,13 +55,13 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   }
 }
 
-void Tower::Click(int x, int y) {
+void Tower::Click(int, int) {
   StateManager& states = state_.GetStateManager();
   states.game_ptr_->InfoMenuForTower(id_);
   // TODO(Nicksechko): Отображение информации о башне на панели
 }
 
-void Tower::MouseIn(int x, int y) {
+void Tower::MouseIn(int, int) {
   if (clicked_) {
     tower_sprite_.setColor(sf::Color(255, 0, 255));
   } else {
@@ -69,7 +69,7 @@ void Tower::MouseIn(int x, int y) {
   }
   is_mouse_in_ = true;
 }
-void Tower::MouseOut(int x, int y) {
+void Tower::MouseOut(int, int) {
   tower_sprite_.setColor(sf::Color::White);
   is_mouse_in_ = false;
 }

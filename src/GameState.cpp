@@ -15,7 +15,8 @@ GameState::GameState(StateManager& states) :
     pause_button_ptr_(new PauseButton(*this, 700, 525)),
     build_menu_grid_ptr_(new BuildMenuGrid(*this)),
     towers_{},
-    info_menu_{} {
+    info_menu_{},
+    is_free{} {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -49,14 +50,14 @@ void GameState::Pause() {
 void GameState::ProcessEvent(sf::Event& event) {
   switch (event.type) {
     case sf::Event::KeyReleased: {
-        switch (event.key.code) {
-          case sf::Keyboard::Escape: {
-            Pause();
-            break;
-          }
-          default: break;
+      switch (event.key.code) {
+        case sf::Keyboard::Escape: {
+          Pause();
+          break;
         }
-        break;
+        default: break;
+      }
+      break;
     }
     default: break;
   }

@@ -6,7 +6,7 @@
 
 class BuildButton : public Button {
  public:
-  explicit BuildButton(State&, int, int, const std::string&, const std::string&);
+  explicit BuildButton(State&, int, int, std::string, const std::string&);
 
   void Click(int, int) override;
 

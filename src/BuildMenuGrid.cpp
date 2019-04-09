@@ -6,31 +6,21 @@
 BuildMenuGrid::BuildMenuGrid(State& state) :
     Widget(state, DrawPriority(1000, this)),
     source_(),
-    banned_tile_tex_(),
-    banned_tile_(),
-    free_tile_tex_(),
-    free_tile_(),
     tower_sprite_() {
-
-  banned_tile_.setTextureRect(sf::IntRect(0, 0, 60, 60));
-  banned_tile_.setColor(sf::Color(255, 0, 0, 128));
-
-  free_tile_.setTextureRect(sf::IntRect(0, 0, 60, 60));
-  free_tile_.setColor(sf::Color(0, 255, 0, 128));
 }
 
 void BuildMenuGrid::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   StateManager& state_manager = state_.GetStateManager();
   for (int i = 0; i < 10; i++) {
     for (int j = 0; j < 10; j++) {
-      sf::Sprite current_tile;
+      sf::RectangleShape tile(sf::Vector2f(60, 60));
       if (state_manager.game_ptr_->IsFree(i, j)) {
-        current_tile = free_tile_;
+        tile.setFillColor(sf::Color(0, 255, 0, 64));
       } else {
-        current_tile = banned_tile_;
+        tile.setFillColor(sf::Color(255, 0, 0, 64));
       }
-      current_tile.setPosition(60 * i, 60 * j);
-      target.draw(current_tile, states);
+      tile.setPosition(sf::Vector2f(60 * i, 60 * j));
+      target.draw(tile, states);
     }
   }
   target.draw(tower_sprite_, states);

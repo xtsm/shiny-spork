@@ -19,12 +19,6 @@ class BuildMenuGrid : public Widget {
 
  private:
   std::string source_;
-  //Спрайт занятых клеток
-  sf::Texture banned_tile_tex_;
-  sf::Sprite banned_tile_;
-  //Спрайт свободных клеток
-  sf::Texture free_tile_tex_;
-  sf::Sprite free_tile_;
   //Спрайт постройки
   sf::Sprite tower_sprite_;
 };
