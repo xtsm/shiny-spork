@@ -44,7 +44,7 @@ class State : public sf::Drawable {
   struct QueueCmp {
     bool operator()(const std::shared_ptr<Widget>& lhs,
         const std::shared_ptr<Widget>& rhs) const {
-      return lhs->GetPriority() < rhs->GetPriority();
+      return lhs->GetPriority() > rhs->GetPriority();
     }
   };
 

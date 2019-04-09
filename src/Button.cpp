@@ -3,7 +3,7 @@
 #include "State.h"
 
 Button::Button(State& state, int x, int y, const sf::String& caption) :
-    Widget(state, DrawPriority(3, this)),
+    Widget(state, DrawPriority(5, this)),
     bg_sprite_tex_(),
     bg_sprite_(),
     font_(),
@@ -50,11 +50,11 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(text_, states);
 }
 
-void Button::Click() {
+void Button::Click(int x, int y) {
   std::cerr << "Button clicked\n";
 }
 
-void Button::MouseIn() {
+void Button::MouseIn(int x, int y) {
   if (disable_ && clicked_) {
     bg_sprite_.setColor(sf::Color(255, 0, 0));
   } else if (disable_) {
@@ -66,7 +66,7 @@ void Button::MouseIn() {
   }
 }
 
-void Button::MouseOut() {
+void Button::MouseOut(int x, int y) {
   if (disable_) {
     bg_sprite_.setColor(sf::Color(80, 80, 80));
   } else {

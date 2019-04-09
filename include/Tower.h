@@ -10,9 +10,9 @@ class Tower : public Widget {
  public:
   explicit Tower(State&, const std::string& source, int, int);
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
-  void Click() override;
-  void MouseIn() override;
-  void MouseOut() override;
+  void Click(int, int) override;
+  void MouseIn(int, int) override;
+  void MouseOut(int, int) override;
   bool PointCheck(int, int) const override;
   // Считывает данные обновления
   void Update();

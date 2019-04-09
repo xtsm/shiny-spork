@@ -8,7 +8,7 @@ RemoveTowerButton::RemoveTowerButton(State& state, int x, int y, std::shared_ptr
     Button(state, x, y, "Remove"),
     tower_(std::move(tower)) {}
 
-void RemoveTowerButton::Click() {
+void RemoveTowerButton::Click(int x, int y) {
   StateManager& states = state_.GetStateManager();
   states.game_ptr_->RemoveTower(tower_);
 }

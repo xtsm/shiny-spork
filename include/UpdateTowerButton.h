@@ -9,7 +9,7 @@ class UpdateTowerButton : public Button {
  public:
   explicit UpdateTowerButton(State&, int, int, std::shared_ptr<Tower>);
 
-  void Click() override;
+  void Click(int, int) override;
 
  private:
   std::shared_ptr<Tower> tower_;

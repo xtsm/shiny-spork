@@ -14,12 +14,12 @@ class Widget : public sf::Drawable {
   //  Проверяет приналдежность точки виджету
   virtual bool PointCheck(int, int) const { return false; }
 
-  virtual void Click() {}
-  virtual void MouseIn() {}
-  virtual void MouseOut() {}
+  virtual void Click(int, int) {}
+  virtual void MouseIn(int, int) {}
+  virtual void MouseOut(int, int) {}
 
   void SetClicked(bool);
-  virtual void SetPosition(int x, int y);
+  virtual void SetPosition(int, int);
 
   long long GetID() const;
 

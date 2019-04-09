@@ -8,7 +8,7 @@ class MainMenuButton : public Button {
  public:
   explicit MainMenuButton(State&, int, int);
 
-  void Click() override;
+  void Click(int, int) override;
 };
 
 #endif  // INCLUDE_MAINMENUBUTTON_H_

@@ -8,7 +8,7 @@ class SettingsButton : public Button {
  public:
   explicit SettingsButton(State&, int, int);
 
-  void Click() override;
+  void Click(int, int) override;
 };
 
 #endif  // INCLUDE_SETTINGSBUTTON_H_

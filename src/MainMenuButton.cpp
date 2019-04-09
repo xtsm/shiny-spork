@@ -6,7 +6,7 @@ MainMenuButton::MainMenuButton(State& state, int x, int y) :
     Button(state, x, y, "Main Menu") {
 }
 
-void MainMenuButton::Click() {
+void MainMenuButton::Click(int x, int y) {
   StateManager& states = state_.GetStateManager();
   states.ChangeState(states.main_menu_ptr_);
 }

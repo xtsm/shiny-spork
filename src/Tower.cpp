@@ -10,7 +10,7 @@
 #include <string>
 
 Tower::Tower(State& state, const std::string& source, int x, int y) :
-    Widget(state, DrawPriority(4, this)),
+    Widget(state, DrawPriority(100 + y, this)),
     tower_sprite_tex_(),
     tower_sprite_(),
     font_(),
@@ -55,13 +55,13 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   }
 }
 
-void Tower::Click() {
+void Tower::Click(int x, int y) {
   StateManager& states = state_.GetStateManager();
   states.game_ptr_->InfoMenuForTower(id_);
   // TODO(Nicksechko): Отображение информации о башне на панели
 }
 
-void Tower::MouseIn() {
+void Tower::MouseIn(int x, int y) {
   if (clicked_) {
     tower_sprite_.setColor(sf::Color(255, 0, 255));
   } else {
@@ -69,7 +69,7 @@ void Tower::MouseIn() {
   }
   is_mouse_in_ = true;
 }
-void Tower::MouseOut() {
+void Tower::MouseOut(int x, int y) {
   tower_sprite_.setColor(sf::Color::White);
   is_mouse_in_ = false;
 }

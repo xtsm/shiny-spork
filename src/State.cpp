@@ -20,7 +20,7 @@ void State::CleanMouseFlags() {
     clicked_ = nullptr;
   }
   if (hovered_ != nullptr) {
-    hovered_->MouseOut();
+    hovered_->MouseOut(0, 0);
     hovered_ = nullptr;
   }
 }
@@ -59,7 +59,7 @@ void State::ProcessEvents(sf::RenderWindow& window) {
           if (widget->PointCheck(click_point.x, click_point.y)) {
             clicked_ = widget;
             clicked_->SetClicked(true);
-            clicked_->MouseIn();
+            clicked_->MouseIn(click_point.x, click_point.y);
             break;
           }
         }
@@ -73,8 +73,10 @@ void State::ProcessEvents(sf::RenderWindow& window) {
           click_point.x /= size.x / 800.0;
           click_point.y /= size.y / 600.0;
           if (clicked_->PointCheck(click_point.x, click_point.y)) {
-            clicked_->Click();
-            if (states_.active_state_ptr_.get() == this) clicked_->MouseIn();
+            clicked_->Click(click_point.x, click_point.y);
+            if (states_.active_state_ptr_.get() == this) {
+              clicked_->MouseIn(click_point.x, click_point.y);
+            }
           }
           clicked_ = nullptr;
         }
@@ -97,14 +99,13 @@ void State::ProcessEvents(sf::RenderWindow& window) {
             break;
           }
         }
-        if (hovered_ != nullptr) hovered_->MouseOut();
+        if (hovered_ != nullptr) hovered_->MouseOut(0, 0);
         hovered_ = new_hovered;
-        if (hovered_ != nullptr) hovered_->MouseIn();
+        if (hovered_ != nullptr) hovered_->MouseIn(0, 0);
         break;
       }
 
-      case sf::Event::MouseLeft:
-        if (hovered_ != nullptr) hovered_->MouseOut();
+      case sf::Event::MouseLeft:if (hovered_ != nullptr) hovered_->MouseOut(0, 0);
         hovered_ = nullptr;
         break;
 

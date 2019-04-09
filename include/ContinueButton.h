@@ -7,7 +7,7 @@ class ContinueButton : public Button {
  public:
   explicit ContinueButton(State&, int, int);
 
-  void Click() override;
+  void Click(int, int) override;
 };
 
 #endif  // INCLUDE_CONTINUEBUTTON_H_

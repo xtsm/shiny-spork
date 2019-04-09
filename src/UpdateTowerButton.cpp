@@ -12,7 +12,7 @@ UpdateTowerButton::UpdateTowerButton(State& state, int x, int y, std::shared_ptr
   }
 }
 
-void UpdateTowerButton::Click() {
+void UpdateTowerButton::Click(int x, int y) {
   if (!disable_) {
     tower_->Update();
     if (!tower_->Updatable()) {

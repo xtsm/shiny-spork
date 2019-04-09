@@ -7,7 +7,7 @@ class LoadGameButton : public Button {
  public:
   explicit LoadGameButton(State&, int, int);
 
-  void Click() override;
+  void Click(int, int) override;
 };
 
 #endif  // INCLUDE_LOADGAMEBUTTON_H_

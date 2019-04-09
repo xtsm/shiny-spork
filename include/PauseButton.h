@@ -7,7 +7,8 @@
 class PauseButton : public Button {
  public:
   PauseButton(State& state, int x, int y);
-  void Click() final;
+
+  void Click(int, int) final;
 };
 
 #endif  // INCLUDE_PAUSEBUTTON_H_

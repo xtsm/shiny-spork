@@ -8,13 +8,12 @@
 
 GameState::GameState(StateManager& states) :
     State(states),
-    width_(0),
-    height_(0),
     background_ptr_(new Background(*this)),
     panel_side_ptr_(new Background(*this)),
     build_button_ptr_(new BuildButton(*this, 650, 50,
-    std::string("assets/tower/1.txt"))),
+                                      std::string("assets/tower/1.txt"), std::string("assets/tower/tower1.png"))),
     pause_button_ptr_(new PauseButton(*this, 700, 525)),
+    build_menu_grid_ptr_(new BuildMenuGrid(*this)),
     towers_{},
     info_menu_{} {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
@@ -25,19 +24,28 @@ void GameState::Load(const std::string& file_name) {
   std::string level_path;
   fin >> level_path;
   background_ptr_->LoadFromFile(level_path);
+
   draw_queue_.clear();
   draw_queue_.insert(background_ptr_);
   draw_queue_.insert(panel_side_ptr_);
   draw_queue_.insert(build_button_ptr_);
   draw_queue_.insert(pause_button_ptr_);
+
+  for (auto& row : is_free) {
+    for (bool& tile : row) {
+      tile = true;
+    }
+  }
 }
 
 void GameState::Tick() {
 }
+
 void GameState::Pause() {
   states_.pause_ptr_->UpdateBackground(render_.getTexture());
   states_.ChangeState(states_.pause_ptr_);
 }
+
 void GameState::ProcessEvent(sf::Event& event) {
   switch (event.type) {
     case sf::Event::KeyReleased: {
@@ -60,8 +68,9 @@ void GameState::BuildTower(const std::string& tower_path, int x, int y) {
   draw_queue_.insert(tower);
 }
 
-void GameState::BuildMenu(const std::string& source) {
-  BuildTower(source, 50, 50);
+void GameState::LoadBuildMenu(const std::string& source, const sf::Sprite& tower) {
+  build_menu_grid_ptr_->Load(source, tower);
+  draw_queue_.insert(build_menu_grid_ptr_);
 //  TODO(Nicksechko): Меню постройки
 }
 
@@ -85,6 +94,10 @@ void GameState::RemoveTower(const std::shared_ptr<Tower>& tower_ptr) {
   RemoveInfoMenu();
 }
 
+void GameState::RemoveBuildMenu() {
+  draw_queue_.erase(build_menu_grid_ptr_);
+}
+
 void GameState::RemoveInfoMenu() {
   for (auto& item : info_menu_) {
     draw_queue_.erase(item.second);
@@ -92,4 +105,6 @@ void GameState::RemoveInfoMenu() {
   info_menu_.clear();
 }
 
-
+bool GameState::IsFree(int x, int y) const {
+  return is_free[x][y];
+}

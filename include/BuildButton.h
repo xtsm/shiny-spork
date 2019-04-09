@@ -6,12 +6,13 @@
 
 class BuildButton : public Button {
  public:
-  explicit BuildButton(State&, int, int, const std::string&);
+  explicit BuildButton(State&, int, int, const std::string&, const std::string&);
 
-  void Click() override;
+  void Click(int, int) override;
 
  private:
   std::string source_;
+  sf::Sprite tower_sprite_;
 };
 
 #endif  // INCLUDE_BUILDBUTTON_H_

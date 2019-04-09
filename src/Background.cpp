@@ -2,7 +2,7 @@
 #include <string>
 
 Background::Background(State& state) :
-    Widget(state, DrawPriority(5, this)),
+    Widget(state, DrawPriority(3, this)),
     bg_(),
     bg_sprite_() {
 }
