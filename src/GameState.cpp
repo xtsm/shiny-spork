@@ -3,13 +3,14 @@
 #include <string>
 #include "StateManager.h"
 
-GameState::GameState(StateManager& states) :
+GameState::GameState(StateManager& states, const Map& map) :
     State(states),
     width_(600),
     height_(800),
     background_(*this),
     panel_side_(*this),
-    pause_(*this, 7 * (this->height_ / 8), 7 * (this->width_ / 8)) {
+    pause_(*this, 7 * (this->height_ / 8), 7 * (this->width_ / 8)),
+    map_(map) {
   panel_side_.LoadFromFile("assets/ui/panel_side.png");
   panel_side_.SetPosition(600, 0);
 }
