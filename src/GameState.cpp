@@ -20,6 +20,7 @@ GameState::GameState(StateManager& states) :
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
+
 void GameState::Load(const std::string& file_name) {
   std::ifstream fin(file_name);
   std::string level_path;
@@ -64,6 +65,7 @@ void GameState::ProcessEvent(sf::Event& event) {
 }
 
 void GameState::BuildTower(const std::string& tower_path, int x, int y) {
+  is_free[x / 60][y / 60] = false;
   std::shared_ptr<Tower> tower(new Tower(*this, tower_path, x, y));
   towers_[tower->GetID()] = tower;
   draw_queue_.insert(tower);
@@ -72,7 +74,6 @@ void GameState::BuildTower(const std::string& tower_path, int x, int y) {
 void GameState::LoadBuildMenu(const std::string& source, const sf::Sprite& tower) {
   build_menu_grid_ptr_->Load(source, tower);
   draw_queue_.insert(build_menu_grid_ptr_);
-//  TODO(Nicksechko): Меню постройки
 }
 
 void GameState::InfoMenuForTower(long long id) {
@@ -90,6 +91,7 @@ void GameState::InfoMenuForTower(long long id) {
 }
 
 void GameState::RemoveTower(const std::shared_ptr<Tower>& tower_ptr) {
+  is_free[tower_ptr->GetX() / 60][tower_ptr->GetY() / 60] = true;
   draw_queue_.erase(tower_ptr);
   towers_.erase(tower_ptr->GetID());
   RemoveInfoMenu();

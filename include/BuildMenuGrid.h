@@ -18,6 +18,7 @@ class BuildMenuGrid : public Widget {
   bool PointCheck(int x, int y) const override;
 
  private:
+  bool loaded_;
   std::string source_;
   //Спрайт постройки
   sf::Sprite tower_sprite_;

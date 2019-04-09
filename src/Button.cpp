@@ -28,7 +28,7 @@ Button::Button(State& state, int x, int y, const sf::String& caption) :
   sf::FloatRect text_bounds = text_.getLocalBounds();
   text_bounds.width += 24;
   sf::Vector2u btn_tile = tex_m.getSize();
-  int tile_count = text_bounds.width + btn_tile.x - 1;
+  int tile_count = static_cast<int>(text_bounds.width + btn_tile.x - 1);
   tile_count /= btn_tile.x;
 
   bg_sprite_tex_.create(tile_count * btn_tile.x, btn_tile.y);
@@ -50,11 +50,11 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(text_, states);
 }
 
-void Button::Click(int x, int y) {
+void Button::Click(int, int) {
   std::cerr << "Button clicked\n";
 }
 
-void Button::MouseIn(int x, int y) {
+void Button::MouseIn(int, int) {
   if (disable_ && clicked_) {
     bg_sprite_.setColor(sf::Color(255, 0, 0));
   } else if (disable_) {
@@ -66,7 +66,7 @@ void Button::MouseIn(int x, int y) {
   }
 }
 
-void Button::MouseOut(int x, int y) {
+void Button::MouseOut(int, int) {
   if (disable_) {
     bg_sprite_.setColor(sf::Color(80, 80, 80));
   } else {

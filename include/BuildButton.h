@@ -12,6 +12,7 @@ class BuildButton : public Button {
 
  private:
   std::string source_;
+  sf::Texture tower_sprite_tex_;
   sf::Sprite tower_sprite_;
 };
 

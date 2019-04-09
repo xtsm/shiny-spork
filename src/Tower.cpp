@@ -36,7 +36,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   tower_sprite_tex_ = State::GetTextureResourceManager()
       .GetOrLoadResource(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
-  tower_sprite_.move(x, y);
+  tower_sprite_.move(x, y - 40);
 
   text_.setFont(font_);
   text_.setString("LVL" + std::to_string(level_));
@@ -44,7 +44,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   text_.setCharacterSize(10);
   font_ = State::GetFontResourceManager()
       .GetOrLoadResource("assets/font/default.ttf");
-  text_.move(x, y);
+  text_.move(x + 10, y - 40);
   // TODO(Nicksechko): Загрузка тексстуры снаряда
 }
 
@@ -69,6 +69,7 @@ void Tower::MouseIn(int, int) {
   }
   is_mouse_in_ = true;
 }
+
 void Tower::MouseOut(int, int) {
   tower_sprite_.setColor(sf::Color::White);
   is_mouse_in_ = false;

@@ -22,6 +22,8 @@ class Widget : public sf::Drawable {
   virtual void SetPosition(int, int);
 
   long long GetID() const;
+  int GetX() const;
+  int GetY() const;
 
   //  Получает проиоритет в очереди рисования и обработки событий
   const DrawPriority& GetPriority() const;

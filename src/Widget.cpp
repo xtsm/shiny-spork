@@ -27,4 +27,12 @@ long long Widget::GetID() const {
   return id_;
 }
 
+int Widget::GetX() const {
+  return x_;
+}
+
+int Widget::GetY() const {
+  return y_;
+}
+
 Widget::~Widget() = default;
