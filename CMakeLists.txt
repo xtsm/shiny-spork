@@ -12,4 +12,5 @@ file(GLOB_RECURSE SOURCE src/*.cpp)
 add_executable(start ${SOURCE} ${INCLUDE})
 
 target_include_directories(start PRIVATE include)
+target_include_directories(start PRIVATE assets)
 target_link_libraries(start sfml-network sfml-graphics sfml-audio sfml-window sfml-system)

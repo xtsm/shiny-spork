@@ -1,3 +1,4 @@
+#include "GameState.h"
 #include <fstream>
 #include <string>
 #include <memory>
@@ -8,13 +9,16 @@
 
 GameState::GameState(StateManager& states) :
     State(states),
+    width_(600),
+    height_(800),
     background_ptr_(new Background(*this)),
     panel_side_ptr_(new Background(*this)),
     build_button_ptr_(new BuildButton(*this, 650, 50,
                                       std::string("assets/tower/1.txt"),
                                       std::string("assets/tower/tower1.png"))),
-    pause_button_ptr_(new PauseButton(*this, 700, 525)),
+    pause_button_ptr_(new PauseButton(*this, 7 * (this->height_ / 8), 7 * (this->width_ / 8))),
     build_menu_grid_ptr_(new BuildMenuGrid(*this)),
+    map_ptr_(),
     towers_{},
     info_menu_{},
     is_free{} {

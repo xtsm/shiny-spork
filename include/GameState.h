@@ -10,15 +10,17 @@
 #include "BuildButton.h"
 #include "PauseButton.h"
 #include "BuildMenuGrid.h"
+#include "utility/Map.h"
+#include "ContinueButton.h"
 
 class GameState: public State {
  public:
-  explicit GameState(StateManager&);
+  explicit GameState(StateManager& states);
   void Load(const std::string&);
   void Pause();
   void Tick() override;
   void ProcessEvent(sf::Event&) override;
-
+  std::shared_ptr<Map> GetMap() const { return map_ptr_; }
   // Строит башню с характеристиками из файла
   void BuildTower(const std::string&, int, int);
   // Вызывает меню постройки башни
@@ -35,10 +37,12 @@ class GameState: public State {
   bool IsFree(int, int) const;
 
  protected:
+  int width_, height_;
   std::shared_ptr<Background> background_ptr_, panel_side_ptr_;
   std::shared_ptr<BuildButton> build_button_ptr_;
   std::shared_ptr<PauseButton> pause_button_ptr_;
   std::shared_ptr<BuildMenuGrid> build_menu_grid_ptr_;
+  std::shared_ptr<Map> map_ptr_;
   std::map<long long, std::shared_ptr<Tower>> towers_;
   std::map<long long, std::shared_ptr<Widget>> info_menu_;
   bool is_free[10][10];
