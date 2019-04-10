@@ -10,13 +10,11 @@ Button::Button(State& state, int x, int y, const sf::String& caption) :
     text_(),
     disable_(false) {
   // TODO(tsmx): absolute crap, replace with proper resource manager ASAP
-  sf::Image tex_l, tex_m, tex_r;
-
-  tex_l = State::GetImageResourceManager()
+  sf::Image& tex_l = State::GetImageResourceManager()
       .GetOrLoadResource("assets/ui/btn_l.png");
-  tex_m = State::GetImageResourceManager()
+  sf::Image& tex_m = State::GetImageResourceManager()
       .GetOrLoadResource("assets/ui/btn_m.png");
-  tex_r = State::GetImageResourceManager()
+  sf::Image& tex_r = State::GetImageResourceManager()
       .GetOrLoadResource("assets/ui/btn_r.png");
   font_ = State::GetFontResourceManager()
       .GetOrLoadResource("assets/font/default.ttf");
@@ -86,4 +84,3 @@ void Button::SetDisable(bool value) {
     bg_sprite_.setColor(sf::Color::White);
   }
 }
-

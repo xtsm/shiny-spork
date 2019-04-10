@@ -9,9 +9,9 @@ BuildButton::BuildButton(State& state, int x, int y,
                          std::string source, const std::string& tower_sprite_path) :
     Button(state, x, y, "Build"),
     source_(std::move(source)),
-    tower_sprite_tex_(),
     tower_sprite_() {
-  tower_sprite_tex_.loadFromFile(tower_sprite_path);
+  sf::Texture& tower_sprite_tex_ = State::GetTextureResourceManager().
+      GetOrLoadResource(tower_sprite_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
 }
 

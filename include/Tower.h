@@ -24,8 +24,7 @@ class Tower : public Widget {
   bool Updatable() const;
 
  protected:
-  // Спрайт и текстура самой башни
-  sf::Texture tower_sprite_tex_;
+  // Спрайт самой башни
   sf::Sprite tower_sprite_;
   // Текст и шрифт надписи над башней
   sf::Font font_;
@@ -38,9 +37,6 @@ class Tower : public Widget {
   int level_;
   // Максимальный возможный уровель башни
   int max_level_;
-  // Спрайт и текстура снаряда
-  sf::Texture projectile_sprite_tex_;
-  sf::Sprite projectile_sprite_;
   // Количество тиков, прошедших с предыдущего выстрела
   int timer_;
   // Скорострельность в формате тик/выстрел

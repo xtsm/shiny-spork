@@ -3,7 +3,6 @@
 
 Background::Background(State& state) :
     Widget(state, DrawPriority(3, this)),
-    bg_(),
     bg_sprite_() {
 }
 
@@ -21,7 +20,7 @@ void Background::SetPosition(int x, int y) {
 }
 
 void Background::LoadFromFile(const std::string& file_name) {
-  bg_ = State::GetTextureResourceManager().GetOrLoadResource(file_name);
+  sf::Texture& bg_ = State::GetTextureResourceManager().GetOrLoadResource(file_name);
   bg_.setRepeated(true);
   bg_sprite_.setTexture(bg_);
 }
@@ -35,6 +34,5 @@ void Background::SetDim(bool value) {
 }
 
 void Background::LoadFromTexture(const sf::Texture& texture) {
-  bg_ = texture;
-  bg_sprite_.setTexture(bg_);
+  bg_sprite_.setTexture(texture);
 }

@@ -11,7 +11,6 @@
 
 Tower::Tower(State& state, const std::string& source, int x, int y) :
     Widget(state, DrawPriority(100 + y, this)),
-    tower_sprite_tex_(),
     tower_sprite_(),
     font_(),
     text_(),
@@ -19,8 +18,6 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     source_(source),
     level_(0),
     max_level_(0),
-    projectile_sprite_tex_(),
-    projectile_sprite_(),
     timer_(0),
     speed_(0),
     range_(0),
@@ -33,10 +30,10 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
 
   std::string tower_image_path;
   source_ >> tower_image_path;
-  tower_sprite_tex_ = State::GetTextureResourceManager()
+  sf::Texture& tower_sprite_tex_ = State::GetTextureResourceManager()
       .GetOrLoadResource(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
-  tower_sprite_.move(x, y - 40);
+  tower_sprite_.move(x + 5, y - 40);
 
   text_.setFont(font_);
   text_.setString("LVL" + std::to_string(level_));
@@ -84,7 +81,7 @@ void Tower::Update() {
   source_ >> speed_ >> range_ >> damage_;
   std::string tower_image_path;
   source_ >> tower_image_path;
-  tower_sprite_tex_ = State::GetTextureResourceManager()
+  sf::Texture& tower_sprite_tex_ = State::GetTextureResourceManager()
       .GetOrLoadResource(tower_image_path);
   tower_sprite_.setTexture(tower_sprite_tex_);
   text_.setString("LVL" + std::to_string(level_));

@@ -21,7 +21,6 @@ class Background : public Widget {
   void SetPosition(int x, int y) override;
 
  private:
-  sf::Texture bg_;
   sf::Sprite bg_sprite_;
 };
 
