@@ -17,6 +17,7 @@ class Widget : public sf::Drawable {
   virtual void Click(int, int) {}
   virtual void MouseIn(int, int) {}
   virtual void MouseOut(int, int) {}
+  virtual void MouseMove(int, int) {}
 
   void SetClicked(bool);
   virtual void SetPosition(int, int);

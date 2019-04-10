@@ -90,7 +90,7 @@ void State::ProcessEvents(sf::RenderWindow& window) {
         hover_point.y /= static_cast<int>(size.y / 600.0);
         if (hovered_ != nullptr &&
             hovered_->PointCheck(hover_point.x, hover_point.y)) {
-          hovered_->MouseIn(hover_point.x, hover_point.y);
+          hovered_->MouseMove(hover_point.x, hover_point.y);
           break;
         }
         std::shared_ptr<Widget> new_hovered = nullptr;
@@ -102,7 +102,10 @@ void State::ProcessEvents(sf::RenderWindow& window) {
         }
         if (hovered_ != nullptr) hovered_->MouseOut(hover_point.x, hover_point.y);
         hovered_ = new_hovered;
-        if (hovered_ != nullptr) hovered_->MouseIn(hover_point.x, hover_point.y);
+        if (hovered_ != nullptr) {
+          hovered_->MouseIn(hover_point.x, hover_point.y);
+          hovered_->MouseMove(hover_point.x, hover_point.y);
+        }
         break;
       }
 

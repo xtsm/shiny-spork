@@ -13,7 +13,7 @@ class BuildMenuGrid : public Widget {
 
   void Click(int x, int y) override;
 
-  void MouseIn(int x, int y) override;
+  void MouseMove(int x, int y) override;
 
   bool PointCheck(int x, int y) const override;
 
@@ -22,6 +22,9 @@ class BuildMenuGrid : public Widget {
   std::string source_;
   //Спрайт постройки
   sf::Sprite tower_sprite_;
+  //Тайл
+  sf::RectangleShape tile_;
+
 };
 
 #endif //SHINY_SPORK_BUILDMENUGRID_H
