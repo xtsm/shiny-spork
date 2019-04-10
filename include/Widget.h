@@ -21,7 +21,7 @@ class Widget : public sf::Drawable {
   void SetClicked(bool);
   virtual void SetPosition(int, int);
 
-  long long GetID() const;
+  int64_t GetID() const;
   int GetX() const;
   int GetY() const;
 
@@ -33,8 +33,8 @@ class Widget : public sf::Drawable {
   DrawPriority priority_;
   bool clicked_;
   int x_, y_;
-  long long id_;
-  static long long last_id_;
+  int64_t id_;
+  static int64_t last_id_;
 };
 
 #endif  // INCLUDE_WIDGET_H_

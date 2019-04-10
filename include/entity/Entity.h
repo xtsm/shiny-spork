@@ -2,12 +2,14 @@
 #define SHINY_SPORK_ENTITY_HPP
 
 #include <SFML/Graphics.hpp>
+#include <memory>
 #include "Widget.h"
+#include "utility/Point.h"
 
 class Entity : public Widget {
  public:
-  Entity(double health, double power,
-         State& state, DrawPriority& priority);
+  Entity(double health, double power, int x, int y,
+         const std::shared_ptr<State>& state, DrawPriority& priority);
 
   virtual void DoMove() = 0;
 
@@ -20,6 +22,7 @@ class Entity : public Widget {
   double health_;
   double power_;
   bool is_alive_;
+  Point position_;
 };
 
 #endif //SHINY_SPORK_ENTITY_HPP

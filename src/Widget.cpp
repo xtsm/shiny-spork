@@ -8,7 +8,7 @@ Widget::Widget(State& state, const DrawPriority& priority) :
     clicked_(false),
     x_(0),
     y_(0),
-    id_(last_id_++) {}
+    id_(++last_id_) {}
 
 const DrawPriority& Widget::GetPriority() const {
   return priority_;
