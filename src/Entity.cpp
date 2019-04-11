@@ -11,6 +11,10 @@ Entity::Entity(State& state, const DrawPriority& priority)
       is_mouse_in_(false),
       is_info_(false) {}
 
+void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  target.draw(sprite_, states);
+}
+
 void Entity::Click(int, int) {
   StateManager& states = state_.GetStateManager();
   states.game_ptr_->InfoMenu(id_);
@@ -49,4 +53,3 @@ void Entity::SetInfo(bool value) {
   }
   is_info_ = value;
 }
-

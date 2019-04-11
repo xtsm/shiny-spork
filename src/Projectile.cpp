@@ -1,16 +1,14 @@
 #include "Projectile.h"
 
-Projectile::Projectile(State& state, const DrawPriority& priority,
-    int x, int y) :
-    Widget(state, priority),
-    sprite_tex_(),
-    sprite_(),
-    damage_(0) {
+Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim,
+                       int damage, int speed, int x, int y) :
+    Entity(state, DrawPriority(101 + y, this)),
+    aim_ptr_(std::move(aim)),
+    damage_(damage),
+    speed_(speed) {
   SetPosition(x, y);
-  // TODO(Nicksechko): Цель
-}
-void Projectile::draw(sf::RenderTarget&, sf::RenderStates) const {
-  // TODO(Nicksechko): Полёт
 }
 
-
+void Pointing() {
+  //TODO(Nicksechko): Пересчёт координат при полёте
+}

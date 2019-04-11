@@ -10,6 +10,8 @@ class Entity : public Widget {
  public:
   Entity(State& state, const DrawPriority& priority);
 
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
   void Click(int, int) override;
 
   void MouseIn(int, int) override;

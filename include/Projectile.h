@@ -1,21 +1,23 @@
 #ifndef INCLUDE_PROJECTILE_H_
 #define INCLUDE_PROJECTILE_H_
 
-#include "Widget.h"
 #include <fstream>
+#include "entity/Enemy.h"
 
-class Projectile : public Widget {
+class Projectile : public Entity {
  public:
-  Projectile(State&, const DrawPriority&, int, int);
-  void draw(sf::RenderTarget&, sf::RenderStates) const override;
+  Projectile(State&, std::shared_ptr<Enemy>,
+             int, int, int, int);
+
+  void Pointing();
+
  protected:
-  // Текстуры снаряда
-  sf::Texture sprite_tex_;
-  sf::Sprite sprite_;
+  // Цель, в которую летит снаряд
+  std::shared_ptr<Enemy> aim_ptr_;
   // Урон, который нанесёт снаряд
   int damage_;
-  // Цель, в которую летит снаряд
-  // TODO(Nicksechko): Цель
+  //Скорость полёта
+  int speed_;
 };
 
 #endif  // INCLUDE_PROJECTILE_H_
