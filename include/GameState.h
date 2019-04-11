@@ -9,6 +9,7 @@
 #include "entity/Enemy.h"
 #include "Background.h"
 #include "entity/Tower.h"
+#include "StartGameButton.h"
 #include "BuildButton.h"
 #include "PauseButton.h"
 #include "BuildMenuGrid.h"
@@ -41,7 +42,13 @@ class GameState: public State {
   void RemoveInfoMenu();
   //Проверяет свободна ли клетка
   bool IsFree(int, int) const;
+  // Устанавливает флаг начала волн врагов
+  void SetProducing(bool produce);
+  // Возвращает количество врагов
   int64_t GetAmountOfEnemies() const;
+  // Создаёт count врагов
+  void CreateSomeEnemies(int count);
+  // Добавляет врага на карту
   void AddNewEnemy(const Enemy&);
 
  protected:
@@ -51,12 +58,14 @@ class GameState: public State {
   std::shared_ptr<PauseButton> pause_button_ptr_;
   std::shared_ptr<UpdateTowerButton> update_tower_button_ptr_;
   std::shared_ptr<RemoveTowerButton> remove_tower_button_ptr_;
+  std::shared_ptr<StartGameButton> start_game_button_ptr_;
   std::shared_ptr<BuildMenuGrid> build_menu_grid_ptr_;
   std::shared_ptr<Map> map_ptr_;
   std::shared_ptr<Entity> info_menu_;
   std::map<int64_t, std::shared_ptr<Tower>> towers_;
   std::map<int64_t, std::shared_ptr<Enemy>> enemies_;
   EnemyCreator creator_of_enemies_;
+  bool is_enemies_produce_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_

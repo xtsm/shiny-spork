@@ -1,6 +1,8 @@
 #include <fstream>
 #include <string>
 #include <memory>
+#include <GameState.h>
+
 #include "UpdateTowerButton.h"
 #include "RemoveTowerButton.h"
 #include "StateManager.h"
@@ -18,12 +20,14 @@ GameState::GameState(StateManager& states) :
     pause_button_ptr_(new PauseButton(*this, 7 * (this->height_ / 8), 7 * (this->width_ / 8))),
     update_tower_button_ptr_(new UpdateTowerButton(*this, 650, 450, nullptr)),
     remove_tower_button_ptr_(new RemoveTowerButton(*this, 650, 400, nullptr)),
+    start_game_button_ptr_(new StartGameButton(*this, 625, 400)),
     build_menu_grid_ptr_(new BuildMenuGrid(*this)),
     map_ptr_(new Map({})),
     info_menu_(),
     towers_{},
     enemies_{},
-    creator_of_enemies_(*this) {
+    creator_of_enemies_(*this),
+    is_enemies_produce_(false) {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -39,10 +43,19 @@ void GameState::Load(const std::string& file_name) {
   draw_queue_.insert(panel_side_ptr_);
   draw_queue_.insert(build_button_ptr_);
   draw_queue_.insert(pause_button_ptr_);
+  draw_queue_.insert(start_game_button_ptr_);
 }
 
 void GameState::Tick() {
-  creator_of_enemies_.CreateSomeEnemies(1);
+  for (const auto& enemy : enemies_) {
+    enemy.second->DoMove();
+    draw_queue_.erase(enemy.second);
+  }
+
+  if (is_enemies_produce_) {
+    CreateSomeEnemies(10);
+  }
+
   for (const auto& enemy : enemies_) {
     draw_queue_.insert(enemy.second);
   }
@@ -132,4 +145,13 @@ int64_t GameState::GetAmountOfEnemies() const {
 
 void GameState::AddNewEnemy(const Enemy& enemy) {
   enemies_.emplace(enemy.GetID(), std::make_shared<Enemy>(enemy));
+}
+
+void GameState::CreateSomeEnemies(int count) {
+  SetProducing(true);
+  creator_of_enemies_.CreateSomeEnemies(count);
+}
+
+void GameState::SetProducing(bool produce) {
+  is_enemies_produce_ = produce;
 }
