@@ -1,5 +1,6 @@
 #include <fstream>
 #include <entity/Enemy.h>
+#include <StateManager.h>
 
 #include "entity/Enemy.h"
 #include "Widget.h"
@@ -53,11 +54,16 @@ void Enemy::DoMove(const Direction& direction) {
   y_ = static_cast<int>(position_.y);
 }
 
-Enemy::Enemy(double health, int speed, int x, int y,
-             const std::shared_ptr<State>& state, const DrawPriority& priority)
-    : Entity(health, 0, x, y, state, priority), speed_(speed) {}
+Enemy::Enemy(double health, int speed, double x, double y,
+             State& state, const DrawPriority& priority)
+    : Entity(state, priority),
+      move_direction_(),
+      health_(health),
+      speed_(speed),
+      power_(0),
+      position_{x, y} {}
 
-EnemyCreator::EnemyCreator(const std::shared_ptr<State>& state)
+EnemyCreator::EnemyCreator(State& state)
     : state_(state) {}
 
 void EnemyCreator::LoadSpawnPoints(const std::string& path_to_file) {
@@ -88,11 +94,11 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
       health = EnemyHealthType::Low;
     }
 
-    Point point_of_spawn = spawn_points_[distribution_of_points(generator)];
-
-    dynamic_cast<GameState&>(*state_).AddNewEnemy(
-        Enemy(GetHealthFromType(health), GetSpeedByType(health),
-                  point_of_spawn.x, point_of_spawn.y, state_, DrawPriority(5, this)));
+//    Point point_of_spawn = spawn_points_[distribution_of_points(generator)];
+//
+//    state_.GetStateManager().game_ptr_->AddNewEnemy(
+//        Enemy(GetHealthFromType(health), GetSpeedByType(health),
+//                  point_of_spawn.x, point_of_spawn.y, state_, DrawPriority(5, this)));
   }
 }
 
@@ -124,10 +130,6 @@ double EnemyCreator::GetSpeedByType(const EnemyHealthType& type) {
     default:
       return 0;
   }
-}
-
-void EnemyCreator::SetState(const std::shared_ptr<State>& state) {
-  state_ = state;
 }
 
 void Enemy::DecreaseHealth(double delta) {

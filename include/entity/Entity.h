@@ -15,6 +15,7 @@ class Entity : public Widget {
   virtual void SetInfo(bool value);
 
  protected:
+  State& state_;
   sf::Sprite sprite_;
   bool is_info_;
 };

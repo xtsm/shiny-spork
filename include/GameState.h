@@ -52,11 +52,9 @@ class GameState: public State {
   std::shared_ptr<BuildMenuGrid> build_menu_grid_ptr_;
   std::shared_ptr<Map> map_ptr_;
   std::shared_ptr<Entity> info_menu_;
-  std::map<long long, std::shared_ptr<Tower>> towers_;
   std::map<int64_t, std::shared_ptr<Tower>> towers_;
   std::map<int64_t, std::shared_ptr<Enemy>> enemies_;
   EnemyCreator creator_of_enemies_;
-  std::map<int64_t, std::shared_ptr<Widget>> info_menu_;
   bool is_free[10][10];
 };
 

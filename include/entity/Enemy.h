@@ -22,8 +22,8 @@ enum class EnemyHealthType {
 
 class Enemy : public Entity {
  public:
-  Enemy(double health, int speed, int x, int y,
-      const std::shared_ptr<State>& state, const DrawPriority& priority);
+  Enemy(double health, int speed, double x, double y,
+        State& state, const DrawPriority& priority);
 
   void DoMove();
 
@@ -39,7 +39,11 @@ class Enemy : public Entity {
 
  private:
   Direction move_direction_;
+  double health_;
   int speed_;
+  int power_;
+  Point position_;
+  bool is_alive_;
   void DoMove(const Direction& direction);
 };
 
@@ -47,16 +51,14 @@ class EnemyCreator {
  public:
   EnemyCreator() = default;
 
-  explicit EnemyCreator(const std::shared_ptr<State>& state);
+  explicit EnemyCreator(State& state);
 
   void LoadSpawnPoints(const std::string& path_to_file);
 
   void CreateSomeEnemies(int64_t count);
 
-  void SetState(const std::shared_ptr<State>& state);
-
  private:
-  std::shared_ptr<State> state_;
+  State& state_;
   std::vector<Point> spawn_points_;
 
   int GetHealthFromType(const EnemyHealthType& type);

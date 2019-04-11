@@ -1,9 +1,6 @@
-#include "GameState.h"
 #include <fstream>
 #include <string>
 #include <memory>
-#include <GameState.h>
-
 #include "UpdateTowerButton.h"
 #include "RemoveTowerButton.h"
 #include "StateManager.h"
@@ -26,12 +23,10 @@ GameState::GameState(StateManager& states) :
     info_menu_(),
     towers_{},
     enemies_{},
-    creator_of_enemies_(),
-    info_menu_{},
+    creator_of_enemies_(*this),
     is_free{} {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
-  creator_of_enemies_.SetState(std::make_shared<GameState>(this));
 }
 
 void GameState::Load(const std::string& file_name) {

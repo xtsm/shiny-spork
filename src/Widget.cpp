@@ -1,6 +1,6 @@
 #include "Widget.h"
 
-long long Widget::last_id_ = 0;
+int64_t Widget::last_id_ = 0;
 
 Widget::Widget(State& state, const DrawPriority& priority) :
     state_(state),
@@ -23,7 +23,7 @@ void Widget::SetPosition(int x, int y) {
   y_ = y;
 }
 
-long long Widget::GetID() const {
+int64_t Widget::GetID() const {
   return id_;
 }
 
