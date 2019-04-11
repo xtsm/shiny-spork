@@ -3,8 +3,10 @@
 
 #include <string>
 #include <iostream>
+#include <cstdint>
 #include <memory>
 #include "State.h"
+#include "entity/Enemy.h"
 #include "Background.h"
 #include "Tower.h"
 #include "BuildButton.h"
@@ -37,6 +39,8 @@ class GameState: public State {
   void RemoveInfoMenu();
   //Проверяет свободна ли клетка
   bool IsFree(int, int) const;
+  int64_t GetAmountOfEnemies() const;
+  void AddNewEnemy(const Enemy&);
 
  protected:
   int width_, height_;
@@ -49,6 +53,10 @@ class GameState: public State {
   std::shared_ptr<Map> map_ptr_;
   std::shared_ptr<Entity> info_menu_;
   std::map<long long, std::shared_ptr<Tower>> towers_;
+  std::map<int64_t, std::shared_ptr<Tower>> towers_;
+  std::map<int64_t, std::shared_ptr<Enemy>> enemies_;
+  EnemyCreator creator_of_enemies_;
+  std::map<int64_t, std::shared_ptr<Widget>> info_menu_;
   bool is_free[10][10];
 };
 

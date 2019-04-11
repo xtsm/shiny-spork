@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <memory>
+#include <GameState.h>
+
 #include "UpdateTowerButton.h"
 #include "RemoveTowerButton.h"
 #include "StateManager.h"
@@ -23,9 +25,13 @@ GameState::GameState(StateManager& states) :
     map_ptr_(),
     info_menu_(),
     towers_{},
+    enemies_{},
+    creator_of_enemies_(),
+    info_menu_{},
     is_free{} {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
+  creator_of_enemies_.SetState(std::make_shared<GameState>(this));
 }
 
 void GameState::Load(const std::string& file_name) {
@@ -48,6 +54,10 @@ void GameState::Load(const std::string& file_name) {
 }
 
 void GameState::Tick() {
+  creator_of_enemies_.CreateSomeEnemies(1);
+  for (const auto& enemy : enemies_) {
+    draw_queue_.insert(enemy.second);
+  }
 }
 
 void GameState::Pause() {
@@ -63,11 +73,13 @@ void GameState::ProcessEvent(sf::Event& event) {
           Pause();
           break;
         }
-        default: break;
+        default:
+          break;
       }
       break;
     }
-    default: break;
+    default:
+      break;
   }
 }
 
@@ -118,4 +130,12 @@ void GameState::RemoveInfoMenu() {
 
 bool GameState::IsFree(int x, int y) const {
   return is_free[x][y];
+}
+
+int64_t GameState::GetAmountOfEnemies() const {
+  return enemies_.size();
+}
+
+void GameState::AddNewEnemy(const Enemy& enemy) {
+  enemies_.emplace(enemy.GetID(), std::make_shared<Enemy>(enemy));
 }
