@@ -17,10 +17,12 @@ GameState::GameState(StateManager& states) :
                                       std::string("assets/tower/1.txt"),
                                       std::string("assets/tower/tower1.png"))),
     pause_button_ptr_(new PauseButton(*this, 7 * (this->height_ / 8), 7 * (this->width_ / 8))),
+    update_tower_button_ptr_(new UpdateTowerButton(*this, 650, 450, nullptr)),
+    remove_tower_button_ptr_(new RemoveTowerButton(*this, 650, 400, nullptr)),
     build_menu_grid_ptr_(new BuildMenuGrid(*this)),
     map_ptr_(),
+    info_menu_(),
     towers_{},
-    info_menu_{},
     is_free{} {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
@@ -82,17 +84,14 @@ void GameState::LoadBuildMenu(const std::string& source, const sf::Sprite& tower
 }
 
 void GameState::InfoMenuForTower(long long id) {
+  RemoveInfoMenu();
   std::shared_ptr<Tower> tower = towers_[id];
-  std::shared_ptr<UpdateTowerButton>
-      update_tower_button(new UpdateTowerButton(*this, 650, 450, tower));
-  std::shared_ptr<RemoveTowerButton>
-      remove_tower_button(new RemoveTowerButton(*this, 650, 400, tower));
-  info_menu_.emplace(update_tower_button->GetID(), update_tower_button);
-  info_menu_.emplace(remove_tower_button->GetID(), remove_tower_button);
-  for (auto& item : info_menu_) {
-    draw_queue_.insert(item.second);
-  }
-//  TODO(Nicksechko): Информация о башне на боковой панели
+  update_tower_button_ptr_->ChangeTower(tower);
+  remove_tower_button_ptr_->ChangeTower(tower);
+  draw_queue_.insert(update_tower_button_ptr_);
+  draw_queue_.insert(remove_tower_button_ptr_);
+  info_menu_ = tower;
+  tower->SetInfo(true);
 }
 
 void GameState::RemoveTower(const std::shared_ptr<Tower>& tower_ptr) {
@@ -107,10 +106,14 @@ void GameState::RemoveBuildMenu() {
 }
 
 void GameState::RemoveInfoMenu() {
-  for (auto& item : info_menu_) {
-    draw_queue_.erase(item.second);
+  if (info_menu_ != nullptr) {
+    info_menu_->SetInfo(false);
   }
-  info_menu_.clear();
+  draw_queue_.erase(update_tower_button_ptr_);
+  draw_queue_.erase(remove_tower_button_ptr_);
+  update_tower_button_ptr_->ChangeTower(nullptr);
+  remove_tower_button_ptr_->ChangeTower(nullptr);
+  info_menu_ = nullptr;
 }
 
 bool GameState::IsFree(int x, int y) const {

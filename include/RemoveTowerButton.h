@@ -11,6 +11,10 @@ class RemoveTowerButton : public Button {
 
   void Click(int, int) override;
 
+  void ChangeTower(const std::shared_ptr<Tower>& new_tower) {
+    tower_ = new_tower;
+  }
+
  private:
   std::shared_ptr<Tower> tower_;
 };

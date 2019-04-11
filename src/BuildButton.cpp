@@ -1,9 +1,7 @@
-#include <utility>
-
-#include <GameState.h>
-#include <StateManager.h>
-#include "BuildButton.h"
 #include <string>
+#include "GameState.h"
+#include "StateManager.h"
+#include "BuildButton.h"
 
 BuildButton::BuildButton(State& state, int x, int y,
                          std::string source, const std::string& tower_sprite_path) :

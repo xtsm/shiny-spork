@@ -6,20 +6,12 @@
 
 class Entity : public Widget {
  public:
-  Entity(double health, double power,
-         State& state, DrawPriority& priority);
+  Entity(State& state, const DrawPriority& priority);
 
-  virtual void DoMove() = 0;
-
-  void DecreaseHealth(double delta);
-  void EncreaseHealth(double delta);
-
-  void DoDamage(Entity& other_entity);
+  virtual void SetInfo(bool value);
 
  protected:
-  double health_;
-  double power_;
-  bool is_alive_;
+  bool is_info_;
 };
 
 #endif //SHINY_SPORK_ENTITY_HPP

@@ -12,6 +12,8 @@
 #include "BuildMenuGrid.h"
 #include "utility/Map.h"
 #include "ContinueButton.h"
+#include "UpdateTowerButton.h"
+#include "RemoveTowerButton.h"
 
 class GameState: public State {
  public:
@@ -41,10 +43,12 @@ class GameState: public State {
   std::shared_ptr<Background> background_ptr_, panel_side_ptr_;
   std::shared_ptr<BuildButton> build_button_ptr_;
   std::shared_ptr<PauseButton> pause_button_ptr_;
+  std::shared_ptr<UpdateTowerButton> update_tower_button_ptr_;
+  std::shared_ptr<RemoveTowerButton> remove_tower_button_ptr_;
   std::shared_ptr<BuildMenuGrid> build_menu_grid_ptr_;
   std::shared_ptr<Map> map_ptr_;
+  std::shared_ptr<Entity> info_menu_;
   std::map<long long, std::shared_ptr<Tower>> towers_;
-  std::map<long long, std::shared_ptr<Widget>> info_menu_;
   bool is_free[10][10];
 };
 
