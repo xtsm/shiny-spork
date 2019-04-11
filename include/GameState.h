@@ -29,10 +29,8 @@ class GameState: public State {
   void BuildTower(const std::string&, int, int);
   // Вызывает меню постройки башни
   void LoadBuildMenu(const std::string&, const sf::Sprite& tower_tex);
-  //Создаёт меню информации
-  void InfoMenu(int64_t);
   // Создаёт меню информации для башни
-  void InfoMenuForTower(const std::shared_ptr<Tower>&);
+  void InfoMenuForTower(int64_t id);
   //Удаляет башню
   void RemoveTower(const std::shared_ptr<Tower>&);
   //Удаляет меню постройки
@@ -41,6 +39,8 @@ class GameState: public State {
   void RemoveInfoMenu();
   //Проверяет свободна ли клетка
   bool IsFree(int, int) const;
+  //Удаляет из очереди отрисовки
+  void RemoveProjectile(int64_t id);
   int64_t GetAmountOfEnemies() const;
   void AddNewEnemy(const Enemy&);
 
@@ -55,6 +55,7 @@ class GameState: public State {
   std::shared_ptr<Map> map_ptr_;
   std::shared_ptr<Entity> info_menu_;
   std::map<int64_t, std::shared_ptr<Tower>> towers_;
+  std::map<int64_t, std::shared_ptr<Projectile>> projectiles_;
   std::map<int64_t, std::shared_ptr<Enemy>> enemies_;
   EnemyCreator creator_of_enemies_;
 };

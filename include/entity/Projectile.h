@@ -14,6 +14,7 @@ class Projectile : public Entity {
  protected:
   // Цель, в которую летит снаряд
   std::shared_ptr<Enemy> aim_ptr_;
+  Point position_;
   // Урон, который нанесёт снаряд
   int damage_;
   //Скорость полёта

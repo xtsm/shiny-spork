@@ -70,7 +70,7 @@ EnemyCreator::EnemyCreator(State& state)
 
 void EnemyCreator::LoadSpawnPoints(const std::string& path_to_file) {
   std::ifstream reader(path_to_file);
-  Point spawn_point{};
+  Point spawn_point(0, 0);
   while (reader >> spawn_point) {
     spawn_points_.push_back(spawn_point);
   }

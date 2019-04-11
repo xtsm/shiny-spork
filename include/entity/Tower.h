@@ -11,6 +11,7 @@ class Tower : public Entity {
  public:
   explicit Tower(State&, const std::string& source, int, int);
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
+  void Click(int x, int y) override;
   // Считывает данные обновления
   void Update();
   // Находит ближайшего врага в радиусе дальнобойности

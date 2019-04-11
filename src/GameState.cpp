@@ -22,6 +22,7 @@ GameState::GameState(StateManager& states) :
     map_ptr_(new Map({})),
     info_menu_(),
     towers_{},
+    projectiles_{},
     enemies_{},
     creator_of_enemies_(*this) {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
@@ -83,15 +84,8 @@ void GameState::LoadBuildMenu(const std::string& source, const sf::Sprite& tower
   draw_queue_.insert(build_menu_grid_ptr_);
 }
 
-void GameState::InfoMenu(int64_t id) {
-  RemoveInfoMenu();
-  if (towers_.count(id)) {
-    InfoMenuForTower(towers_[id]);
-    return;
-  }
-}
-
-void GameState::InfoMenuForTower(const std::shared_ptr<Tower>& tower) {
+void GameState::InfoMenuForTower(int64_t id) {
+  std::shared_ptr<Tower> tower = towers_[id];
   update_tower_button_ptr_->ChangeTower(tower);
   remove_tower_button_ptr_->ChangeTower(tower);
   draw_queue_.insert(update_tower_button_ptr_);
@@ -124,6 +118,11 @@ void GameState::RemoveInfoMenu() {
 
 bool GameState::IsFree(int x, int y) const {
   return map_ptr_->IsFree(x, y);
+}
+
+void GameState::RemoveProjectile(int64_t id) {
+  draw_queue_.erase(projectiles_[id]);
+  projectiles_.erase(id);
 }
 
 int64_t GameState::GetAmountOfEnemies() const {

@@ -57,6 +57,11 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(sprite_, states);
 }
 
+void Tower::Click(int x, int y) {
+  Entity::Click(x, y);
+  state_.GetStateManager().game_ptr_->InfoMenuForTower(id_);
+}
+
 void Tower::Update() {
   level_++;
 

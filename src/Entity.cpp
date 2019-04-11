@@ -17,7 +17,7 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 void Entity::Click(int, int) {
   StateManager& states = state_.GetStateManager();
-  states.game_ptr_->InfoMenu(id_);
+  states.game_ptr_->RemoveInfoMenu();
 }
 
 void Entity::MouseIn(int, int) {
