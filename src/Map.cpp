@@ -1,7 +1,12 @@
 
 #include <utility/Map.h>
 
-Map::Map(std::vector<std::vector<int>>& map) : map_(std::move(map)) {}
+Map::Map(std::vector<std::vector<int>> map) : map_(std::move(map)) {
+  map_.resize(10);
+  for (auto& row : map_) {
+    row.resize(10);
+  }
+}
 
 bool Map::IsMoveAvailable(const Direction& direction, int x, int y) const {
   switch (direction) {
@@ -11,5 +16,13 @@ bool Map::IsMoveAvailable(const Direction& direction, int x, int y) const {
     case Direction::South:return (y != (map_.size() - 1) && map_[y + 1][x] == 1);
     default:return false;
   }
+}
+
+bool Map::IsFree(int x, int y) const {
+  return map_[x][y] == 0;
+}
+
+void Map::Set(int x, int y, int value) {
+  map_[x][y] = value;
 }
 

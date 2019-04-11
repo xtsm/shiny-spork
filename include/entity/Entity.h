@@ -10,13 +10,24 @@ class Entity : public Widget {
  public:
   Entity(State& state, const DrawPriority& priority);
 
-  void LoadSprite(const std::string& file_name);
+  void Click(int, int) override;
 
+  void MouseIn(int, int) override;
+
+  void MouseOut(int, int) override;
+
+  bool PointCheck(int, int) const override;
+
+  void LoadSprite(const std::string& file_name);
+  //Устанавливает флаг отображения информации
   virtual void SetInfo(bool value);
 
  protected:
-  State& state_;
   sf::Sprite sprite_;
+  sf::Sprite icon_sprite_;
+  sf::Color default_sprite_color_;
+  // Флаг, указывающий находится ли указатель над башней
+  bool is_mouse_in_;
   bool is_info_;
 };
 

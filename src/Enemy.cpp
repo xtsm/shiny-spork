@@ -61,45 +61,49 @@ Enemy::Enemy(double health, int speed, double x, double y,
       health_(health),
       speed_(speed),
       power_(0),
-      position_{x, y} {}
+      position_{x, y},
+      is_alive_(true) {}
 
 EnemyCreator::EnemyCreator(State& state)
-    : state_(state) {}
+    : state_(state),
+      spawn_points_{} {}
 
 void EnemyCreator::LoadSpawnPoints(const std::string& path_to_file) {
   std::ifstream reader(path_to_file);
-  Point spawn_point;
+  Point spawn_point{};
   while (reader >> spawn_point) {
     spawn_points_.push_back(spawn_point);
   }
   reader.close();
 }
 
-void EnemyCreator::CreateSomeEnemies(int64_t count) {
-  std::mt19937 generator;
-  std::uniform_int_distribution<int64_t>
-      distribution_of_points(0, spawn_points_.size() - 1);
-  std::uniform_int_distribution<int> distribution_of_type(0, 50);
+void EnemyCreator::CreateSomeEnemies(int64_t) {
+//TODO(nikkita1267):
 
-  for (int64_t i = 0; i < count; ++i) {
-    int type = distribution_of_type(generator);
-    EnemyHealthType health;
-    if (type >= 0 && type < 5) {
-      health = EnemyHealthType::VeryHigh;
-    } else if (type >= 5 && type < 15) {
-      health = EnemyHealthType::High;
-    } else if (type >= 15 && type < 30) {
-      health = EnemyHealthType::Middle;
-    } else {
-      health = EnemyHealthType::Low;
-    }
-
+//  std::mt19937 generator(1488);
+//  std::uniform_int_distribution<int64_t>
+//      distribution_of_points(0, spawn_points_.size() - 1);
+//  std::uniform_int_distribution<int> distribution_of_type(0, 50);
+//
+//  for (int64_t i = 0; i < count; ++i) {
+//    int type = distribution_of_type(generator);
+//    EnemyHealthType health;
+//    if (type >= 0 && type < 5) {
+//      health = EnemyHealthType::VeryHigh;
+//    } else if (type >= 5 && type < 15) {
+//      health = EnemyHealthType::High;
+//    } else if (type >= 15 && type < 30) {
+//      health = EnemyHealthType::Middle;
+//    } else {
+//      health = EnemyHealthType::Low;
+//    }
+//
 //    Point point_of_spawn = spawn_points_[distribution_of_points(generator)];
 //
 //    state_.GetStateManager().game_ptr_->AddNewEnemy(
 //        Enemy(GetHealthFromType(health), GetSpeedByType(health),
 //                  point_of_spawn.x, point_of_spawn.y, state_, DrawPriority(5, this)));
-  }
+//  }
 }
 
 int EnemyCreator::GetHealthFromType(const EnemyHealthType& type) {

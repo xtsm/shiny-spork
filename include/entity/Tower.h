@@ -11,10 +11,6 @@ class Tower : public Entity {
  public:
   explicit Tower(State&, const std::string& source, int, int);
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
-  void Click(int, int) override;
-  void MouseIn(int, int) override;
-  void MouseOut(int, int) override;
-  bool PointCheck(int, int) const override;
   // Считывает данные обновления
   void Update();
   // Находит ближайшего врага в радиусе дальнобойности
@@ -25,19 +21,11 @@ class Tower : public Entity {
   bool Updatable() const;
   // Инициализириует текст
   void InitText(sf::Text&, int, int);
-  //Устанавливает флаг отображения информации
-  void SetInfo(bool) override;
 
  protected:
-  // Спрайт самой башни
-  sf::Sprite tower_sprite_;
-  sf::Sprite icon_sprite_;
-  sf::Color default_sprite_color_;
   // Текст и шрифт надписи над башней
   sf::Font font_;
   sf::Text text_;
-  // Флаг, указывающий находится ли указатель над башней
-  bool is_mouse_in_;
   // Поток из файла с описанием уровней башни
   std::ifstream source_;
   // Количество тиков, прошедших с предыдущего выстрела

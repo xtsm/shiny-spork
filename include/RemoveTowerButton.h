@@ -3,7 +3,7 @@
 
 #include <memory>
 #include "Button.h"
-#include "Tower.h"
+#include "entity/Tower.h"
 
 class RemoveTowerButton : public Button {
  public:

@@ -8,7 +8,7 @@
 #include "State.h"
 #include "entity/Enemy.h"
 #include "Background.h"
-#include "Tower.h"
+#include "entity/Tower.h"
 #include "BuildButton.h"
 #include "PauseButton.h"
 #include "BuildMenuGrid.h"
@@ -29,8 +29,10 @@ class GameState: public State {
   void BuildTower(const std::string&, int, int);
   // Вызывает меню постройки башни
   void LoadBuildMenu(const std::string&, const sf::Sprite& tower_tex);
+  //Создаёт меню информации
+  void InfoMenu(int64_t);
   // Создаёт меню информации для башни
-  void InfoMenuForTower(long long);
+  void InfoMenuForTower(const std::shared_ptr<Tower>&);
   //Удаляет башню
   void RemoveTower(const std::shared_ptr<Tower>&);
   //Удаляет меню постройки
@@ -55,7 +57,6 @@ class GameState: public State {
   std::map<int64_t, std::shared_ptr<Tower>> towers_;
   std::map<int64_t, std::shared_ptr<Enemy>> enemies_;
   EnemyCreator creator_of_enemies_;
-  bool is_free[10][10];
 };
 
 #endif  // INCLUDE_GAMESTATE_H_

@@ -4,19 +4,15 @@
 // speed range damage tower_image_path // Характеристики второго уровня
 // ...................................
 // speed range damage tower_image_path // Характеристики max_level уровня
-#include "Tower.h"
+#include "entity/Tower.h"
 #include "StateManager.h"
 #include <iostream>
 #include <string>
 
 Tower::Tower(State& state, const std::string& source, int x, int y) :
     Entity(state, DrawPriority(100 + y, this)),
-    tower_sprite_(),
-    icon_sprite_(),
-    default_sprite_color_(sf::Color(255, 255, 255)),
     font_(),
     text_(),
-    is_mouse_in_(false),
     source_(source),
     timer_(0),
     max_level_(0),
@@ -31,7 +27,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   SetPosition(x, y);
 
   icon_sprite_.move(650, 200);
-  tower_sprite_.move(x + 5, y - 40);
+  sprite_.move(x + 5, y - 40);
 
   font_ = State::GetFontResourceManager()
       .GetOrLoadResource("assets/font/default.ttf");
@@ -58,30 +54,7 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(speed_text_, states);
     target.draw(range_text_, states);
   }
-  target.draw(tower_sprite_, states);
-}
-
-void Tower::Click(int, int) {
-  StateManager& states = state_.GetStateManager();
-  states.game_ptr_->InfoMenuForTower(id_);
-}
-
-void Tower::MouseIn(int, int) {
-  if (clicked_) {
-    tower_sprite_.setColor(sf::Color(255, 0, 255));
-  } else {
-    tower_sprite_.setColor(sf::Color(200, 200, 255));
-  }
-  is_mouse_in_ = true;
-}
-
-void Tower::MouseOut(int, int) {
-  tower_sprite_.setColor(default_sprite_color_);
-  is_mouse_in_ = false;
-}
-
-bool Tower::PointCheck(int x, int y) const {
-  return tower_sprite_.getGlobalBounds().contains(x, y);
+  target.draw(sprite_, states);
 }
 
 void Tower::Update() {
@@ -91,10 +64,7 @@ void Tower::Update() {
   std::string tower_image_path;
   source_ >> tower_image_path;
 
-  sf::Texture& tower_sprite_tex_ = State::GetTextureResourceManager()
-      .GetOrLoadResource(tower_image_path);
-  icon_sprite_.setTexture(tower_sprite_tex_);
-  tower_sprite_.setTexture(tower_sprite_tex_);
+  LoadSprite(tower_image_path);
 
   text_.setString("LVL " + std::to_string(level_));
   level_text_.setString("Level " + std::to_string(level_) + " / " + std::to_string(max_level_));
@@ -121,15 +91,4 @@ void Tower::InitText(sf::Text& text, int x, int y) {
   text.setOutlineColor(sf::Color::White);
   text.setCharacterSize(10);
   text.move(x, y);
-}
-
-void Tower::SetInfo(bool value) {
-  if (value) {
-    default_sprite_color_ = sf::Color(200, 200, 255);
-    tower_sprite_.setColor(default_sprite_color_);
-  } else {
-    default_sprite_color_ = sf::Color(255, 255, 255);
-    tower_sprite_.setColor(default_sprite_color_);
-  }
-  Entity::SetInfo(value);
 }

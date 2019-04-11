@@ -19,12 +19,11 @@ GameState::GameState(StateManager& states) :
     update_tower_button_ptr_(new UpdateTowerButton(*this, 650, 450, nullptr)),
     remove_tower_button_ptr_(new RemoveTowerButton(*this, 650, 400, nullptr)),
     build_menu_grid_ptr_(new BuildMenuGrid(*this)),
-    map_ptr_(),
+    map_ptr_(new Map({})),
     info_menu_(),
     towers_{},
     enemies_{},
-    creator_of_enemies_(*this),
-    is_free{} {
+    creator_of_enemies_(*this) {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -40,12 +39,6 @@ void GameState::Load(const std::string& file_name) {
   draw_queue_.insert(panel_side_ptr_);
   draw_queue_.insert(build_button_ptr_);
   draw_queue_.insert(pause_button_ptr_);
-
-  for (auto& row : is_free) {
-    for (bool& tile : row) {
-      tile = true;
-    }
-  }
 }
 
 void GameState::Tick() {
@@ -79,7 +72,7 @@ void GameState::ProcessEvent(sf::Event& event) {
 }
 
 void GameState::BuildTower(const std::string& tower_path, int x, int y) {
-  is_free[x / 60][y / 60] = false;
+  map_ptr_->Set(x / 60, y / 60, -1);
   std::shared_ptr<Tower> tower(new Tower(*this, tower_path, x, y));
   towers_[tower->GetID()] = tower;
   draw_queue_.insert(tower);
@@ -90,9 +83,15 @@ void GameState::LoadBuildMenu(const std::string& source, const sf::Sprite& tower
   draw_queue_.insert(build_menu_grid_ptr_);
 }
 
-void GameState::InfoMenuForTower(long long id) {
+void GameState::InfoMenu(int64_t id) {
   RemoveInfoMenu();
-  std::shared_ptr<Tower> tower = towers_[id];
+  if (towers_.count(id)) {
+    InfoMenuForTower(towers_[id]);
+    return;
+  }
+}
+
+void GameState::InfoMenuForTower(const std::shared_ptr<Tower>& tower) {
   update_tower_button_ptr_->ChangeTower(tower);
   remove_tower_button_ptr_->ChangeTower(tower);
   draw_queue_.insert(update_tower_button_ptr_);
@@ -102,7 +101,7 @@ void GameState::InfoMenuForTower(long long id) {
 }
 
 void GameState::RemoveTower(const std::shared_ptr<Tower>& tower_ptr) {
-  is_free[tower_ptr->GetX() / 60][tower_ptr->GetY() / 60] = true;
+  map_ptr_->Set(tower_ptr->GetX() / 60, tower_ptr->GetY() / 60, 0);
   draw_queue_.erase(tower_ptr);
   towers_.erase(tower_ptr->GetID());
   RemoveInfoMenu();
@@ -124,7 +123,7 @@ void GameState::RemoveInfoMenu() {
 }
 
 bool GameState::IsFree(int x, int y) const {
-  return is_free[x][y];
+  return map_ptr_->IsFree(x, y);
 }
 
 int64_t GameState::GetAmountOfEnemies() const {
