@@ -21,34 +21,43 @@ enum class EnemyHealthType {
 
 class Enemy : public Entity {
  public:
-  Enemy(double health, int x, int y,
-      std::shared_ptr<State>& state, DrawPriority& priority);
+  Enemy(double health, int speed, int x, int y,
+      const std::shared_ptr<State>& state, const DrawPriority& priority);
 
-  void DoMove() final;
+  void DoMove();
+
+  void DecreaseHealth(double delta);
+  void EncreaseHealth(double delta);
+
+  void DoDamage(Enemy& other_entity);
 
   void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
 
-  ResourceManager<sf::Sprite> GetSpriteManager() const { return sprites_manager_; }
 //  void SetTexture(const sf::Texture& texture) {}
 // Use textures_resource_manager instead
 
  private:
-
+  Direction move_direction_;
+  int speed_;
   void DoMove(const Direction& direction);
 };
 
 class EnemyCreator {
  public:
+  EnemyCreator() = default;
+
   explicit EnemyCreator(const std::shared_ptr<State>& state);
 
   void LoadSpawnPoints(const std::string& path_to_file);
 
   void CreateSomeEnemies(int64_t count);
 
+  void SetState(const std::shared_ptr<State>& state);
+
  private:
   std::shared_ptr<State> state_;
   std::vector<Point> spawn_points_;
-  static const DrawPriority enemy_priority_;
 
   int GetHealthFromType(const EnemyHealthType& type);
+  double GetSpeedByType(const EnemyHealthType& type);
 };

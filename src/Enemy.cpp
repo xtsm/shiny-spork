@@ -1,4 +1,7 @@
+#include <fstream>
 #include <entity/Enemy.h>
+
+#include "entity/Enemy.h"
 #include "Widget.h"
 #include "State.h"
 #include "GameState.h"
@@ -21,39 +24,49 @@ void Enemy::DoMove() {
 }
 
 void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  target.draw(*this, states);
+  target.draw(sprite_, states);
 }
 
 void Enemy::DoMove(const Direction& direction) {
   switch (direction) {
     case Direction::North:
-      --y_;
+      position_.y -= speed_;
+      sprite_.setTextureRect(sf::IntRect());
       break;
     case Direction::East:
-      ++x_;
+      position_.x += speed_;
+      sprite_.setTextureRect(sf::IntRect());
       break;
     case Direction::West:
-      --x_;
+      position_.x -= speed_;
+      sprite_.setTextureRect(sf::IntRect());
       break;
     case Direction::South:
-      ++y_;
+      position_.y += speed_;
+      sprite_.setTextureRect(sf::IntRect());
       break;
     default:
       break;
   }
+
+  x_ = static_cast<int>(position_.x);
+  y_ = static_cast<int>(position_.y);
 }
 
-Enemy::Enemy(double health, int x, int y,
-             std::shared_ptr<State>& state, DrawPriority& priority)
-    : Entity(health, 0, x, y, state, priority) {}
+Enemy::Enemy(double health, int speed, int x, int y,
+             const std::shared_ptr<State>& state, const DrawPriority& priority)
+    : Entity(health, 0, x, y, state, priority), speed_(speed) {}
 
 EnemyCreator::EnemyCreator(const std::shared_ptr<State>& state)
     : state_(state) {}
 
-DrawPriority EnemyCreator::enemy_priority_ = DrawPriority(5, this);
-
 void EnemyCreator::LoadSpawnPoints(const std::string& path_to_file) {
-  // TODO: Read from file spawn points
+  std::ifstream reader(path_to_file);
+  Point spawn_point;
+  while (reader >> spawn_point) {
+    spawn_points_.push_back(spawn_point);
+  }
+  reader.close();
 }
 
 void EnemyCreator::CreateSomeEnemies(int64_t count) {
@@ -77,9 +90,9 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
 
     Point point_of_spawn = spawn_points_[distribution_of_points(generator)];
 
-    static_cast<GameState&>(*state_).AddNewEnemy(
-        new Enemy(GetHealthFromType(health),
-                  point_of_spawn.x, point_of_spawn.y, state_, enemy_priority_));
+    dynamic_cast<GameState&>(*state_).AddNewEnemy(
+        Enemy(GetHealthFromType(health), GetSpeedByType(health),
+                  point_of_spawn.x, point_of_spawn.y, state_, DrawPriority(5, this)));
   }
 }
 
@@ -96,4 +109,45 @@ int EnemyCreator::GetHealthFromType(const EnemyHealthType& type) {
     default:
       return 0;
   }
+}
+
+double EnemyCreator::GetSpeedByType(const EnemyHealthType& type) {
+  switch (type) {
+    case EnemyHealthType::VeryHigh:
+      return 0.1;
+    case EnemyHealthType::High:
+      return 0.3;
+    case EnemyHealthType::Middle:
+      return 0.7;
+    case EnemyHealthType::Low:
+      return 1;
+    default:
+      return 0;
+  }
+}
+
+void EnemyCreator::SetState(const std::shared_ptr<State>& state) {
+  state_ = state;
+}
+
+void Enemy::DecreaseHealth(double delta) {
+  if (health_ > 0 && health_ - delta >= 0) {
+    health_ -= delta;
+  } else {
+    health_ = 0;
+  }
+
+  if (health_ == 0) {
+    is_alive_ = false;
+  }
+}
+
+void Enemy::EncreaseHealth(double delta) {
+  if (is_alive_) {
+    health_ += delta;
+  }
+}
+
+void Enemy::DoDamage(Enemy& other_entity) {
+  other_entity.DecreaseHealth(power_);
 }

@@ -8,17 +8,13 @@
 
 class Entity : public Widget {
  public:
-  Entity(double health, double power, int x, int y,
-         const std::shared_ptr<State>& state, DrawPriority& priority);
+  Entity(double health, double power, double x, double y,
+         const std::shared_ptr<State>& state, const DrawPriority& priority);
 
-  virtual void DoMove() = 0;
-
-  void DecreaseHealth(double delta);
-  void EncreaseHealth(double delta);
-
-  void DoDamage(Entity& other_entity);
+  void LoadSprite(const std::string& file_name);
 
  protected:
+  sf::Sprite sprite_;
   double health_;
   double power_;
   bool is_alive_;
