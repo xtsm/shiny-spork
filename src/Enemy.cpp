@@ -10,16 +10,16 @@
 
 void Enemy::DoMove() {
   if (typeid(state_) == typeid(GameState)) {
-    std::shared_ptr<Map> map = (dynamic_cast<GameState&>(state_)).GetMap();
+    std::shared_ptr<Map> map = state_.GetStateManager().game_ptr_->GetMap();
 
-    if (map->IsMoveAvailable(Direction::North, x_, y_)) {
+    if (map->IsMoveAvailable(Direction::North, position_.x, position_.y)) {
       DoMove(Direction::North);
-    } else if (map->IsMoveAvailable(Direction::South, x_, y_)) {
-      DoMove(Direction::South);
-    } else if (map->IsMoveAvailable(Direction::East, x_, y_)) {
+    } else if (map->IsMoveAvailable(Direction::East, position_.x, position_.y)) {
       DoMove(Direction::East);
-    } else if (map->IsMoveAvailable(Direction::West, x_, y_)) {
+    } else if (map->IsMoveAvailable(Direction::West, position_.x, position_.y)) {
       DoMove(Direction::West);
+    } else if (map->IsMoveAvailable(Direction::South, position_.x, position_.y)) {
+      DoMove(Direction::South);
     }
   }
 }
@@ -32,26 +32,25 @@ void Enemy::DoMove(const Direction& direction) {
   switch (direction) {
     case Direction::North:
       position_.y -= speed_;
-      sprite_.setTextureRect(sf::IntRect());
+      sprite_.setTextureRect(sf::IntRect(3, 33, 27, 40));
       break;
     case Direction::East:
       position_.x += speed_;
-      sprite_.setTextureRect(sf::IntRect());
+      sprite_.setTextureRect(sf::IntRect(33, 3, 27, 40));
       break;
     case Direction::West:
       position_.x -= speed_;
-      sprite_.setTextureRect(sf::IntRect());
+      sprite_.setTextureRect(sf::IntRect(63, 3, 27, 40));
       break;
     case Direction::South:
       position_.y += speed_;
-      sprite_.setTextureRect(sf::IntRect());
+      sprite_.setTextureRect(sf::IntRect(3, 63, 27, 40));
       break;
     default:
       break;
   }
 
-  x_ = static_cast<int>(position_.x);
-  y_ = static_cast<int>(position_.y);
+  sprite_.setPosition(position_.x, position_.y);
 }
 
 Enemy::Enemy(double health, int speed, double x, double y,
@@ -62,11 +61,17 @@ Enemy::Enemy(double health, int speed, double x, double y,
       speed_(speed),
       power_(0),
       position_{x, y},
-      is_alive_(true) {}
+      is_alive_(true) {
+  LoadSprite("assets/enemies/low_enemy.png");
+  sprite_.setPosition(x, y);
+  sprite_.setTextureRect(sf::IntRect(3, 3, 27, 40));
+}
 
 EnemyCreator::EnemyCreator(State& state)
     : state_(state),
-      spawn_points_{} {}
+      spawn_points_{} {
+  LoadSpawnPoints("assets/enemies/1.txt");
+}
 
 void EnemyCreator::LoadSpawnPoints(const std::string& path_to_file) {
   std::ifstream reader(path_to_file);
@@ -77,33 +82,34 @@ void EnemyCreator::LoadSpawnPoints(const std::string& path_to_file) {
   reader.close();
 }
 
-void EnemyCreator::CreateSomeEnemies(int64_t) {
+void EnemyCreator::CreateSomeEnemies(int64_t count) {
 //TODO(nikkita1267):
 
-//  std::mt19937 generator(1488);
-//  std::uniform_int_distribution<int64_t>
-//      distribution_of_points(0, spawn_points_.size() - 1);
-//  std::uniform_int_distribution<int> distribution_of_type(0, 50);
-//
-//  for (int64_t i = 0; i < count; ++i) {
-//    int type = distribution_of_type(generator);
-//    EnemyHealthType health;
-//    if (type >= 0 && type < 5) {
-//      health = EnemyHealthType::VeryHigh;
-//    } else if (type >= 5 && type < 15) {
-//      health = EnemyHealthType::High;
-//    } else if (type >= 15 && type < 30) {
-//      health = EnemyHealthType::Middle;
-//    } else {
-//      health = EnemyHealthType::Low;
-//    }
-//
-//    Point point_of_spawn = spawn_points_[distribution_of_points(generator)];
-//
-//    state_.GetStateManager().game_ptr_->AddNewEnemy(
-//        Enemy(GetHealthFromType(health), GetSpeedByType(health),
-//                  point_of_spawn.x, point_of_spawn.y, state_, DrawPriority(5, this)));
-//  }
+  std::mt19937 generator(1488);
+  std::uniform_int_distribution<int64_t>
+      distribution_of_points(0, spawn_points_.size() - 1);
+  std::uniform_int_distribution<int> distribution_of_type(0, 50);
+
+  for (int64_t i = 0; i < count; ++i) {
+    int type = distribution_of_type(generator);
+    EnemyHealthType health;
+    if (type >= 0 && type < 5) {
+      health = EnemyHealthType::VeryHigh;
+    } else if (type >= 5 && type < 15) {
+      health = EnemyHealthType::High;
+    } else if (type >= 15 && type < 30) {
+      health = EnemyHealthType::Middle;
+    } else {
+      health = EnemyHealthType::Low;
+    }
+
+    Point point_of_spawn = spawn_points_[distribution_of_points(generator)];
+
+    state_.GetStateManager().game_ptr_->AddNewEnemy(
+        Enemy(GetHealthFromType(health), GetSpeedByType(health),
+              point_of_spawn.x * 60, point_of_spawn.y * 60,
+              state_, DrawPriority(5, this)));
+  }
 }
 
 int EnemyCreator::GetHealthFromType(const EnemyHealthType& type) {

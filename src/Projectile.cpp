@@ -2,7 +2,7 @@
 #include "StateManager.h"
 
 Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim,
-                       int damage, int speed, int x, int y) :
+                       int x, int y, int damage, int speed) :
     Entity(state, DrawPriority(101 + y, this)),
     aim_ptr_(std::move(aim)),
     position_(x, y),

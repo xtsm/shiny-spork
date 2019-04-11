@@ -5,6 +5,7 @@
 #include "RemoveTowerButton.h"
 #include "StateManager.h"
 #include "GameState.h"
+#include "utility/Point.h"
 
 GameState::GameState(StateManager& states) :
     State(states),
@@ -18,13 +19,15 @@ GameState::GameState(StateManager& states) :
     pause_button_ptr_(new PauseButton(*this, 7 * (this->height_ / 8), 7 * (this->width_ / 8))),
     update_tower_button_ptr_(new UpdateTowerButton(*this, 650, 450, nullptr)),
     remove_tower_button_ptr_(new RemoveTowerButton(*this, 650, 400, nullptr)),
+    start_game_button_ptr_(new StartGameButton(*this, 625, 400)),
     build_menu_grid_ptr_(new BuildMenuGrid(*this)),
     map_ptr_(new Map({})),
     info_menu_(),
     towers_{},
     projectiles_{},
     enemies_{},
-    creator_of_enemies_(*this) {
+    creator_of_enemies_(*this),
+    is_enemies_produce_(false) {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -40,12 +43,29 @@ void GameState::Load(const std::string& file_name) {
   draw_queue_.insert(panel_side_ptr_);
   draw_queue_.insert(build_button_ptr_);
   draw_queue_.insert(pause_button_ptr_);
+  draw_queue_.insert(start_game_button_ptr_);
 }
 
 void GameState::Tick() {
-  creator_of_enemies_.CreateSomeEnemies(1);
+  for (const auto& enemy : enemies_) {
+    enemy.second->DoMove();
+    draw_queue_.erase(enemy.second);
+  }
+
+  if (is_enemies_produce_) {
+    CreateSomeEnemies(10);
+  }
+
   for (const auto& enemy : enemies_) {
     draw_queue_.insert(enemy.second);
+  }
+
+  for (const auto& projectile : projectiles_) {
+    projectile.second->Pointing();
+  }
+
+  for (const auto& tower : towers_) {
+    tower.second->Shot();
   }
 }
 
@@ -120,9 +140,26 @@ bool GameState::IsFree(int x, int y) const {
   return map_ptr_->IsFree(x, y);
 }
 
+void GameState::AddProjectile(const std::shared_ptr<Projectile>& projectile) {
+  projectiles_.emplace(projectile->GetID(), projectile);
+  draw_queue_.insert(projectile);
+  // TODO(Nicksechko): Выстрел по цели
+}
+
 void GameState::RemoveProjectile(int64_t id) {
   draw_queue_.erase(projectiles_[id]);
   projectiles_.erase(id);
+}
+
+std::shared_ptr<Enemy> GameState::FindAim(int x, int y, int range) {
+  for (const auto& enemy : enemies_) {
+    Point d(enemy.second->GetX() - x, enemy.second->GetY() - y);
+    if (d.Length() <= range * range) {
+      return enemy.second;
+    }
+  }
+  return nullptr;
+  // TODO(Nicksechko): Поск цели
 }
 
 int64_t GameState::GetAmountOfEnemies() const {
@@ -131,4 +168,13 @@ int64_t GameState::GetAmountOfEnemies() const {
 
 void GameState::AddNewEnemy(const Enemy& enemy) {
   enemies_.emplace(enemy.GetID(), std::make_shared<Enemy>(enemy));
+}
+
+void GameState::CreateSomeEnemies(int count) {
+  SetProducing(true);
+  creator_of_enemies_.CreateSomeEnemies(count);
+}
+
+void GameState::SetProducing(bool produce) {
+  is_enemies_produce_ = produce;
 }

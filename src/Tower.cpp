@@ -1,9 +1,9 @@
 // Source файл должен иметь следующий формат:
 // max_level
-// speed range damage tower_image_path // Характеристики первого уровня
-// speed range damage tower_image_path // Характеристики второго уровня
-// ...................................
-// speed range damage tower_image_path // Характеристики max_level уровня
+// speed projectile_speed range damage tower_sprite_path projectile_sprite_path// Характеристики первого уровня
+// speed projectile_speed range damage tower_sprite_path projectile_sprite_path// Характеристики второго уровня
+// ...........................................................
+// speed projectile_speed range damage tower_sprite_path projectile_sprite_path// Характеристики max_level уровня
 #include "entity/Tower.h"
 #include "StateManager.h"
 #include <iostream>
@@ -11,6 +11,7 @@
 
 Tower::Tower(State& state, const std::string& source, int x, int y) :
     Entity(state, DrawPriority(100 + y, this)),
+    projectile_sprite_path_(),
     font_(),
     text_(),
     source_(source),
@@ -23,7 +24,9 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     range_(0),
     range_text_(),
     damage_(0),
-    damage_text_() {
+    damage_text_(),
+    projectile_speed_(0),
+    projectile_speed_text_() {
   SetPosition(x, y);
 
   icon_sprite_.move(650, 200);
@@ -40,7 +43,6 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
 
   source_ >> max_level_;
   Update();
-  // TODO(Nicksechko): Загрузка текстуры снаряда
 }
 
 void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -65,9 +67,10 @@ void Tower::Click(int x, int y) {
 void Tower::Update() {
   level_++;
 
-  source_ >> speed_ >> range_ >> damage_;
+  source_ >> speed_ >> projectile_speed_ >> range_ >> damage_;
   std::string tower_image_path;
   source_ >> tower_image_path;
+  source_ >> projectile_sprite_path_;
 
   LoadSprite(tower_image_path);
 
@@ -76,15 +79,23 @@ void Tower::Update() {
   damage_text_.setString("Damage: " + std::to_string(damage_));
   speed_text_.setString("Speed: " + std::to_string(speed_));
   range_text_.setString("Range: " + std::to_string(range_));
-  // TODO(Nicksechko): Обновление текстуры снаряда
-}
-
-void Tower::Find_Aim() {
-  // TODO(Nicksechko): Поск цели
 }
 
 void Tower::Shot() {
-  // TODO(Nicksechko): Выстрел по цели
+  if (timer_ > 0) {
+    timer_--;
+    return;
+  }
+  timer_ = speed_;
+  std::shared_ptr<Enemy> aim =
+      state_.GetStateManager().game_ptr_->FindAim(x_, y_, range_);
+  if (aim == nullptr) {
+    return;
+  }
+  std::shared_ptr<Projectile>
+      projectile(new Projectile(state_, aim, x_, y_, damage_, projectile_speed_));
+  projectile->LoadSprite(projectile_sprite_path_);
+  state_.GetStateManager().game_ptr_->AddProjectile(projectile);
 }
 
 bool Tower::Updatable() const {

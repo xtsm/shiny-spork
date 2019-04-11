@@ -2,6 +2,7 @@
 #define SHINY_SPORK_MAP_H
 
 #include <vector>
+#include <string>
 #include "utility/Direction.h"
 
 class Map {
@@ -14,6 +15,8 @@ class Map {
   bool IsFree(int, int) const;
 
   void Set(int, int, int);
+
+  void LoadMapFromFile(const std::string& file_name);
 
  private:
   std::vector<std::vector<int>> map_;

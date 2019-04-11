@@ -1,1 +1,1 @@
-assets/bg/level1.png
+assets/bg/map.png
