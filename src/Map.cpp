@@ -20,11 +20,11 @@ bool Map::IsMoveAvailable(const Direction& direction, int x, int y) const {
 }
 
 bool Map::IsFree(int x, int y) const {
-  return map_[x][y] == 0;
+  return map_[y][x] == 0;
 }
 
 void Map::Set(int x, int y, int value) {
-  map_[x][y] = value;
+  map_[y][x] = value;
 }
 
 void Map::LoadMapFromFile(const std::string& file_name) {
