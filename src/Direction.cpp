@@ -1,4 +1,5 @@
 #include "utility/Direction.h"
+#include <string>
 
 std::ostream& operator<<(std::ostream& out, const Direction& direction) {
   switch (direction) {
@@ -18,5 +19,22 @@ std::ostream& operator<<(std::ostream& out, const Direction& direction) {
       break;
   }
   return out;
+}
+
+std::istream& operator>>(std::istream& in, Direction& direction) {
+  std::string dir;
+  in >> dir;
+
+  if (dir == "NORTH") {
+    direction = Direction::North;
+  } else if (dir == "SOUTH") {
+    direction = Direction::South;
+  } else if (dir == "EAST") {
+    direction = Direction::East;
+  } else {
+    direction = Direction::West;
+  }
+
+  return in;
 }
 

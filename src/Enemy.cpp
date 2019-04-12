@@ -10,62 +10,15 @@
 #include "utility/Direction.h"
 
 void Enemy::DoMove() {
-  if (typeid(state_) == typeid(GameState)) {
-    std::shared_ptr<Map> map = state_.GetStateManager().game_ptr_->GetMap();
-    switch (move_direction_) {
-      case Direction::North:
-        if (map->IsMoveAvailable(Direction::West, x_, y_)) {
-          DoMove(Direction::West);
-        } else if (map->IsMoveAvailable(Direction::East, x_, y_)) {
-          DoMove(Direction::East);
-        } else if (map->IsMoveAvailable(Direction::North, x_, y_)) {
-          DoMove(Direction::North);
-        } else if (map->IsMoveAvailable(Direction::South, x_, y_)) {
-          DoMove(Direction::South);
-        } else {
-          std::cerr << "Moves don't available" << std::endl;
-        }
-        break;
-      case Direction::West:
-        if (map->IsMoveAvailable(Direction::North, x_, y_)) {
-          DoMove(Direction::North);
-        } else if (map->IsMoveAvailable(Direction::South, x_, y_)) {
-          DoMove(Direction::South);
-        } else if (map->IsMoveAvailable(Direction::West, x_, y_)) {
-          DoMove(Direction::West);
-        } else if (map->IsMoveAvailable(Direction::East, x_, y_)) {
-          DoMove(Direction::East);
-        } else {
-          std::cerr << "Moves don't available" << std::endl;
-        }
-        break;
-      case Direction::East:
-        if (map->IsMoveAvailable(Direction::North, x_, y_)) {
-          DoMove(Direction::North);
-        } else if (map->IsMoveAvailable(Direction::South, x_, y_)) {
-          DoMove(Direction::South);
-        } else if (map->IsMoveAvailable(Direction::East, x_, y_)) {
-          DoMove(Direction::East);
-        } else if (map->IsMoveAvailable(Direction::West, x_, y_)) {
-          DoMove(Direction::West);
-        } else {
-          std::cerr << "Moves don't available" << std::endl;
-        }
-        break;
-      case Direction::South:
-        if (map->IsMoveAvailable(Direction::West, x_, y_)) {
-          DoMove(Direction::West);
-        } else if (map->IsMoveAvailable(Direction::East, x_, y_)) {
-          DoMove(Direction::East);
-        } else if (map->IsMoveAvailable(Direction::South, x_, y_)) {
-          DoMove(Direction::South);
-        } else if (map->IsMoveAvailable(Direction::North, x_, y_)) {
-          DoMove(Direction::North);
-        } else {
-          std::cerr << "Moves don't available" << std::endl;
-        }
-    }
-  }
+  std::vector<Direction> possible_moves = GetAvailableMoves(x_, y_);
+  // Randomly choose move
+  if (possible_moves.empty()) return;
+
+  std::mt19937 generator(228);
+  std::uniform_int_distribution<int> distribution(
+      0, static_cast<int>(possible_moves.size() - 1));
+  int choose_move = distribution(generator);
+  DoMove(possible_moves[choose_move]);
 }
 
 void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -74,11 +27,10 @@ void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 void Enemy::DoMove(const Direction& direction) {
   move_direction_ = direction;
-  std::cerr << "Make move in dir " << direction << std::endl;
   switch (direction) {
     case Direction::North:
       position_.y -= speed_;
-      y_ = static_cast<int>(std::floor(position_.y));
+      y_ = static_cast<int>(std::floor(position_.y + sprite_.getTextureRect().height));
       sprite_.setTextureRect(sf::IntRect(3, 33, 27, 40));
       break;
     case Direction::East:
@@ -88,7 +40,7 @@ void Enemy::DoMove(const Direction& direction) {
       break;
     case Direction::West:
       position_.x -= speed_;
-      x_ = static_cast<int>(std::floor(position_.x));
+      x_ = static_cast<int>(std::floor(position_.x + sprite_.getTextureRect().width));
       sprite_.setTextureRect(sf::IntRect(3, 63, 27, 40));
       break;
     case Direction::South:
@@ -104,9 +56,10 @@ void Enemy::DoMove(const Direction& direction) {
 }
 
 Enemy::Enemy(double health, double speed, double x, double y,
-             State& state, const DrawPriority& priority)
+             const Direction& move_direction, State& state,
+             const DrawPriority& priority)
     : Entity(state, priority),
-      move_direction_(Direction::West),
+      move_direction_(move_direction),
       health_(health),
       speed_(speed),
       power_(0),
@@ -117,19 +70,22 @@ Enemy::Enemy(double health, double speed, double x, double y,
   y_ = static_cast<int>(y);
   sprite_.setPosition(static_cast<float>(x), static_cast<float>(y));
   sprite_.setTextureRect(sf::IntRect(5, 5, 27, 40));
+  DoMove(move_direction_);
 }
 
 EnemyCreator::EnemyCreator(State& state)
     : state_(state),
       spawn_points_{} {
-  LoadSpawnPoints("assets/enemies/1.txt");
+  LoadSpawnPointsAndDirections("assets/enemies/1.txt");
 }
 
-void EnemyCreator::LoadSpawnPoints(const std::string& path_to_file) {
+void EnemyCreator::LoadSpawnPointsAndDirections(const std::string& path_to_file) {
   std::ifstream reader(path_to_file);
   Point spawn_point(0, 0);
+  Direction direction;
   while (reader >> spawn_point) {
-    spawn_points_.push_back(spawn_point);
+    reader >> direction;
+    spawn_points_.emplace_back(spawn_point, direction);
   }
   reader.close();
 }
@@ -154,10 +110,12 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
       health = EnemyHealthType::Low;
     }
 
-    Point point_of_spawn = spawn_points_[distribution_of_points(generator)];
+    auto point_of_spawn_with_direction = spawn_points_[distribution_of_points(generator)];
 
     Enemy new_enemy(GetHealthFromType(health), GetSpeedByType(health),
-                    point_of_spawn.x * 60, point_of_spawn.y * 60,
+                    point_of_spawn_with_direction.first.x * 60,
+                    point_of_spawn_with_direction.first.y * 60,
+                    point_of_spawn_with_direction.second,
                     state_, DrawPriority(120, this));
     new_enemy.SetDrawPriority(
         DrawPriority(static_cast<int>(120 + new_enemy.GetID()), this));
@@ -202,8 +160,6 @@ void Enemy::DecreaseHealth(double delta) {
     health_ = 0;
   }
 
-  std::cerr << "Hp: " << health_ << std::endl;
-
   if (health_ == 0) {
     is_alive_ = false;
     state_.GetStateManager().game_ptr_->RemoveEnemyById(GetID());
@@ -222,4 +178,28 @@ void Enemy::DoDamage(Enemy& other_entity) {
 
 void Enemy::SetDrawPriority(const DrawPriority& priority) {
   priority_ = priority;
+}
+
+std::vector<Direction> Enemy::GetAvailableMoves(int x, int y) const {
+  std::vector<Direction> available_moves;
+
+  std::shared_ptr<Map> map = state_.GetStateManager().game_ptr_->GetMap();
+
+  if (map->IsMoveAvailable(Direction::North, x, y)) {
+    available_moves.push_back(Direction::North);
+  }
+
+  if (map->IsMoveAvailable(Direction::West, x, y)) {
+    available_moves.push_back(Direction::West);
+  }
+
+  if (map->IsMoveAvailable(Direction::East, x, y)) {
+    available_moves.push_back(Direction::East);
+  }
+
+  if (map->IsMoveAvailable(Direction::South, x, y)) {
+    available_moves.push_back(Direction::South);
+  }
+
+  return available_moves;
 }

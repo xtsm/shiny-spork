@@ -12,4 +12,6 @@ enum class Direction {
 
 std::ostream& operator<<(std::ostream& out, const Direction& direction);
 
+std::istream& operator>>(std::istream& in, Direction& direction);
+
 #endif //SHINY_SPORK_DIRECTION_H

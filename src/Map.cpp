@@ -37,9 +37,7 @@ void Map::LoadMapFromFile(const std::string& file_name) {
   for (auto& row : map_) {
     for (int& element : row) {
       reader >> element;
-      std::cerr << element << " ";
     }
-    std::cerr << std::endl;
   }
 }
 
