@@ -60,13 +60,14 @@ void GameState::Tick() {
     draw_queue_.insert(enemy.second);
   }
 
+  for (const auto& tower : towers_) {
+    tower.second->Shot();
+  }
+
   for (const auto& projectile : projectiles_) {
     projectile.second->Pointing();
   }
 
-  for (const auto& tower : towers_) {
-    tower.second->Shot();
-  }
 }
 
 void GameState::Pause() {

@@ -12,16 +12,14 @@ Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim,
 }
 
 void Projectile::Pointing() {
-  if (Point(aim_ptr_->GetX(), aim_ptr_->GetY()) == position_) {
-
-  }
   Point d = Point(aim_ptr_->GetX(), aim_ptr_->GetY()) - position_;
   if (d.Length() < speed_ * speed_) {
     aim_ptr_->DecreaseHealth(damage_);
     state_.GetStateManager().game_ptr_->RemoveProjectile(id_);
     return;
   } else {
-    d *= speed_ / d.Length();
+    d *= speed_ * speed_ / d.Length();
     position_ += d;
+    sprite_.setPosition(position_.x, position_.y);
   }
 }

@@ -32,18 +32,22 @@ void Enemy::DoMove(const Direction& direction) {
   switch (direction) {
     case Direction::North:
       position_.y -= speed_;
+      y_ = static_cast<int>(position_.y);
       sprite_.setTextureRect(sf::IntRect(3, 33, 27, 40));
       break;
     case Direction::East:
       position_.x += speed_;
+      x_ = static_cast<int>(position_.x);
       sprite_.setTextureRect(sf::IntRect(33, 3, 27, 40));
       break;
     case Direction::West:
       position_.x -= speed_;
+      x_ = static_cast<int>(position_.x);
       sprite_.setTextureRect(sf::IntRect(63, 3, 27, 40));
       break;
     case Direction::South:
       position_.y += speed_;
+      y_ = static_cast<int>(position_.y);
       sprite_.setTextureRect(sf::IntRect(3, 63, 27, 40));
       break;
     default:
