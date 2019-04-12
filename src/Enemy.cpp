@@ -1,7 +1,7 @@
 #include <fstream>
 #include <cmath>
 #include <entity/Enemy.h>
-
+#include <chrono>
 #include "entity/Enemy.h"
 #include "Widget.h"
 #include "StateManager.h"
@@ -14,7 +14,7 @@ void Enemy::DoMove() {
   // Randomly choose move
   if (possible_moves.empty()) return;
 
-  std::mt19937 generator(228);
+  std::mt19937 generator(std::chrono::steady_clock::now().time_since_epoch().count());
   std::uniform_int_distribution<int> distribution(
       0, static_cast<int>(possible_moves.size() - 1));
   int choose_move = distribution(generator);
@@ -92,7 +92,7 @@ void EnemyCreator::LoadSpawnPointsAndDirections(const std::string& path_to_file)
 
 void EnemyCreator::CreateSomeEnemies(int64_t count) {
 //TODO(nikkita1267):
-  std::mt19937 generator(1488);
+  std::mt19937 generator(std::chrono::steady_clock::now().time_since_epoch().count());
   std::uniform_int_distribution<int64_t>
       distribution_of_points(0, spawn_points_.size() - 1);
   std::uniform_int_distribution<int> distribution_of_type(0, 50);

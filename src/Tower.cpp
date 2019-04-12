@@ -93,7 +93,7 @@ void Tower::Shot() {
     return;
   }
   std::shared_ptr<Projectile>
-      projectile(new Projectile(state_, aim, x_, y_, damage_, projectile_speed_));
+      projectile(new Projectile(state_, aim, x_ + 30, y_, damage_, projectile_speed_));
   projectile->LoadSprite(projectile_sprite_path_);
   state_.GetStateManager().game_ptr_->AddProjectile(projectile);
 }
