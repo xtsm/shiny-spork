@@ -39,7 +39,7 @@ bool Entity::PointCheck(int x, int y) const {
 }
 
 void Entity::LoadSprite(const std::string& file_name) {
-  sprite_.setTexture(State::GetTextureResourceManager().GetOrLoadResource(file_name));
+  sprite_.setTexture(State::GetTextureResourceManager().GetOrLoadResource(file_name), true);
   icon_sprite_.setTexture(State::GetTextureResourceManager().GetOrLoadResource(file_name));
 }
 

@@ -1,5 +1,6 @@
 #include <fstream>
 #include <string>
+#include <iostream>
 #include <memory>
 #include "UpdateTowerButton.h"
 #include "RemoveTowerButton.h"
@@ -27,7 +28,9 @@ GameState::GameState(StateManager& states) :
     projectiles_{},
     enemies_{},
     creator_of_enemies_(*this),
-    is_enemies_produce_(false) {
+    is_enemies_produce_(false),
+    current_delay_(1000),
+    delay_(1000) {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -49,15 +52,19 @@ void GameState::Load(const std::string& file_name) {
 void GameState::Tick() {
   for (const auto& enemy : enemies_) {
     enemy.second->DoMove();
-    draw_queue_.erase(enemy.second);
+    draw_queue_.insert(enemy.second);
+//    draw_queue_.erase(enemy.second);
+  }
+
+  --current_delay_;
+  if (current_delay_ == 0) {
+    is_enemies_produce_ = true;
+    current_delay_ = delay_;
   }
 
   if (is_enemies_produce_) {
-    CreateSomeEnemies(10);
-  }
-
-  for (const auto& enemy : enemies_) {
-    draw_queue_.insert(enemy.second);
+    CreateSomeEnemies(1);
+    is_enemies_produce_ = false;
   }
 
   for (const auto& tower : towers_) {
@@ -67,7 +74,6 @@ void GameState::Tick() {
   for (const auto& projectile : projectiles_) {
     projectile.second->Pointing();
   }
-
 }
 
 void GameState::Pause() {
@@ -169,6 +175,14 @@ int64_t GameState::GetAmountOfEnemies() const {
 
 void GameState::AddNewEnemy(const Enemy& enemy) {
   enemies_.emplace(enemy.GetID(), std::make_shared<Enemy>(enemy));
+  draw_queue_.insert(enemies_[enemy.GetID()]);
+}
+
+void GameState::RemoveEnemyById(int64_t id) {
+  if (enemies_.count(id) != 0) {
+    draw_queue_.erase(enemies_[id]);
+    enemies_.erase(id);
+  }
 }
 
 void GameState::CreateSomeEnemies(int count) {

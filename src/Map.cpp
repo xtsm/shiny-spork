@@ -11,11 +11,16 @@ Map::Map(std::vector<std::vector<int>> map) : map_(std::move(map)) {
 
 bool Map::IsMoveAvailable(const Direction& direction, int x, int y) const {
   switch (direction) {
-    case Direction::North:return (y / 60 != 0 && map_[y / 60 - 1][x / 60] == 1);
-    case Direction::East:return (x / 60 != (map_[0].size() - 1) && map_[y / 60][x / 60 + 1] == 1);
-    case Direction::West:return (x / 60 != 0 && map_[y / 60][x / 60 - 1] == 1);
-    case Direction::South:return (y / 60 != (map_.size() - 1) && map_[y / 60 + 1][x / 60] == 1);
-    default:return false;
+    case Direction::North:
+      return (y / 60 != 0 && map_[y / 60 - 1][x / 60] > map_[y / 60][x / 60]);
+    case Direction::East:
+      return (x / 60 != (map_[0].size() - 1) && map_[y / 60][x / 60 + 1] > map_[y / 60][x / 60]);
+    case Direction::West:
+      return (x / 60 != 0 && map_[y / 60][x / 60 - 1] > map_[y / 60][x / 60]);
+    case Direction::South:
+      return (y / 60 != (map_.size() - 1) && map_[y / 60 + 1][x / 60] > map_[y / 60][x / 60]);
+    default:
+      return false;
   }
 }
 
@@ -32,7 +37,9 @@ void Map::LoadMapFromFile(const std::string& file_name) {
   for (auto& row : map_) {
     for (int& element : row) {
       reader >> element;
+      std::cerr << element << " ";
     }
+    std::cerr << std::endl;
   }
 }
 

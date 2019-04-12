@@ -55,6 +55,8 @@ class GameState: public State {
   void CreateSomeEnemies(int count);
   // Добавляет врага на карту
   void AddNewEnemy(const Enemy&);
+  // Удаляет врага с карты
+  void RemoveEnemyById(int64_t id);
 
  protected:
   int width_, height_;
@@ -72,6 +74,9 @@ class GameState: public State {
   std::map<int64_t, std::shared_ptr<Enemy>> enemies_;
   EnemyCreator creator_of_enemies_;
   bool is_enemies_produce_;
+  // Задержка между спавном врагов
+  int current_delay_;
+  const int delay_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_
