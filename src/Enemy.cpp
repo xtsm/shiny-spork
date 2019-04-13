@@ -76,7 +76,7 @@ Enemy::Enemy(double health, double speed, double x, double y,
 EnemyCreator::EnemyCreator(State& state)
     : state_(state),
       spawn_points_{} {
-  LoadSpawnPointsAndDirections("assets/enemies/1.txt");
+  LoadSpawnPointsAndDirections("assets/levels/enemy1.txt");
 }
 
 void EnemyCreator::LoadSpawnPointsAndDirections(const std::string& path_to_file) {

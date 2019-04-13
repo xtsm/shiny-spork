@@ -1,3 +1,0 @@
-0 4 EAST
-0 5 EAST
-2 5 SOUTH

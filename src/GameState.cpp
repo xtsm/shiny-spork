@@ -15,7 +15,7 @@ GameState::GameState(StateManager& states) :
     background_ptr_(new Background(*this)),
     panel_side_ptr_(new Background(*this)),
     build_button_ptr_(new BuildButton(*this, 650, 50,
-                                      std::string("assets/tower/1.txt"),
+                                      std::string("assets/levels/tower1.txt"),
                                       std::string("assets/tower/tower1.png"))),
     pause_button_ptr_(new PauseButton(*this, 690, 550)),
     update_tower_button_ptr_(new UpdateTowerButton(*this, 650, 450, nullptr)),
