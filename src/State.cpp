@@ -70,8 +70,8 @@ void State::ProcessEvents(sf::RenderWindow& window) {
           clicked_->SetClicked(false);
           sf::Vector2u click_point(event.mouseButton.x, event.mouseButton.y);
           sf::Vector2u size = window.getSize();
-          click_point.x /= static_cast<int>(size.x / 800.0);
-          click_point.y /= static_cast<int>(size.y / 600.0);
+          click_point.x /= size.x / 800.0;
+          click_point.y /= size.y / 600.0;
           if (clicked_->PointCheck(click_point.x, click_point.y)) {
             clicked_->Click(click_point.x, click_point.y);
             if (states_.active_state_ptr_.get() == this) {
@@ -86,8 +86,8 @@ void State::ProcessEvents(sf::RenderWindow& window) {
       case sf::Event::MouseMoved: {
         sf::Vector2u hover_point(event.mouseMove.x, event.mouseMove.y);
         sf::Vector2u size = window.getSize();
-        hover_point.x /= static_cast<int>(size.x / 800.0);
-        hover_point.y /= static_cast<int>(size.y / 600.0);
+        hover_point.x /= size.x / 800.0;
+        hover_point.y /= size.y / 600.0;
         if (hovered_ != nullptr &&
             hovered_->PointCheck(hover_point.x, hover_point.y)) {
           hovered_->MouseMove(hover_point.x, hover_point.y);
