@@ -2,14 +2,20 @@
 #include "entity/Projectile.h"
 #include "StateManager.h"
 
-Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim,
-                       int x, int y, int damage, int speed) :
+Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim, int x, int y,
+                       int damage, std::string source) :
     Entity(state, DrawPriority(101 + y, this)),
     aim_ptr_(std::move(aim)),
+    source_(std::move(source)),
     position_(x, y),
     damage_(damage),
-    speed_(speed) {
+    speed_(0) {
   SetPosition(x, y);
+
+  std::ifstream fin(source_ + "/description.txt");
+  fin >> speed_;
+
+  LoadSprite(source_ + "/sprite.png");
 }
 
 bool Projectile::Pointing() {

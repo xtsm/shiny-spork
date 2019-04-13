@@ -10,7 +10,7 @@ SettingsState::SettingsState(StateManager& states) :
     main_menu_button_ptr_(new MainMenuButton(*this, 50, 350)),
     background_ptr_(new Background(*this)) {
   draw_queue_.insert(main_menu_button_ptr_);
-  background_ptr_->LoadFromFile("assets/bg/1.png");
+  background_ptr_->LoadFromFile("assets/ui/main_menu.png");
   background_ptr_->SetSize(800, 600);
   draw_queue_.insert(background_ptr_);
 }

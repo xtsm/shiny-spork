@@ -7,13 +7,16 @@
 class Projectile : public Entity {
  public:
   Projectile(State&, std::shared_ptr<Enemy>,
-             int, int, int, int);
+             int, int, int, std::string);
 
   bool Pointing();
 
  protected:
   // Цель, в которую летит снаряд
   std::shared_ptr<Enemy> aim_ptr_;
+  //Путь к описанию снаряда
+  std::string source_;
+  //Позиция снаряда
   Point position_;
   // Урон, который нанесёт снаряд
   int damage_;

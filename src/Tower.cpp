@@ -11,11 +11,13 @@
 
 Tower::Tower(State& state, const std::string& source, int x, int y) :
     Entity(state, DrawPriority(100 + y, this)),
-    projectile_sprite_path_(),
+    projectile_path_(),
     font_(),
     text_(),
     source_(source),
+    fin_(source + "/config.txt"),
     timer_(0),
+    tower_name_(),
     max_level_(0),
     level_(0),
     level_text_(),
@@ -24,9 +26,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     range_(0),
     range_text_(),
     damage_(0),
-    damage_text_(),
-    projectile_speed_(0),
-    projectile_speed_text_() {
+    damage_text_() {
   SetPosition(x, y);
 
   icon_sprite_.move(650, 200);
@@ -41,7 +41,8 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   InitText(speed_text_, 620, 320);
   InitText(range_text_, 620, 340);
 
-  source_ >> max_level_;
+  getline(fin_, tower_name_);
+  fin_ >> max_level_;
   Update();
 }
 
@@ -66,13 +67,12 @@ void Tower::Click(int x, int y) {
 
 void Tower::Update() {
   level_++;
+  fin_ >> speed_ >> range_ >> damage_;
+  std::string tower_image_;
+  fin_ >> tower_image_;
+  fin_ >> projectile_path_;
 
-  source_ >> speed_ >> projectile_speed_ >> range_ >> damage_;
-  std::string tower_image_path;
-  source_ >> tower_image_path;
-  source_ >> projectile_sprite_path_;
-
-  LoadSprite(tower_image_path);
+  LoadSprite(source_ + "/" + tower_image_ + ".png");
 
   text_.setString("LVL " + std::to_string(level_));
   level_text_.setString("Level " + std::to_string(level_) + " / " + std::to_string(max_level_));
@@ -93,8 +93,8 @@ void Tower::Shot() {
     return;
   }
   std::shared_ptr<Projectile>
-      projectile(new Projectile(state_, aim, x_ + 30, y_, damage_, projectile_speed_));
-  projectile->LoadSprite(projectile_sprite_path_);
+      projectile(new Projectile(state_, aim, x_ + 30, y_, damage_,
+                                "assets/projectile" + projectile_path_));
   state_.GetStateManager().game_ptr_->AddProjectile(projectile);
 }
 

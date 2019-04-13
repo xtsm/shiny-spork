@@ -61,7 +61,7 @@ class GameState: public State {
  protected:
   int width_, height_;
   std::shared_ptr<Background> background_ptr_, panel_side_ptr_;
-  std::shared_ptr<BuildButton> build_button_ptr_;
+  std::vector<std::shared_ptr<BuildButton>> build_button_ptrs_;
   std::shared_ptr<PauseButton> pause_button_ptr_;
   std::shared_ptr<UpdateTowerButton> update_tower_button_ptr_;
   std::shared_ptr<RemoveTowerButton> remove_tower_button_ptr_;

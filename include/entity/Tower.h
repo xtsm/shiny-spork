@@ -22,14 +22,18 @@ class Tower : public Entity {
   void InitText(sf::Text&, int, int);
 
  protected:
-  std::string projectile_sprite_path_;
+  std::string projectile_path_;
   // Текст и шрифт надписи над башней
   sf::Font font_;
   sf::Text text_;
+  //Путь к описанию башни
+  std::string source_;
   // Поток из файла с описанием уровней башни
-  std::ifstream source_;
+  std::ifstream fin_;
   // Количество тиков, прошедших с предыдущего выстрела
   int timer_;
+  // Название башни
+  std::string tower_name_;
   // Максимальный возможный уровель башни
   int max_level_;
   // Уровень башни
@@ -44,9 +48,6 @@ class Tower : public Entity {
   // Урон от снаряда
   int damage_;
   sf::Text damage_text_;
-  //Скорость снаряда
-  int projectile_speed_;
-  sf::Text projectile_speed_text_;
 };
 
 #endif  // INCLUDE_TOWER_H_

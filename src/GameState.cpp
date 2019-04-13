@@ -1,3 +1,5 @@
+#include <memory>
+
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -14,9 +16,7 @@ GameState::GameState(StateManager& states) :
     height_(800),
     background_ptr_(new Background(*this)),
     panel_side_ptr_(new Background(*this)),
-    build_button_ptr_(new BuildButton(*this, 650, 50,
-                                      std::string("assets/levels/tower1.txt"),
-                                      std::string("assets/tower/tower1.png"))),
+    build_button_ptrs_(),
     pause_button_ptr_(new PauseButton(*this, 690, 550)),
     update_tower_button_ptr_(new UpdateTowerButton(*this, 650, 450, nullptr)),
     remove_tower_button_ptr_(new RemoveTowerButton(*this, 650, 400, nullptr)),
@@ -35,16 +35,28 @@ GameState::GameState(StateManager& states) :
   panel_side_ptr_->SetPosition(600, 0);
 }
 
-void GameState::Load(const std::string& file_name) {
-  std::ifstream fin(file_name);
-  std::string level_path;
-  fin >> level_path;
-  background_ptr_->LoadFromFile(level_path);
-
+void GameState::Load(const std::string& level_path) {
   draw_queue_.clear();
+
+  background_ptr_->LoadFromFile(level_path + "/bg.png");
   draw_queue_.insert(background_ptr_);
   draw_queue_.insert(panel_side_ptr_);
-  draw_queue_.insert(build_button_ptr_);
+
+  std::ifstream fin(level_path + "/towers.txt");
+  int towers_number;
+  std::string tower_path;
+  int x = 650, y = 0;
+  fin >> towers_number;
+  build_button_ptrs_.resize(towers_number);
+  for (auto& build_button_ptr : build_button_ptrs_) {
+    fin >> tower_path;
+    build_button_ptr = std::make_shared<BuildButton>(*this, x, y, tower_path);
+    draw_queue_.insert(build_button_ptr);
+    y += 50;
+  }
+
+  map_ptr_->LoadMapFromFile(level_path + "/map.txt");
+
   draw_queue_.insert(pause_button_ptr_);
   draw_queue_.insert(start_game_button_ptr_);
 }
@@ -96,13 +108,11 @@ void GameState::ProcessEvent(sf::Event& event) {
           Pause();
           break;
         }
-        default:
-          break;
+        default:break;
       }
       break;
     }
-    default:
-      break;
+    default:break;
   }
 }
 
