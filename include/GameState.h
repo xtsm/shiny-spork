@@ -40,13 +40,12 @@ class GameState: public State {
   void RemoveInfoMenu();
   //Проверяет свободна ли клетка
   bool IsFree(int, int) const;
+  //Создаёт Projectile летящий в цель
   void AddProjectile(const std::shared_ptr<Projectile>& projectile);
   //Удаляет из очереди отрисовки
   void RemoveProjectile(int64_t id);
   //Находит цель для башни
   std::shared_ptr<Enemy> FindAim(int, int, int);
-  //Создаёт Projectile летящий в цель
-  void Shot(int, int, int, int, int);
   // Устанавливает флаг начала волн врагов
   void SetProducing(bool produce);
   // Возвращает количество врагов
@@ -54,7 +53,8 @@ class GameState: public State {
   // Создаёт count врагов
   void CreateSomeEnemies(int count);
   // Добавляет врага на карту
-  void AddNewEnemy(const Enemy&);
+  void AddNewEnemy(double health, double speed, double x, double y,
+                   const Direction& move_direction);
   // Удаляет врага с карты
   void RemoveEnemyById(int64_t id);
 

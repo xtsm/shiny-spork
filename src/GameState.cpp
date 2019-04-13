@@ -173,9 +173,11 @@ int64_t GameState::GetAmountOfEnemies() const {
   return enemies_.size();
 }
 
-void GameState::AddNewEnemy(const Enemy& enemy) {
-  enemies_.emplace(enemy.GetID(), std::make_shared<Enemy>(enemy));
-  draw_queue_.insert(enemies_[enemy.GetID()]);
+void GameState::AddNewEnemy(double health, double speed, double x, double y,
+                            const Direction& move_direction) {
+  std::shared_ptr<Enemy> enemy(new Enemy(health, speed, x, y, move_direction, *this, 120));
+  enemies_.emplace(enemy->GetID(), enemy);
+  draw_queue_.insert(enemy);
 }
 
 void GameState::RemoveEnemyById(int64_t id) {

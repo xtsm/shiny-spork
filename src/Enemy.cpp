@@ -21,10 +21,6 @@ void Enemy::DoMove() {
   DoMove(possible_moves[choose_move]);
 }
 
-void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  target.draw(sprite_, states);
-}
-
 void Enemy::DoMove(const Direction& direction) {
   move_direction_ = direction;
   switch (direction) {
@@ -56,9 +52,8 @@ void Enemy::DoMove(const Direction& direction) {
 }
 
 Enemy::Enemy(double health, double speed, double x, double y,
-             const Direction& move_direction, State& state,
-             const DrawPriority& priority)
-    : Entity(state, priority),
+             const Direction& move_direction, State& state, int priority)
+    : Entity(state, DrawPriority(priority, this)),
       move_direction_(move_direction),
       health_(health),
       speed_(speed),
@@ -111,15 +106,10 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
     }
 
     auto point_of_spawn_with_direction = spawn_points_[distribution_of_points(generator)];
-
-    Enemy new_enemy(GetHealthFromType(health), GetSpeedByType(health),
-                    point_of_spawn_with_direction.first.x * 60,
-                    point_of_spawn_with_direction.first.y * 60,
-                    point_of_spawn_with_direction.second,
-                    state_, DrawPriority(120, this));
-    new_enemy.SetDrawPriority(
-        DrawPriority(static_cast<int>(120 + new_enemy.GetID()), this));
-    state_.GetStateManager().game_ptr_->AddNewEnemy(new_enemy);
+    state_.GetStateManager().game_ptr_->AddNewEnemy(GetHealthFromType(health), GetSpeedByType(health),
+                                                    point_of_spawn_with_direction.first.x * 60,
+                                                    point_of_spawn_with_direction.first.y * 60,
+                                                    point_of_spawn_with_direction.second);
   }
 }
 
@@ -174,10 +164,6 @@ void Enemy::EncreaseHealth(double delta) {
 
 void Enemy::DoDamage(Enemy& other_entity) {
   other_entity.DecreaseHealth(power_);
-}
-
-void Enemy::SetDrawPriority(const DrawPriority& priority) {
-  priority_ = priority;
 }
 
 std::vector<Direction> Enemy::GetAvailableMoves(int x, int y) const {

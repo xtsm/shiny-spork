@@ -23,8 +23,7 @@ enum class EnemyHealthType {
 class Enemy : public Entity {
  public:
   Enemy(double health, double speed, double x, double y,
-        const Direction& move_direction, State& state,
-        const DrawPriority& priority);
+        const Direction& move_direction, State& state, int priority);
 
   void DoMove();
 
@@ -33,14 +32,7 @@ class Enemy : public Entity {
 
   void DoDamage(Enemy& other_entity);
 
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
-
   bool IsAlive() const { return is_alive_; }
-
-  void SetDrawPriority(const DrawPriority& priority);
-
-//  void SetTexture(const sf::Texture& texture) {}
-// Use textures_resource_manager instead
 
  private:
   Direction move_direction_;
@@ -56,8 +48,6 @@ class Enemy : public Entity {
 
 class EnemyCreator {
  public:
-  EnemyCreator() = default;
-
   explicit EnemyCreator(State& state);
 
   void LoadSpawnPointsAndDirections(const std::string& path_to_file);

@@ -13,6 +13,7 @@ Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim,
 }
 
 void Projectile::Pointing() {
+  assert(aim_ptr_ != nullptr);
   Point d = Point(aim_ptr_->GetX(), aim_ptr_->GetY()) - position_;
   if (d.Length() < speed_ * speed_) {
     aim_ptr_->DecreaseHealth(damage_);
