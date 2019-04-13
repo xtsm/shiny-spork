@@ -54,8 +54,8 @@ void State::ProcessEvents(sf::RenderWindow& window) {
         for (const std::shared_ptr<Widget>& widget : draw_queue_) {
           sf::Vector2u click_point(event.mouseButton.x, event.mouseButton.y);
           sf::Vector2u size = window.getSize();
-          click_point.x /= static_cast<int>(size.x / 800.0);
-          click_point.y /= static_cast<int>(size.y / 600.0);
+          click_point.x /= size.x / 800.0;
+          click_point.y /= size.y / 600.0;
           if (widget->PointCheck(click_point.x, click_point.y)) {
             clicked_ = widget;
             clicked_->SetClicked(true);

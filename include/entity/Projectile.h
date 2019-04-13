@@ -9,7 +9,7 @@ class Projectile : public Entity {
   Projectile(State&, std::shared_ptr<Enemy>,
              int, int, int, int);
 
-  void Pointing();
+  bool Pointing();
 
  protected:
   // Цель, в которую летит снаряд

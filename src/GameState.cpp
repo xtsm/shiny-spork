@@ -71,8 +71,15 @@ void GameState::Tick() {
     tower.second->Shot();
   }
 
+  std::vector<int64_t> removed;
   for (const auto& projectile : projectiles_) {
-    projectile.second->Pointing();
+    if (projectile.second->Pointing()) {
+      removed.push_back(projectile.second->GetID());
+    }
+  }
+
+  for (const auto& id : removed) {
+    RemoveProjectile(id);
   }
 }
 
