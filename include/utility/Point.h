@@ -2,11 +2,14 @@
 #define SHINY_SPORK_POINT_H
 
 #include <iostream>
+#include <cmath>
 
 struct Point {
   explicit Point(double x, double y);
 
   double Length();
+
+  double AngleInDegree();
 
   friend Point operator-(const Point& lhs, const Point& rhs);
 

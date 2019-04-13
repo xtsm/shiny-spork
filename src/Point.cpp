@@ -1,9 +1,16 @@
 #include "utility/Point.h"
 
+const double pi = 3.14159265358979323846;
+const double from_radian_to_degree = 180 / pi;
+
 Point::Point(double x, double y) : x(x), y(y) {}
 
 double Point::Length() {
   return x * x + y * y;
+}
+
+double Point::AngleInDegree() {
+  return (atan2(y, x) + pi) * from_radian_to_degree;
 }
 
 Point operator-(const Point& lhs, const Point& rhs) {
