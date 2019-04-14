@@ -39,9 +39,9 @@ class Tower : public Entity {
   // Уровень башни
   int level_;
   sf::Text level_text_;
-  // Скорострельность в формате тик/выстрел
-  int speed_;
-  sf::Text speed_text_;
+  // Время перезарядки
+  int cooldown_;
+  sf::Text cooldown_text_;
   // Дальнобойность
   int range_;
   sf::Text range_text_;

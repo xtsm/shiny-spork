@@ -1,4 +1,4 @@
 Archery Tower
 2
-20 100 10 standard standard
-15 110 10 standard standard
+standard standard 20 100 10
+standard standard 15 110 10

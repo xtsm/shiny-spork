@@ -23,24 +23,26 @@ enum class EnemyType {
 
 class Enemy : public Entity {
  public:
-  Enemy(double health, double speed, double x, double y,
+  Enemy(const std::string& path, double x, double y,
         const Tile& current_tile, const Direction& direction_of_move,
         State& state, int priority);
 
   void DoMove();
 
-  void DecreaseHealth(double delta);
-  void EncreaseHealth(double delta);
+  void DecreaseHealth(int delta);
+  void EncreaseHealth(int delta);
 
   void DoDamage(Enemy& other_entity);
 
   bool IsAlive() const { return is_alive_; }
 
  private:
+  std::string name_;
+  int frames_;
   Tile current_tile_;
   Direction direction_of_move_;
   Tile desination_tile_;
-  double health_;
+  int health_;
   double speed_;
   int power_;
   Point position_;
@@ -53,7 +55,10 @@ class Enemy : public Entity {
 
 class EnemyCreator {
  public:
-  explicit EnemyCreator(State& state);
+
+  explicit EnemyCreator(State&);
+
+  void Load(const std::string&);
 
   void LoadSpawnPointsAndDirections(const std::string& path_to_file);
 
@@ -62,6 +67,7 @@ class EnemyCreator {
  private:
   State& state_;
   std::vector<std::pair<Point, Direction>> spawn_points_;
+  std::vector<std::string> enemy_types_;
 
   int GetHealthFromType(const EnemyType& type);
   double GetSpeedByType(const EnemyType& type);

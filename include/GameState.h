@@ -53,7 +53,7 @@ class GameState: public State {
   // Создаёт count врагов
   void CreateSomeEnemies(int count);
   // Добавляет врага на карту
-  void AddNewEnemy(double health, double speed, double x, double y,
+  void AddNewEnemy(std::string, double, double,
                    const Direction& move_direction);
   // Удаляет врага с карты
   void RemoveEnemyById(int64_t id);

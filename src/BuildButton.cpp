@@ -7,8 +7,15 @@ BuildButton::BuildButton(State& state, int x, int y, std::string source) :
     Button(state, x, y, "Build"),
     source_(std::move(source)),
     tower_sprite_() {
+  std::ifstream fin(source_ + "/config.txt");
+  int tmp;
+  std::string name, sprite_name;
+  getline(fin, name);
+  fin >> tmp;
+  fin >> sprite_name;
+
   sf::Texture& tower_sprite_tex_ = State::GetTextureResourceManager().
-      GetOrLoadResource(source_ + "/standard.png");
+      GetOrLoadResource(source_ + "/" + sprite_name + ".png");
   tower_sprite_.setTexture(tower_sprite_tex_);
 }
 

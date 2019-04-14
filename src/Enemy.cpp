@@ -43,28 +43,23 @@ void Enemy::DoMove() {
 
 void Enemy::DoMove(const Direction& direction) {
   switch (direction) {
-    case Direction::North:
-      position_.y -= speed_;
+    case Direction::North:position_.y -= speed_;
       y_ = static_cast<int>(std::floor(position_.y + sprite_.getTextureRect().height));
       sprite_.setTextureRect(sf::IntRect(3, 33, 27, 40));
       break;
-    case Direction::East:
-      position_.x += speed_;
+    case Direction::East:position_.x += speed_;
       x_ = static_cast<int>(std::floor(position_.x));
       sprite_.setTextureRect(sf::IntRect(33, 3, 27, 40));
       break;
-    case Direction::West:
-      position_.x -= speed_;
+    case Direction::West:position_.x -= speed_;
       x_ = static_cast<int>(std::floor(position_.x + sprite_.getTextureRect().width));
       sprite_.setTextureRect(sf::IntRect(3, 63, 27, 40));
       break;
-    case Direction::South:
-      position_.y += speed_;
+    case Direction::South:position_.y += speed_;
       y_ = static_cast<int>(std::floor(position_.y));
       sprite_.setTextureRect(sf::IntRect(63, 3, 27, 40));
       break;
-    default:
-      break;
+    default:break;
   }
 
   sprite_.setPosition(static_cast<float>(position_.x), static_cast<float>(position_.y));
@@ -73,29 +68,43 @@ void Enemy::DoMove(const Direction& direction) {
   ChangeDirectionTile(tile_after_move);
 }
 
-Enemy::Enemy(double health, double speed, double x, double y,
+Enemy::Enemy(const std::string& path, double x, double y,
              const Tile& current_tile, const Direction& direction,
              State& state, int priority)
     : Entity(state, DrawPriority(priority, this)),
+      name_(),
+      frames_(0),
       current_tile_(current_tile),
       direction_of_move_(direction),
       desination_tile_(current_tile),
-      health_(health),
-      speed_(speed),
+      health_(0),
+      speed_(0),
       power_(0),
       position_{x, y},
       is_alive_(true) {
-  LoadSprite("assets/enemies/low_enemy.png");
+  LoadSprite(path + "/sprite.png");
+  std::ifstream reader(path + "/config.txt");
+  getline(reader, name_);
+  reader >> frames_;
+  reader >> health_ >> speed_ >> power_;
   x_ = static_cast<int>(x);
   y_ = static_cast<int>(y);
   sprite_.setPosition(static_cast<float>(x), static_cast<float>(y));
   sprite_.setTextureRect(sf::IntRect(5, 5, 27, 40));
 }
 
-EnemyCreator::EnemyCreator(State& state)
-    : state_(state),
-      spawn_points_{} {
-  LoadSpawnPointsAndDirections("assets/levels/enemy1.txt");
+EnemyCreator::EnemyCreator(State& state) : state_(state) {}
+
+void EnemyCreator::Load(const std::string& level_path) {
+  LoadSpawnPointsAndDirections(level_path + "/spawn_points.txt");
+
+  std::ifstream fin(level_path + "/enemies.txt");
+  int count_of_types;
+  fin >> count_of_types;
+  enemy_types_.resize(count_of_types);
+  for (auto& enemy_type : enemy_types_) {
+    fin >> enemy_type;
+  }
 }
 
 void EnemyCreator::LoadSpawnPointsAndDirections(const std::string& path_to_file) {
@@ -110,66 +119,69 @@ void EnemyCreator::LoadSpawnPointsAndDirections(const std::string& path_to_file)
 }
 
 void EnemyCreator::CreateSomeEnemies(int64_t count) {
-//TODO(nikkita1267):
   std::mt19937 generator(std::chrono::steady_clock::now().time_since_epoch().count());
   std::uniform_int_distribution<int64_t>
       distribution_of_points(0, spawn_points_.size() - 1);
-  std::uniform_int_distribution<int> distribution_of_type(0, 50);
+
+  std::uniform_int_distribution<int> distribution_of_type(0, enemy_types_.size() - 1);
 
   for (int64_t i = 0; i < count; ++i) {
     int type = distribution_of_type(generator);
-    EnemyType health;
-    if (type >= 0 && type < 5) {
-      health = EnemyType::VeryHigh;
-    } else if (type >= 5 && type < 15) {
-      health = EnemyType::High;
-    } else if (type >= 15 && type < 30) {
-      health = EnemyType::Middle;
-    } else {
-      health = EnemyType::Low;
-    }
 
     auto point_of_spawn_with_direction = spawn_points_[distribution_of_points(generator)];
     state_.GetStateManager().
-        game_ptr_->AddNewEnemy(
-        GetHealthFromType(health), GetSpeedByType(health),
-        point_of_spawn_with_direction.first.x * 60,
-        point_of_spawn_with_direction.first.y * 60,
-        point_of_spawn_with_direction.second);
+        game_ptr_->AddNewEnemy("assets/enemies/" + enemy_types_[type],
+                               point_of_spawn_with_direction.first.x * 60,
+                               point_of_spawn_with_direction.first.y * 60,
+                               point_of_spawn_with_direction.second);
   }
+
+//  std::uniform_int_distribution<int> distribution_of_type(0, 50);
+//
+//  for (int64_t i = 0; i < count; ++i) {
+//    int type = distribution_of_type(generator);
+//    EnemyType health;
+//    if (type >= 0 && type < 5) {
+//      health = EnemyType::VeryHigh;
+//    } else if (type >= 5 && type < 15) {
+//      health = EnemyType::High;
+//    } else if (type >= 15 && type < 30) {
+//      health = EnemyType::Middle;
+//    } else {
+//      health = EnemyType::Low;
+//    }
+//
+//    auto point_of_spawn_with_direction = spawn_points_[distribution_of_points(generator)];
+//    state_.GetStateManager().
+//        game_ptr_->AddNewEnemy(
+//        GetHealthFromType(health), GetSpeedByType(health),
+//        point_of_spawn_with_direction.first.x * 60,
+//        point_of_spawn_with_direction.first.y * 60,
+//        point_of_spawn_with_direction.second);
+//  }
 }
 
 int EnemyCreator::GetHealthFromType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:
-      return 1000;
-    case EnemyType::High:
-      return 500;
-    case EnemyType::Middle:
-      return 250;
-    case EnemyType::Low:
-      return 100;
-    default:
-      return 0;
+    case EnemyType::VeryHigh:return 1000;
+    case EnemyType::High:return 500;
+    case EnemyType::Middle:return 250;
+    case EnemyType::Low:return 100;
+    default:return 0;
   }
 }
 
 double EnemyCreator::GetSpeedByType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:
-      return 0.2;
-    case EnemyType::High:
-      return 0.4;
-    case EnemyType::Middle:
-      return 0.8;
-    case EnemyType::Low:
-      return 1;
-    default:
-      return 0;
+    case EnemyType::VeryHigh:return 0.2;
+    case EnemyType::High:return 0.4;
+    case EnemyType::Middle:return 0.8;
+    case EnemyType::Low:return 1;
+    default:return 0;
   }
 }
 
-void Enemy::DecreaseHealth(double delta) {
+void Enemy::DecreaseHealth(int delta) {
   if (health_ > 0 && health_ - delta >= 0) {
     health_ -= delta;
   } else {
@@ -182,7 +194,7 @@ void Enemy::DecreaseHealth(double delta) {
   }
 }
 
-void Enemy::EncreaseHealth(double delta) {
+void Enemy::EncreaseHealth(int delta) {
   if (is_alive_) {
     health_ += delta;
   }

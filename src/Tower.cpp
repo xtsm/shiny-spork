@@ -1,9 +1,9 @@
 // Source файл должен иметь следующий формат:
 // max_level
-// speed projectile_speed range damage tower_sprite_path projectile_sprite_path// Характеристики первого уровня
-// speed projectile_speed range damage tower_sprite_path projectile_sprite_path// Характеристики второго уровня
-// ...........................................................
-// speed projectile_speed range damage tower_sprite_path projectile_sprite_path// Характеристики max_level уровня
+// tower_sprite projectile_path speed range damage// Характеристики первого уровня
+// tower_sprite projectile_path speed range damage// Характеристики второго уровня
+// ...............................................
+// tower_sprite projectile_path speed range damage projectile_path// Характеристики max_level уровня
 #include "entity/Tower.h"
 #include "StateManager.h"
 #include <iostream>
@@ -21,8 +21,8 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     max_level_(0),
     level_(0),
     level_text_(),
-    speed_(0),
-    speed_text_(),
+    cooldown_(0),
+    cooldown_text_(),
     range_(0),
     range_text_(),
     damage_(0),
@@ -37,9 +37,9 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
 
   InitText(text_, x + 10, y - 40);
   InitText(level_text_, 650, 200);
-  InitText(damage_text_, 620, 300);
-  InitText(speed_text_, 620, 320);
-  InitText(range_text_, 620, 340);
+  InitText(cooldown_text_, 620, 300);
+  InitText(range_text_, 620, 320);
+  InitText(damage_text_, 620, 340);
 
   getline(fin_, tower_name_);
   fin_ >> max_level_;
@@ -54,7 +54,7 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(icon_sprite_, states);
     target.draw(level_text_, states);
     target.draw(damage_text_, states);
-    target.draw(speed_text_, states);
+    target.draw(cooldown_text_, states);
     target.draw(range_text_, states);
   }
   target.draw(sprite_, states);
@@ -67,18 +67,20 @@ void Tower::Click(int x, int y) {
 
 void Tower::Update() {
   level_++;
-  fin_ >> speed_ >> range_ >> damage_;
+
   std::string tower_image_;
   fin_ >> tower_image_;
   fin_ >> projectile_path_;
 
   LoadSprite(source_ + "/" + tower_image_ + ".png");
 
+  fin_ >> cooldown_ >> range_ >> damage_;
+
   text_.setString("LVL " + std::to_string(level_));
   level_text_.setString("Level " + std::to_string(level_) + " / " + std::to_string(max_level_));
-  damage_text_.setString("Damage: " + std::to_string(damage_));
-  speed_text_.setString("Speed: " + std::to_string(speed_));
+  cooldown_text_.setString("Cooldown: " + std::to_string(cooldown_));
   range_text_.setString("Range: " + std::to_string(range_));
+  damage_text_.setString("Damage: " + std::to_string(damage_));
 }
 
 void Tower::Shot() {
@@ -86,15 +88,15 @@ void Tower::Shot() {
     timer_--;
     return;
   }
-  timer_ = speed_;
   std::shared_ptr<Enemy> aim =
       state_.GetStateManager().game_ptr_->FindAim(x_, y_, range_);
   if (aim == nullptr) {
     return;
   }
+  timer_ = cooldown_;
   std::shared_ptr<Projectile>
       projectile(new Projectile(state_, aim, x_ + 30, y_, damage_,
-                                "assets/projectile" + projectile_path_));
+                                "assets/projectiles/" + projectile_path_));
   state_.GetStateManager().game_ptr_->AddProjectile(projectile);
 }
 

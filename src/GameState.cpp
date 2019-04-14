@@ -55,6 +55,8 @@ void GameState::Load(const std::string& level_path) {
     y += 50;
   }
 
+  creator_of_enemies_.Load(level_path);
+
   map_ptr_->LoadMapFromFile(level_path + "/map.txt");
 
   draw_queue_.insert(pause_button_ptr_);
@@ -190,12 +192,12 @@ int64_t GameState::GetAmountOfEnemies() const {
   return enemies_.size();
 }
 
-void GameState::AddNewEnemy(double health, double speed, double x, double y,
+void GameState::AddNewEnemy(std::string path, double x, double y,
                             const Direction& move_direction) {
   std::shared_ptr<Enemy> enemy(
-      new Enemy(health, speed, x, y,
-          map_ptr_->GetTile(static_cast<int>(x), static_cast<int>(y)),
-          move_direction, *this, 120));
+      new Enemy(path, x, y,
+                map_ptr_->GetTile(static_cast<int>(x), static_cast<int>(y)),
+                move_direction, *this, 120));
   enemies_.emplace(enemy->GetID(), enemy);
   draw_queue_.insert(enemy);
 }
