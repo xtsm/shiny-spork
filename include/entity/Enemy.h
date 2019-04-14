@@ -27,6 +27,8 @@ class Enemy : public Entity {
         const Tile& current_tile, const Direction& direction_of_move,
         State& state, int priority);
 
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
   void DoMove();
 
   void DecreaseHealth(int delta);
@@ -42,7 +44,10 @@ class Enemy : public Entity {
   Tile current_tile_;
   Direction direction_of_move_;
   Tile desination_tile_;
+  int max_health_;
   int health_;
+  sf::RectangleShape health_bar_;
+  sf::RectangleShape damage_bar_;
   double speed_;
   int power_;
   Point position_;

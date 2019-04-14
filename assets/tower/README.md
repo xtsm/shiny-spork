@@ -13,9 +13,9 @@
 
     F
     N
-    С1 R1 D1 Sprite1 Projectile1 
+    Sprite1 Projectile1 R1 С1 D1 
     ...
-    RN DN CN SpriteN ProjectileN
+    SpriteN ProjectileN RN CN DN
 
 где `F` - названия башни (для отображения в UI),
 `N` - количество уровней башни,

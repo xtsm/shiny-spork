@@ -8,18 +8,24 @@ BuildMenuGrid::BuildMenuGrid(State& state) :
     loaded_(false),
     source_(),
     tower_sprite_(),
-    tile_(sf::Vector2f(60, 60)) {
+    tile_(sf::Vector2f(60, 60)),
+    range_circle_(0),
+    range_(0) {
   tile_.setOutlineThickness(1);
 }
 
 void BuildMenuGrid::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(tile_, states);
+  target.draw(range_circle_);
   target.draw(tower_sprite_, states);
 }
 
-void BuildMenuGrid::Load(const std::string& source, const sf::Sprite& tower_sprite) {
+void BuildMenuGrid::Load(const std::string& source, const sf::Sprite& tower_sprite, int range) {
   loaded_ = true;
   source_ = source;
+  range_ = range;
+  range_circle_.setRadius(range);
+  range_circle_.setFillColor(sf::Color(255, 255, 255, 128));
   tower_sprite_ = tower_sprite;
   tower_sprite_.setColor(sf::Color(255, 255, 255, 128));
   MouseMove(0, 0);
@@ -47,6 +53,7 @@ void BuildMenuGrid::MouseMove(int x, int y) {
     tile_.setFillColor(sf::Color(255, 0, 0, 64));
   }
   tile_.setPosition(sf::Vector2f(tower_sprite_x, tower_sprite_y));
+  range_circle_.setPosition(tower_sprite_x - range_ + 30, tower_sprite_y - range_ + 30);
   tower_sprite_.setPosition(tower_sprite_x + 5, tower_sprite_y - 40);
 }
 

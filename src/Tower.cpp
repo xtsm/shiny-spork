@@ -21,10 +21,11 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     max_level_(0),
     level_(0),
     level_text_(),
-    cooldown_(0),
-    cooldown_text_(),
     range_(0),
     range_text_(),
+    range_circle_(0),
+    cooldown_(0),
+    cooldown_text_(),
     damage_(0),
     damage_text_() {
   SetPosition(x, y);
@@ -35,10 +36,11 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   font_ = State::GetFontResourceManager()
       .GetOrLoadResource("assets/font/default.ttf");
 
+  range_circle_.setFillColor(sf::Color(255, 255, 255, 128));
   InitText(text_, x + 10, y - 40);
   InitText(level_text_, 650, 200);
-  InitText(cooldown_text_, 620, 300);
-  InitText(range_text_, 620, 320);
+  InitText(range_text_, 620, 300);
+  InitText(cooldown_text_, 620, 320);
   InitText(damage_text_, 620, 340);
 
   getline(fin_, tower_name_);
@@ -51,6 +53,7 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(text_, states);
   }
   if (is_info_) {
+    target.draw(range_circle_);
     target.draw(icon_sprite_, states);
     target.draw(level_text_, states);
     target.draw(damage_text_, states);
@@ -74,12 +77,14 @@ void Tower::Update() {
 
   LoadSprite(source_ + "/" + tower_image_ + ".png");
 
-  fin_ >> cooldown_ >> range_ >> damage_;
+  fin_ >> range_ >> cooldown_ >> damage_;
 
+  range_circle_.setPosition(x_ - range_ + 30, y_ - range_ + 30);
+  range_circle_.setRadius(range_);
   text_.setString("LVL " + std::to_string(level_));
   level_text_.setString("Level " + std::to_string(level_) + " / " + std::to_string(max_level_));
-  cooldown_text_.setString("Cooldown: " + std::to_string(cooldown_));
   range_text_.setString("Range: " + std::to_string(range_));
+  cooldown_text_.setString("Cooldown: " + std::to_string(cooldown_));
   damage_text_.setString("Damage: " + std::to_string(damage_));
 }
 
@@ -95,7 +100,7 @@ void Tower::Shot() {
   }
   timer_ = cooldown_;
   std::shared_ptr<Projectile>
-      projectile(new Projectile(state_, aim, x_ + 30, y_, damage_,
+      projectile(new Projectile(state_, aim, x_ + 30, y_ + 30, damage_,
                                 "assets/projectiles/" + projectile_path_));
   state_.GetStateManager().game_ptr_->AddProjectile(projectile);
 }

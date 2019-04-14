@@ -29,7 +29,7 @@ class GameState: public State {
   // Строит башню с характеристиками из файла
   void BuildTower(const std::string&, int, int);
   // Вызывает меню постройки башни
-  void LoadBuildMenu(const std::string&, const sf::Sprite& tower_tex);
+  void LoadBuildMenu(const std::string&, const sf::Sprite&, int);
   // Создаёт меню информации для башни
   void InfoMenuForTower(int64_t id);
   //Удаляет башню
@@ -53,7 +53,7 @@ class GameState: public State {
   // Создаёт count врагов
   void CreateSomeEnemies(int count);
   // Добавляет врага на карту
-  void AddNewEnemy(std::string, double, double,
+  void AddNewEnemy(const std::string&, double, double,
                    const Direction& move_direction);
   // Удаляет врага с карты
   void RemoveEnemyById(int64_t id);

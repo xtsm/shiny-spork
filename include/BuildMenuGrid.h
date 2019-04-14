@@ -9,7 +9,7 @@ class BuildMenuGrid : public Widget {
 
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-  void Load(const std::string&, const sf::Sprite&);
+  void Load(const std::string&, const sf::Sprite&, int range);
 
   void Click(int x, int y) override;
 
@@ -24,6 +24,8 @@ class BuildMenuGrid : public Widget {
   sf::Sprite tower_sprite_;
   //Тайл
   sf::RectangleShape tile_;
+  sf::CircleShape range_circle_;
+  int range_;
 
 };
 

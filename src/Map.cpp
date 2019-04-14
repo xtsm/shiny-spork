@@ -1,29 +1,30 @@
 #include "utility/Map.h"
 #include <fstream>
 #include <tuple>
+#include <queue>
 
-Map::Map(std::vector<std::vector<Tile>> map) : map_(std::move(map)) {
+Map::Map(std::vector<std::vector<Tile>> map) :
+    map_(std::move(map)) {
   map_.resize(10);
   for (auto& row : map_) {
     row.resize(10);
   }
-  LoadMapFromFile("assets/levels/map.txt");
 }
 
 bool Map::IsMoveAvailable(const Direction& direction, int x, int y) const {
   switch (direction) {
     case Direction::North:
       return (y / 60 != 0 && map_[y / 60 - 1][x / 60].GetNumber()
-          > map_[y / 60][x / 60].GetNumber());
+          < map_[y / 60][x / 60].GetNumber());
     case Direction::East:
       return (x / 60 != (map_[0].size() - 1) && map_[y / 60][x / 60 + 1].GetNumber()
-          > map_[y / 60][x / 60].GetNumber());
+          < map_[y / 60][x / 60].GetNumber());
     case Direction::West:
       return (x / 60 != 0 && map_[y / 60][x / 60 - 1].GetNumber()
-          > map_[y / 60][x / 60].GetNumber());
+          < map_[y / 60][x / 60].GetNumber());
     case Direction::South:
       return (y / 60 != (map_.size() - 1) && map_[y / 60 + 1][x / 60].GetNumber()
-          > map_[y / 60][x / 60].GetNumber());
+          < map_[y / 60][x / 60].GetNumber());
     default:
       return false;
   }
@@ -37,16 +38,19 @@ void Map::LoadMapFromFile(const std::string& file_name) {
   std::ifstream reader(file_name);
   for (int i = 0; i < map_.size(); ++i) {
     for (int j = 0; j < map_[i].size(); ++j) {
-      int number;
+      int number = 0;
       reader >> number;
+      if (number == 0) {
+        number = 1000;
+      }
       // i -- y coordinate, j -- x coordinate
       map_[i][j] = Tile(j, i, number);
     }
   }
 }
 
-void Map::Set(int x, int y, int value) {
-  map_[y][x].SetNumber(value);
+void Map::SetIsFree(int x, int y, bool value) {
+  map_[y][x].SetIsFree(value);
 }
 
 Tile Map::GetTile(int x, int y) const {
@@ -54,7 +58,7 @@ Tile Map::GetTile(int x, int y) const {
 }
 
 Tile::Tile(int x, int y, int number)
-    : coordinates_(x, y), number_(number), is_free_(true) {}
+    : coordinates_(x, y), number_(number), is_free_(number == 1000) {}
 
 std::istream& operator>>(std::istream& in, Tile& tile) {
   in >> tile.coordinates_ >> tile.number_;

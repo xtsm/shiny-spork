@@ -9,6 +9,12 @@
 #include "GameState.h"
 #include "utility/Direction.h"
 
+void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  Entity::draw(target, states);
+  target.draw(health_bar_, states);
+  target.draw(damage_bar_, states);
+}
+
 void Enemy::DoMove() {
   std::vector<std::pair<Tile, Direction>> possible_moves =
       GetAvailableMoves(x_, y_);
@@ -62,6 +68,8 @@ void Enemy::DoMove(const Direction& direction) {
     default:break;
   }
 
+  health_bar_.setPosition(x_, y_);
+  damage_bar_.setPosition(x_ + static_cast<double>(health_) / max_health_ * 60, y_);
   sprite_.setPosition(static_cast<float>(position_.x), static_cast<float>(position_.y));
   Tile tile_after_move = state_.GetStateManager().game_ptr_->
       GetMap()->GetTile(x_, y_);
@@ -77,18 +85,28 @@ Enemy::Enemy(const std::string& path, double x, double y,
       current_tile_(current_tile),
       direction_of_move_(direction),
       desination_tile_(current_tile),
+      max_health_(0),
       health_(0),
+      health_bar_(),
+      damage_bar_(),
       speed_(0),
       power_(0),
       position_{x, y},
       is_alive_(true) {
+  x_ = static_cast<int>(x);
+  y_ = static_cast<int>(y);
   LoadSprite(path + "/sprite.png");
   std::ifstream reader(path + "/config.txt");
   getline(reader, name_);
   reader >> frames_;
   reader >> health_ >> speed_ >> power_;
-  x_ = static_cast<int>(x);
-  y_ = static_cast<int>(y);
+  max_health_ = health_;
+  health_bar_.setFillColor(sf::Color(0, 255, 0));
+  health_bar_.setPosition(x_, y_);
+  health_bar_.setSize(sf::Vector2f(static_cast<double>(health_) / max_health_ * 60, 10));
+  damage_bar_.setFillColor(sf::Color(255, 0, 0));
+  damage_bar_.setPosition(x_ + static_cast<double>(health_) / max_health_ * 60, y_);
+  damage_bar_.setSize(sf::Vector2f((1 - static_cast<double>(health_) / max_health_) * 60, 10));
   sprite_.setPosition(static_cast<float>(x), static_cast<float>(y));
   sprite_.setTextureRect(sf::IntRect(5, 5, 27, 40));
 }
@@ -187,11 +205,15 @@ void Enemy::DecreaseHealth(int delta) {
   } else {
     health_ = 0;
   }
-
   if (health_ == 0) {
     is_alive_ = false;
     state_.GetStateManager().game_ptr_->RemoveEnemyById(GetID());
   }
+  health_bar_.setPosition(x_, y_);
+  health_bar_.setSize(sf::Vector2f(static_cast<double>(health_) / max_health_ * 60, 10));
+  damage_bar_.setPosition(x_ + static_cast<double>(health_) / max_health_ * 60, y_);
+  damage_bar_.setSize(sf::Vector2f((1 - static_cast<double>(health_) / max_health_) * 60, 10));
+
 }
 
 void Enemy::EncreaseHealth(int delta) {

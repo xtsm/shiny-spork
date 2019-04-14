@@ -119,14 +119,14 @@ void GameState::ProcessEvent(sf::Event& event) {
 }
 
 void GameState::BuildTower(const std::string& tower_path, int x, int y) {
-  map_ptr_->Set(x / 60, y / 60, -1);
+  map_ptr_->SetIsFree(x / 60, y / 60, false);
   std::shared_ptr<Tower> tower(new Tower(*this, tower_path, x, y));
   towers_[tower->GetID()] = tower;
   draw_queue_.insert(tower);
 }
 
-void GameState::LoadBuildMenu(const std::string& source, const sf::Sprite& tower) {
-  build_menu_grid_ptr_->Load(source, tower);
+void GameState::LoadBuildMenu(const std::string& source, const sf::Sprite& tower, int range) {
+  build_menu_grid_ptr_->Load(source, tower, range);
   draw_queue_.insert(build_menu_grid_ptr_);
 }
 
@@ -141,7 +141,7 @@ void GameState::InfoMenuForTower(int64_t id) {
 }
 
 void GameState::RemoveTower(const std::shared_ptr<Tower>& tower_ptr) {
-  map_ptr_->Set(tower_ptr->GetX() / 60, tower_ptr->GetY() / 60, 0);
+  map_ptr_->SetIsFree(tower_ptr->GetX() / 60, tower_ptr->GetY() / 60, true);
   draw_queue_.erase(tower_ptr);
   towers_.erase(tower_ptr->GetID());
   RemoveInfoMenu();
@@ -192,7 +192,7 @@ int64_t GameState::GetAmountOfEnemies() const {
   return enemies_.size();
 }
 
-void GameState::AddNewEnemy(std::string path, double x, double y,
+void GameState::AddNewEnemy(const std::string& path, double x, double y,
                             const Direction& move_direction) {
   std::shared_ptr<Enemy> enemy(
       new Enemy(path, x, y,

@@ -39,12 +39,13 @@ class Tower : public Entity {
   // Уровень башни
   int level_;
   sf::Text level_text_;
-  // Время перезарядки
-  int cooldown_;
-  sf::Text cooldown_text_;
   // Дальнобойность
   int range_;
   sf::Text range_text_;
+  sf::CircleShape range_circle_;
+  // Время перезарядки
+  int cooldown_;
+  sf::Text cooldown_text_;
   // Урон от снаряда
   int damage_;
   sf::Text damage_text_;

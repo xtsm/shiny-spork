@@ -11,8 +11,10 @@ class BuildButton : public Button {
   void Click(int, int) override;
 
  private:
+  std::string tower_name_;
   std::string source_;
   sf::Sprite tower_sprite_;
+  int range_;
 };
 
 #endif  // INCLUDE_BUILDBUTTON_H_

@@ -44,7 +44,7 @@ class Map {
 
   bool IsFree(int x, int y) const;
 
-  void Set(int x, int y, int value);
+  void SetIsFree(int x, int y, bool value);
 
   Tile GetTile(int x, int y) const;
 
