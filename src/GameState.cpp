@@ -192,7 +192,10 @@ int64_t GameState::GetAmountOfEnemies() const {
 
 void GameState::AddNewEnemy(double health, double speed, double x, double y,
                             const Direction& move_direction) {
-  std::shared_ptr<Enemy> enemy(new Enemy(health, speed, x, y, move_direction, *this, 120));
+  std::shared_ptr<Enemy> enemy(
+      new Enemy(health, speed, x, y,
+          map_ptr_->GetTile(static_cast<int>(x), static_cast<int>(y)),
+          move_direction, *this, 120));
   enemies_.emplace(enemy->GetID(), enemy);
   draw_queue_.insert(enemy);
 }
