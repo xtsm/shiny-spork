@@ -4,7 +4,7 @@
 
 class Button : public Widget {
  public:
-  Button(State&, int, int, const sf::String&);
+  Button(State&, int priority, int, int, const sf::String&);
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
   void Click(int, int) override;
   void MouseIn(int, int) override;

@@ -3,7 +3,7 @@
 #include "StateManager.h"
 
 LoadGameButton::LoadGameButton(State& state, int x, int y) :
-    Button(state, x, y, "Load Game") {
+    Button(state, 5, x, y, "Load Game") {
 }
 
 void LoadGameButton::LoadGameButton::Click(int, int) {

@@ -88,11 +88,6 @@ void State::ProcessEvents(sf::RenderWindow& window) {
         sf::Vector2u size = window.getSize();
         hover_point.x /= size.x / 800.0;
         hover_point.y /= size.y / 600.0;
-        if (hovered_ != nullptr &&
-            hovered_->PointCheck(hover_point.x, hover_point.y)) {
-          hovered_->MouseMove(hover_point.x, hover_point.y);
-          break;
-        }
         std::shared_ptr<Widget> new_hovered = nullptr;
         for (const std::shared_ptr<Widget>& widget : draw_queue_) {
           if (widget->PointCheck(hover_point.x, hover_point.y)) {

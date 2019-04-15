@@ -4,13 +4,13 @@
 #include "BuildButton.h"
 
 BuildButton::BuildButton(State& state, int x, int y, std::string source) :
-    Button(state, x, y, "Build"),
+    Button(state, 1005, x, y, "Build"),
     tower_name_(),
     source_(std::move(source)),
     tower_sprite_(),
     range_(0) {
   std::ifstream fin(source_ + "/config.txt");
-  int tmp;
+  int tmp = 0;
   std::string sprite_name, projectile_sprite_name;
   getline(fin, tower_name_);
   fin >> tmp;

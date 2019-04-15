@@ -2,8 +2,8 @@
 #include "Button.h"
 #include "State.h"
 
-Button::Button(State& state, int x, int y, const sf::String& caption) :
-    Widget(state, DrawPriority(5, this)),
+Button::Button(State& state, int priority, int x, int y, const sf::String& caption) :
+    Widget(state, DrawPriority(priority, this)),
     bg_sprite_tex_(),
     bg_sprite_(),
     font_(),

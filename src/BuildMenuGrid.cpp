@@ -4,7 +4,7 @@
 #include "GameState.h"
 
 BuildMenuGrid::BuildMenuGrid(State& state) :
-    Widget(state, DrawPriority(1000, this)),
+    Widget(state, DrawPriority(900, this)),
     loaded_(false),
     source_(),
     tower_sprite_(),
@@ -12,6 +12,10 @@ BuildMenuGrid::BuildMenuGrid(State& state) :
     range_circle_(0),
     range_(0) {
   tile_.setOutlineThickness(1);
+  range_circle_.setOutlineColor(sf::Color::Black);
+  range_circle_.setOutlineThickness(1);
+  tower_sprite_.setColor(sf::Color(255, 255, 255, 128));
+  range_circle_.setFillColor(sf::Color(255, 255, 255, 64));
 }
 
 void BuildMenuGrid::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -25,9 +29,7 @@ void BuildMenuGrid::Load(const std::string& source, const sf::Sprite& tower_spri
   source_ = source;
   range_ = range;
   range_circle_.setRadius(range);
-  range_circle_.setFillColor(sf::Color(255, 255, 255, 128));
   tower_sprite_ = tower_sprite;
-  tower_sprite_.setColor(sf::Color(255, 255, 255, 128));
   MouseMove(0, 0);
 }
 

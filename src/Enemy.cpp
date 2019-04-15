@@ -11,8 +11,8 @@
 
 void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   Entity::draw(target, states);
-  target.draw(health_bar_, states);
   target.draw(damage_bar_, states);
+  target.draw(health_bar_, states);
 }
 
 void Enemy::DoMove() {
@@ -69,7 +69,7 @@ void Enemy::DoMove(const Direction& direction) {
   }
 
   health_bar_.setPosition(x_, y_);
-  damage_bar_.setPosition(x_ + static_cast<double>(health_) / max_health_ * 60, y_);
+  damage_bar_.setPosition(x_, y_);
   sprite_.setPosition(static_cast<float>(position_.x), static_cast<float>(position_.y));
   Tile tile_after_move = state_.GetStateManager().game_ptr_->
       GetMap()->GetTile(x_, y_);
@@ -103,10 +103,10 @@ Enemy::Enemy(const std::string& path, double x, double y,
   max_health_ = health_;
   health_bar_.setFillColor(sf::Color(0, 255, 0));
   health_bar_.setPosition(x_, y_);
-  health_bar_.setSize(sf::Vector2f(static_cast<double>(health_) / max_health_ * 60, 10));
+  health_bar_.setSize(sf::Vector2f(static_cast<double>(health_) / max_health_ * 60, 3));
   damage_bar_.setFillColor(sf::Color(255, 0, 0));
-  damage_bar_.setPosition(x_ + static_cast<double>(health_) / max_health_ * 60, y_);
-  damage_bar_.setSize(sf::Vector2f((1 - static_cast<double>(health_) / max_health_) * 60, 10));
+  damage_bar_.setPosition(x_, y_);
+  damage_bar_.setSize(sf::Vector2f(60, 3));
   sprite_.setPosition(static_cast<float>(x), static_cast<float>(y));
   sprite_.setTextureRect(sf::IntRect(5, 5, 27, 40));
 }
@@ -209,11 +209,7 @@ void Enemy::DecreaseHealth(int delta) {
     is_alive_ = false;
     state_.GetStateManager().game_ptr_->RemoveEnemyById(GetID());
   }
-  health_bar_.setPosition(x_, y_);
-  health_bar_.setSize(sf::Vector2f(static_cast<double>(health_) / max_health_ * 60, 10));
-  damage_bar_.setPosition(x_ + static_cast<double>(health_) / max_health_ * 60, y_);
-  damage_bar_.setSize(sf::Vector2f((1 - static_cast<double>(health_) / max_health_) * 60, 10));
-
+  health_bar_.setSize(sf::Vector2f(static_cast<double>(health_) / max_health_ * 60, 3));
 }
 
 void Enemy::EncreaseHealth(int delta) {

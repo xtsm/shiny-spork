@@ -7,7 +7,7 @@
 
 class StartGameButton : public Button {
  public:
-  StartGameButton(State& state, int x, int y);
+  StartGameButton(State& state, int, int);
 
   void Click(int, int) final;
 };

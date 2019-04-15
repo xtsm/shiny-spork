@@ -8,7 +8,7 @@ MainMenuState::MainMenuState(StateManager& states) :
     load_game_button_ptr_(new LoadGameButton(*this, 50, 250)),
     settings_button_ptr_(new SettingsButton(*this, 50, 300)),
     exit_button_ptr_(new ExitButton(*this, 50, 350)),
-    background_ptr_(new Background(*this)) {
+    background_ptr_(new Background(*this, 3)) {
   draw_queue_.insert(new_game_button_ptr_);
   draw_queue_.insert(load_game_button_ptr_);
   draw_queue_.insert(settings_button_ptr_);

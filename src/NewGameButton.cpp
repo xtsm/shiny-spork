@@ -3,7 +3,7 @@
 #include "StateManager.h"
 
 NewGameButton::NewGameButton(State& state, int x, int y) :
-    Button(state, x, y, "New Game") {
+    Button(state, 5, x, y, "New Game") {
 }
 
 void NewGameButton::NewGameButton::Click(int, int) {

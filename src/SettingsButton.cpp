@@ -3,7 +3,7 @@
 #include "StateManager.h"
 
 SettingsButton::SettingsButton(State& state, int x, int y) :
-    Button(state, x, y, "Settings") {}
+    Button(state, 5, x, y, "Settings") {}
 
 void SettingsButton::Click(int, int) {
   StateManager& states = state_.GetStateManager();

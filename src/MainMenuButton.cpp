@@ -3,7 +3,7 @@
 #include "StateManager.h"
 
 MainMenuButton::MainMenuButton(State& state, int x, int y) :
-    Button(state, x, y, "Main Menu") {
+    Button(state, 5, x, y, "Main Menu") {
 }
 
 void MainMenuButton::Click(int, int) {

@@ -36,7 +36,9 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   font_ = State::GetFontResourceManager()
       .GetOrLoadResource("assets/font/default.ttf");
 
-  range_circle_.setFillColor(sf::Color(255, 255, 255, 128));
+  range_circle_.setOutlineThickness(1);
+  range_circle_.setOutlineColor(sf::Color::Black);
+  range_circle_.setFillColor(sf::Color(255, 255, 255, 64));
   InitText(text_, x + 10, y - 40);
   InitText(level_text_, 650, 200);
   InitText(range_text_, 620, 300);

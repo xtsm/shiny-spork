@@ -5,7 +5,7 @@
 #include "entity/Tower.h"
 
 RemoveTowerButton::RemoveTowerButton(State& state, int x, int y, std::shared_ptr<Tower> tower) :
-    Button(state, x, y, "Remove"),
+    Button(state, 1005, x, y, "Remove"),
     tower_(std::move(tower)) {}
 
 void RemoveTowerButton::Click(int, int) {

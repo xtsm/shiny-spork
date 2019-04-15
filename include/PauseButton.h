@@ -6,7 +6,7 @@
 
 class PauseButton : public Button {
  public:
-  PauseButton(State& state, int x, int y);
+  PauseButton(State&, int, int);
 
   void Click(int, int) final;
 };

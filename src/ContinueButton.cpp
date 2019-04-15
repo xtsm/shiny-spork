@@ -2,7 +2,7 @@
 #include "StateManager.h"
 
 ContinueButton::ContinueButton(State& state, int x, int y) :
-    Button(state, x, y, "Continue") {
+    Button(state, 1005, x, y, "Continue") {
 }
 
 void ContinueButton::Click(int, int) {

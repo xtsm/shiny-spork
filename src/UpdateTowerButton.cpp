@@ -5,7 +5,7 @@
 #include "GameState.h"
 
 UpdateTowerButton::UpdateTowerButton(State& state, int x, int y, std::shared_ptr<Tower> tower) :
-    Button(state, x, y, "Update"),
+    Button(state, 1005, x, y, "Update"),
     tower_(std::move(tower)) {
 }
 
