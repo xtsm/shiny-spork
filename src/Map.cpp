@@ -89,11 +89,11 @@ void Tile::SetNumber(int number) {
 }
 
 int Tile::GetX() const {
-  return coordinates_.x;
+  return static_cast<int>(coordinates_.x);
 }
 
 int Tile::GetY() const {
-  return coordinates_.y;
+  return static_cast<int>(coordinates_.y);
 }
 
 Tile::Tile() : Tile(0, 0, 0) {}

@@ -1,9 +1,11 @@
 #include <memory>
-
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <memory>
+#include <GameState.h>
+#include <sstream>
+
 #include "UpdateTowerButton.h"
 #include "RemoveTowerButton.h"
 #include "StateManager.h"
@@ -23,6 +25,7 @@ GameState::GameState(StateManager& states) :
     start_game_button_ptr_(new StartGameButton(*this, 625, 500)),
     build_menu_grid_ptr_(new BuildMenuGrid(*this)),
     map_ptr_(new Map({})),
+    info_(),
     info_menu_(),
     towers_{},
     projectiles_{},
@@ -30,7 +33,8 @@ GameState::GameState(StateManager& states) :
     creator_of_enemies_(*this),
     is_enemies_produce_(false),
     current_delay_(1000),
-    delay_(1000) {
+    delay_(1000),
+    is_info_displayed_(false) {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -47,7 +51,7 @@ void GameState::Load(const std::string& level_path) {
   std::string tower_path;
   int x = 650, y = 0;
   fin >> towers_number;
-  build_button_ptrs_.resize(towers_number);
+  build_button_ptrs_.resize(static_cast<unsigned long long int>(towers_number));
   for (auto& build_button_ptr : build_button_ptrs_) {
     fin >> tower_path;
     build_button_ptr = std::make_shared<BuildButton>(*this, x, y, tower_path);
@@ -110,11 +114,13 @@ void GameState::ProcessEvent(sf::Event& event) {
           Pause();
           break;
         }
-        default:break;
+        default:
+          break;
       }
       break;
     }
-    default:break;
+    default:
+      break;
   }
 }
 
@@ -157,9 +163,13 @@ void GameState::RemoveInfoMenu() {
   }
   draw_queue_.erase(update_tower_button_ptr_);
   draw_queue_.erase(remove_tower_button_ptr_);
+  if (info_ != nullptr && draw_queue_.count(info_) != 0) {
+    draw_queue_.erase(info_);
+  }
   update_tower_button_ptr_->ChangeTower(nullptr);
   remove_tower_button_ptr_->ChangeTower(nullptr);
   info_menu_ = nullptr;
+  info_ = nullptr;
 }
 
 bool GameState::IsFree(int x, int y) const {
@@ -216,4 +226,32 @@ void GameState::CreateSomeEnemies(int count) {
 
 void GameState::SetProducing(bool produce) {
   is_enemies_produce_ = produce;
+}
+
+void GameState::InfoMenuForEnemy(int64_t id) {
+  std::shared_ptr<Enemy> enemy = enemies_[id];
+  sf::Font font = State::GetFontResourceManager()
+      .GetOrLoadResource("assets/font/default.ttf");
+  sf::Sprite enemy_sprite = enemy->GetSprite();
+
+  std::ostringstream health_converter;
+  health_converter << "Health: " << enemy->GetHealth() << "/" << enemy->GetMaxHealth();
+  sf::Text health_text(sf::String(health_converter.str()), font, 20);
+  health_text.setFillColor(sf::Color::Red);
+  health_text.setPosition(700, 100 + enemy_sprite.getGlobalBounds().height);
+
+  std::ostringstream damage_converter;
+  damage_converter << "Damage: " << enemy->GetPower();
+  sf::Text damage_text(sf::String(damage_converter.str()), font, 20);
+  damage_text.setFillColor(sf::Color::Red);
+  damage_text.setPosition(700, 150 + enemy_sprite.getGlobalBounds().height);
+
+  sf::Text name_text(sf::String(enemy->GetName()), font, 20);
+  name_text.setFillColor(sf::Color::Red);
+  name_text.setPosition(700, 50 + enemy_sprite.getGlobalBounds().height);
+
+  info_ = std::make_shared<EntityInfo>(*this, enemy_sprite,
+      std::vector<sf::Text>{name_text, health_text, damage_text});
+
+  draw_queue_.insert(info_);
 }

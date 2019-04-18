@@ -17,6 +17,7 @@
 #include "ContinueButton.h"
 #include "UpdateTowerButton.h"
 #include "RemoveTowerButton.h"
+#include "EntityInfo.h"
 
 class GameState: public State {
  public:
@@ -32,6 +33,8 @@ class GameState: public State {
   void LoadBuildMenu(const std::string&, const sf::Sprite&, int);
   // Создаёт меню информации для башни
   void InfoMenuForTower(int64_t id);
+  // Отображает информацию о враге
+  void InfoMenuForEnemy(int64_t id);
   //Удаляет башню
   void RemoveTower(const std::shared_ptr<Tower>&);
   //Удаляет меню постройки
@@ -68,6 +71,7 @@ class GameState: public State {
   std::shared_ptr<StartGameButton> start_game_button_ptr_;
   std::shared_ptr<BuildMenuGrid> build_menu_grid_ptr_;
   std::shared_ptr<Map> map_ptr_;
+  std::shared_ptr<EntityInfo> info_;
   std::shared_ptr<Entity> info_menu_;
   std::map<int64_t, std::shared_ptr<Tower>> towers_;
   std::map<int64_t, std::shared_ptr<Projectile>> projectiles_;
@@ -77,6 +81,7 @@ class GameState: public State {
   // Задержка между спавном врагов
   int current_delay_;
   const int delay_;
+  bool is_info_displayed_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_

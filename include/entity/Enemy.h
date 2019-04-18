@@ -32,18 +32,26 @@ class Enemy : public Entity {
   void DoMove();
 
   void DecreaseHealth(int delta);
-  void EncreaseHealth(int delta);
+
+  void Click(int, int) override;
 
   void DoDamage(Enemy& other_entity);
 
-  bool IsAlive() const { return is_alive_; }
+  sf::Sprite GetSprite() const;
+  std::string GetName() const;
+  int GetHealth() const;
+  int GetMaxHealth() const;
+  int GetPower() const;
 
  private:
   std::string name_;
   int frames_;
+  sf::IntRect current_sprite_rect_;
+  int max_delay_for_sprite_change_;
+  int delay_for_sprite_change_;
   Tile current_tile_;
   Direction direction_of_move_;
-  Tile desination_tile_;
+  Tile destination_tile_;
   int max_health_;
   int health_;
   sf::RectangleShape health_bar_;
@@ -55,7 +63,8 @@ class Enemy : public Entity {
   void DoMove(const Direction& direction);
   void ChangeDirectionTile(const Tile& new_direction_tile);
   std::vector<std::pair<Tile, Direction>> GetAvailableMoves(int x, int y) const;
-//  bool IsMoveHasChangedTile(const Tile& tile_after_move);
+  void ChangeCurrentSpriteRect();
+  void CheckAndChangeCoordinates();
 };
 
 class EnemyCreator {
