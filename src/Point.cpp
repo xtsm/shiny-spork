@@ -33,6 +33,10 @@ Point& operator*=(Point& a, double alpha) {
   return a;
 }
 
+Point operator*(const Point& lhs, const Point& rhs) {
+  return Point(lhs.x * rhs.x, lhs.y * rhs.y);
+}
+
 std::istream& operator>>(std::istream& in, Point& point) {
   in >> point.x >> point.y;
   return in;

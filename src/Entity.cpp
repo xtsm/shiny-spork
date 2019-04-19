@@ -53,3 +53,20 @@ void Entity::SetInfo(bool value) {
   }
   is_info_ = value;
 }
+
+sf::Sprite Entity::GetIconSprite() const {
+  return icon_sprite_;
+}
+
+std::vector<sf::Text> Entity::GetInfo() const {
+  return std::vector<sf::Text>();
+}
+
+void Entity::InitText(sf::Text& text, int x, int y, sf::Color color) const {
+  const sf::Font& font_ = State::GetFontResourceManager().GetOrLoadResource("assets/font/default.ttf");
+  text.setFont(font_);
+  text.setFillColor(color);
+  text.setOutlineColor(sf::Color::White);
+  text.setCharacterSize(10);
+  text.move(x, y);
+}

@@ -12,7 +12,6 @@
 Tower::Tower(State& state, const std::string& source, int x, int y) :
     Entity(state, DrawPriority(100 + y, this)),
     projectile_path_(),
-    font_(),
     text_(),
     source_(source),
     fin_(source + "/config.txt"),
@@ -20,30 +19,19 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     tower_name_(),
     max_level_(0),
     level_(0),
-    level_text_(),
     range_(0),
-    range_text_(),
     range_circle_(0),
     cooldown_(0),
-    cooldown_text_(),
-    damage_(0),
-    damage_text_() {
+    damage_(0) {
   SetPosition(x, y);
 
-  icon_sprite_.move(650, 200);
+  icon_sprite_.move(660, 200);
   sprite_.move(x + 5, y - 40);
-
-  font_ = State::GetFontResourceManager()
-      .GetOrLoadResource("assets/font/default.ttf");
 
   range_circle_.setOutlineThickness(1);
   range_circle_.setOutlineColor(sf::Color::Black);
   range_circle_.setFillColor(sf::Color(255, 255, 255, 64));
   InitText(text_, x + 10, y - 40);
-  InitText(level_text_, 650, 200);
-  InitText(range_text_, 620, 300);
-  InitText(cooldown_text_, 620, 320);
-  InitText(damage_text_, 620, 340);
 
   getline(fin_, tower_name_);
   fin_ >> max_level_;
@@ -62,10 +50,7 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
 void Tower::Click(int x, int y) {
   Entity::Click(x, y);
-  std::shared_ptr<EntityInfo> info(new EntityInfo(state_, icon_sprite_,
-                                                  std::vector<sf::Text>{level_text_, damage_text_, cooldown_text_,
-                                                                        range_text_}));
-  state_.GetStateManager().game_ptr_->InfoMenuForTower(info, id_);
+  state_.GetStateManager().game_ptr_->InfoMenuForTower(id_);
 }
 
 void Tower::Update() {
@@ -82,10 +67,6 @@ void Tower::Update() {
   range_circle_.setPosition(x_ - range_ + 30, y_ - range_ + 30);
   range_circle_.setRadius(range_);
   text_.setString("LVL " + std::to_string(level_));
-  level_text_.setString("Level " + std::to_string(level_) + " / " + std::to_string(max_level_));
-  range_text_.setString("Range: " + std::to_string(range_));
-  cooldown_text_.setString("Cooldown: " + std::to_string(cooldown_));
-  damage_text_.setString("Damage: " + std::to_string(damage_));
 }
 
 void Tower::Shot() {
@@ -94,7 +75,7 @@ void Tower::Shot() {
     return;
   }
   std::shared_ptr<Enemy> aim =
-      state_.GetStateManager().game_ptr_->FindAim(x_, y_, range_);
+      state_.GetStateManager().game_ptr_->FindAim(x_ + 30, y_ + 30, range_);
   if (aim == nullptr) {
     return;
   }
@@ -109,9 +90,21 @@ bool Tower::Updatable() const {
   return level_ < max_level_;
 }
 
-void Tower::InitText(sf::Text& text, int x, int y) {
-  text.setFont(font_);
-  text.setOutlineColor(sf::Color::White);
-  text.setCharacterSize(10);
-  text.move(x, y);
+std::vector<sf::Text> Tower::GetInfo() const {
+  sf::Text tower_name;
+  sf::Text level_text;
+  sf::Text range_text;
+  sf::Text cooldown_text;
+  sf::Text damage_text;
+  InitText(tower_name, 620, 200);
+  InitText(level_text, 720, 200);
+  InitText(range_text, 620, 300);
+  InitText(cooldown_text, 620, 320);
+  InitText(damage_text, 620, 340);
+  tower_name.setString(tower_name_);
+  level_text.setString("Level " + std::to_string(level_) + " / " + std::to_string(max_level_));
+  range_text.setString("Range: " + std::to_string(range_));
+  cooldown_text.setString("Cooldown: " + std::to_string(cooldown_));
+  damage_text.setString("Damage: " + std::to_string(damage_));
+  return std::vector<sf::Text>{tower_name, level_text, range_text, cooldown_text, damage_text};
 }

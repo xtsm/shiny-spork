@@ -37,7 +37,8 @@ class Enemy : public Entity {
 
   void DoDamage(Enemy& other_entity);
 
-  sf::Sprite GetSprite() const;
+  std::vector<sf::Text> GetInfo() const override;
+
   std::string GetName() const;
   int GetHealth() const;
   int GetMaxHealth() const;

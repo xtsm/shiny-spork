@@ -143,6 +143,7 @@ Enemy::Enemy(const std::string& path, double x, double y,
   damage_bar_.setFillColor(sf::Color(255, 0, 0));
   damage_bar_.setPosition(x_, y_);
   damage_bar_.setSize(sf::Vector2f(30, 3));
+  icon_sprite_.setPosition(650, 230);
   sprite_.setPosition(static_cast<float>(x), static_cast<float>(y));
   sprite_.setTextureRect(sf::IntRect(0, 0, sprite_.getTexture()->getSize().x,
                                      sprite_.getTexture()->getSize().y / frames_));
@@ -302,6 +303,7 @@ void Enemy::ChangeCurrentSpriteRect() {
     current_sprite_rect_ = sf::IntRect(current_sprite_rect_.left,
                                        (current_sprite_rect_.top + height) % (height * frames_), width, height);
     sprite_.setTextureRect(current_sprite_rect_);
+    icon_sprite_.setTextureRect(current_sprite_rect_);
     delay_for_sprite_change_ = max_delay_for_sprite_change_;
   } else {
     --delay_for_sprite_change_;
@@ -323,10 +325,6 @@ void Enemy::Click(int x, int y) {
   state_.GetStateManager().game_ptr_->InfoMenuForEnemy(id_);
 }
 
-sf::Sprite Enemy::GetSprite() const {
-  return sprite_;
-}
-
 std::string Enemy::GetName() const {
   return name_;
 }
@@ -341,4 +339,34 @@ int Enemy::GetMaxHealth() const {
 
 int Enemy::GetPower() const {
   return power_;
+}
+
+std::vector<sf::Text> Enemy::GetInfo() const {
+
+  sf::Text name_text;
+  sf::Text health_text;
+  sf::Text damage_text;
+  InitText(name_text, 650, 200, sf::Color::Red);
+  InitText(health_text, 620, 300);
+  InitText(damage_text, 620, 320);
+  name_text.setString(name_);
+  health_text.setString("Health: " + std::to_string(health_) + " / " + std::to_string(max_health_));
+  damage_text.setString("Damage: " + std::to_string(power_));
+
+  return std::vector<sf::Text>{name_text, health_text, damage_text};
+//  std::ostringstream health_converter;
+//  health_converter << "Health: " << health_ << "/" << max_health_;
+//  sf::Text health_text(sf::String(health_converter.str()), font, 20);
+//  health_text.setFillColor(sf::Color::Red);
+//  health_text.setPosition(700, 100 + sprite_.getGlobalBounds().height);
+//
+//  std::ostringstream damage_converter;
+//  damage_converter << "Damage: " << power_;
+//  (sf::String(damage_converter.str()), font, 20);
+//  damage_text.setFillColor(sf::Color::Red);
+//  damage_text.setPosition(700, 150 + sprite_.getGlobalBounds().height);
+//
+//  (sf::String(name_), font, 20);
+//  name_text.setFillColor(sf::Color::Red);
+//  name_text.setPosition(700, 50 + sprite_.getGlobalBounds().height);
 }

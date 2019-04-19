@@ -24,6 +24,12 @@ class Entity : public Widget {
   //Устанавливает флаг отображения информации
   virtual void SetInfo(bool value);
 
+  virtual sf::Sprite GetIconSprite() const;
+
+  virtual std::vector<sf::Text> GetInfo() const;
+
+  void InitText(sf::Text&, int, int, sf::Color color = sf::Color::White) const;
+
  protected:
   sf::Sprite sprite_;
   sf::Sprite icon_sprite_;

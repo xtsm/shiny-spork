@@ -27,7 +27,7 @@ bool Projectile::Pointing() {
   } else {
     d *= speed_ * speed_ / d.Length();
     position_ += d;
-    sprite_.setRotation(d.AngleInDegree());
+    sprite_.setRotation((d * Point(-1, -1)).AngleInDegree() + 180);
     sprite_.setPosition(position_.x, position_.y);
     return false;
   }

@@ -3,18 +3,22 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <entity/Entity.h>
 
 #include "Widget.h"
 
 class EntityInfo : public Widget {
  public:
-  EntityInfo(State& state, const sf::Sprite& image, const std::vector<sf::Text>& info);
+  explicit EntityInfo(State&);
 
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+  void Clear();
+
+  void ChangeEntity(const std::shared_ptr<Entity>& entity);
+
  private:
-  sf::Sprite image_of_entity_;
-  std::vector<sf::Text> some_info_about_entity_;
+  std::shared_ptr<Entity> entity_;
   int amount_of_lines_;
   const int max_amount_of_lines_;
 };

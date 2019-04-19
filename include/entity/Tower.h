@@ -19,12 +19,11 @@ class Tower : public Entity {
   // Проверяет можно ли обновить башню
   bool Updatable() const;
   // Инициализириует текст
-  void InitText(sf::Text&, int, int);
+
+  std::vector<sf::Text> GetInfo() const override;
 
  protected:
   std::string projectile_path_;
-  // Текст и шрифт надписи над башней
-  sf::Font font_;
   sf::Text text_;
   //Путь к описанию башни
   std::string source_;
@@ -38,17 +37,13 @@ class Tower : public Entity {
   int max_level_;
   // Уровень башни
   int level_;
-  sf::Text level_text_;
   // Дальнобойность
   int range_;
-  sf::Text range_text_;
   sf::CircleShape range_circle_;
   // Время перезарядки
   int cooldown_;
-  sf::Text cooldown_text_;
   // Урон от снаряда
   int damage_;
-  sf::Text damage_text_;
 };
 
 #endif  // INCLUDE_TOWER_H_
