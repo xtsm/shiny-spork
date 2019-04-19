@@ -2,7 +2,7 @@
 
 EntityInfo::EntityInfo(State& state, const sf::Sprite& image,
                        const std::vector<sf::Text>& info)
-    : Widget(state, DrawPriority(1000, this)),
+    : Widget(state, DrawPriority(1005, this)),
       image_of_entity_(image),
       some_info_about_entity_(info.begin(), info.end()),
       amount_of_lines_(static_cast<int>(info.size())),

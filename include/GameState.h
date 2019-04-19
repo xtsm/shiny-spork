@@ -32,7 +32,7 @@ class GameState: public State {
   // Вызывает меню постройки башни
   void LoadBuildMenu(const std::string&, const sf::Sprite&, int);
   // Создаёт меню информации для башни
-  void InfoMenuForTower(int64_t id);
+  void InfoMenuForTower(const std::shared_ptr<EntityInfo>&, int64_t id);
   // Отображает информацию о враге
   void InfoMenuForEnemy(int64_t id);
   //Удаляет башню

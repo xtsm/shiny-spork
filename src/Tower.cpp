@@ -56,18 +56,16 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   }
   if (is_info_) {
     target.draw(range_circle_);
-    target.draw(icon_sprite_, states);
-    target.draw(level_text_, states);
-    target.draw(damage_text_, states);
-    target.draw(cooldown_text_, states);
-    target.draw(range_text_, states);
   }
   target.draw(sprite_, states);
 }
 
 void Tower::Click(int x, int y) {
   Entity::Click(x, y);
-  state_.GetStateManager().game_ptr_->InfoMenuForTower(id_);
+  std::shared_ptr<EntityInfo> info(new EntityInfo(state_, icon_sprite_,
+                                                  std::vector<sf::Text>{level_text_, damage_text_, cooldown_text_,
+                                                                        range_text_}));
+  state_.GetStateManager().game_ptr_->InfoMenuForTower(info, id_);
 }
 
 void Tower::Update() {

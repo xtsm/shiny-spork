@@ -136,13 +136,14 @@ void GameState::LoadBuildMenu(const std::string& source, const sf::Sprite& tower
   draw_queue_.insert(build_menu_grid_ptr_);
 }
 
-void GameState::InfoMenuForTower(int64_t id) {
+void GameState::InfoMenuForTower(const std::shared_ptr<EntityInfo>& info, int64_t id) {
   std::shared_ptr<Tower> tower = towers_[id];
   update_tower_button_ptr_->ChangeTower(tower);
   remove_tower_button_ptr_->ChangeTower(tower);
   draw_queue_.insert(update_tower_button_ptr_);
   draw_queue_.insert(remove_tower_button_ptr_);
-  info_menu_ = tower;
+  info_ = info;
+  draw_queue_.insert(info);
   tower->SetInfo(true);
 }
 
@@ -229,10 +230,13 @@ void GameState::SetProducing(bool produce) {
 }
 
 void GameState::InfoMenuForEnemy(int64_t id) {
+  RemoveInfoMenu();
   std::shared_ptr<Enemy> enemy = enemies_[id];
-  sf::Font font = State::GetFontResourceManager()
+  const sf::Font& font = State::GetFontResourceManager()
       .GetOrLoadResource("assets/font/default.ttf");
   sf::Sprite enemy_sprite = enemy->GetSprite();
+
+  std::cerr << enemy->GetHealth() << enemy->GetPower() << enemy->GetName() << std::endl;
 
   std::ostringstream health_converter;
   health_converter << "Health: " << enemy->GetHealth() << "/" << enemy->GetMaxHealth();
@@ -241,7 +245,7 @@ void GameState::InfoMenuForEnemy(int64_t id) {
   health_text.setPosition(700, 100 + enemy_sprite.getGlobalBounds().height);
 
   std::ostringstream damage_converter;
-  damage_converter << "Damage: " << enemy->GetPower();
+  "Damage: " + std::to_string(enemy->GetPower());
   sf::Text damage_text(sf::String(damage_converter.str()), font, 20);
   damage_text.setFillColor(sf::Color::Red);
   damage_text.setPosition(700, 150 + enemy_sprite.getGlobalBounds().height);
