@@ -17,6 +17,8 @@ class EntityInfo : public Widget {
 
   void ChangeEntity(const std::shared_ptr<Entity>& entity);
 
+  int64_t GetEntityID() const;
+
  private:
   std::shared_ptr<Entity> entity_;
   int amount_of_lines_;

@@ -28,7 +28,8 @@ class Entity : public Widget {
 
   virtual std::vector<sf::Text> GetInfo() const;
 
-  void InitText(sf::Text&, int, int, sf::Color color = sf::Color::White) const;
+  void InitText(sf::Text&, int, int, int character_size = 12,
+                sf::Color color = sf::Color::White) const;
 
  protected:
   sf::Sprite sprite_;

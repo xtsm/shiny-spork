@@ -1,3 +1,6 @@
+
+#include <EntityInfo.h>
+
 #include "EntityInfo.h"
 
 EntityInfo::EntityInfo(State& state)
@@ -33,4 +36,12 @@ void EntityInfo::ChangeEntity(const std::shared_ptr<Entity>& entity) {
   }
   entity_ = entity;
   entity_->SetInfo(true);
+}
+
+int64_t EntityInfo::GetEntityID() const {
+  if (entity_ == nullptr) {
+    return -1;
+  } else {
+    return entity_->GetID();
+  }
 }

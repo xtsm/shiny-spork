@@ -208,6 +208,9 @@ void GameState::RemoveEnemyById(int64_t id) {
   if (enemies_.count(id) != 0) {
     draw_queue_.erase(enemies_[id]);
     enemies_.erase(id);
+    if (info_->GetEntityID() == id) {
+      info_->Clear();
+    }
   }
 }
 
@@ -223,5 +226,7 @@ void GameState::SetProducing(bool produce) {
 void GameState::InfoMenuForEnemy(int64_t id) {
   RemoveInfoMenu();
   std::shared_ptr<Enemy> enemy = enemies_[id];
-  info_->ChangeEntity(enemy);
+  if (enemy->IsAlive()) {
+    info_->ChangeEntity(enemy);
+  }
 }

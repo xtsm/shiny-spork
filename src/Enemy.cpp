@@ -50,6 +50,9 @@ void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 void Enemy::DoMove() {
   std::vector<std::pair<Tile, Direction>> possible_moves =
       GetAvailableMoves(x_, y_);
+//  std::cerr << "Do some move and cur == dest is " << std::boolalpha
+//            << (current_tile_ == destination_tile_) << std::endl;
+//  std::cerr << "Destination is " << destination_tile_ << std::endl;
   if (current_tile_ == destination_tile_) {
     if (possible_moves.empty()) return;
 
@@ -78,6 +81,7 @@ void Enemy::DoMove() {
 }
 
 void Enemy::DoMove(const Direction& direction) {
+  std::cerr << direction << std::endl;
   switch (direction) {
     case Direction::North:
       position_.y -= speed_;
@@ -103,6 +107,7 @@ void Enemy::DoMove(const Direction& direction) {
   health_bar_.setPosition(x_, y_);
   damage_bar_.setPosition(x_, y_);
   sprite_.setPosition(static_cast<float>(position_.x), static_cast<float>(position_.y));
+//  std::cerr << position_.x << " " << position_.y << std::endl;
   ChangeCurrentSpriteRect();
   Tile tile_after_move = state_.GetStateManager().game_ptr_->
       GetMap()->GetTile(x_, y_);
@@ -325,30 +330,13 @@ void Enemy::Click(int x, int y) {
   state_.GetStateManager().game_ptr_->InfoMenuForEnemy(id_);
 }
 
-std::string Enemy::GetName() const {
-  return name_;
-}
-
-int Enemy::GetHealth() const {
-  return health_;
-}
-
-int Enemy::GetMaxHealth() const {
-  return max_health_;
-}
-
-int Enemy::GetPower() const {
-  return power_;
-}
-
 std::vector<sf::Text> Enemy::GetInfo() const {
-
   sf::Text name_text;
   sf::Text health_text;
   sf::Text damage_text;
-  InitText(name_text, 650, 200, sf::Color::Red);
-  InitText(health_text, 620, 300);
-  InitText(damage_text, 620, 320);
+  InitText(name_text, 650, 200, 15, sf::Color::Red);
+  InitText(health_text, 620, 300, 15);
+  InitText(damage_text, 620, 320, 15);
   name_text.setString(name_);
   health_text.setString("Health: " + std::to_string(health_) + " / " + std::to_string(max_health_));
   damage_text.setString("Damage: " + std::to_string(power_));
@@ -369,4 +357,8 @@ std::vector<sf::Text> Enemy::GetInfo() const {
 //  (sf::String(name_), font, 20);
 //  name_text.setFillColor(sf::Color::Red);
 //  name_text.setPosition(700, 50 + sprite_.getGlobalBounds().height);
+}
+
+bool Enemy::IsAlive() const {
+  return is_alive_;
 }

@@ -39,10 +39,7 @@ class Enemy : public Entity {
 
   std::vector<sf::Text> GetInfo() const override;
 
-  std::string GetName() const;
-  int GetHealth() const;
-  int GetMaxHealth() const;
-  int GetPower() const;
+  bool IsAlive() const;
 
  private:
   std::string name_;

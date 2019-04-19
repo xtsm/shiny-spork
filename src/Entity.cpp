@@ -62,11 +62,13 @@ std::vector<sf::Text> Entity::GetInfo() const {
   return std::vector<sf::Text>();
 }
 
-void Entity::InitText(sf::Text& text, int x, int y, sf::Color color) const {
-  const sf::Font& font_ = State::GetFontResourceManager().GetOrLoadResource("assets/font/default.ttf");
+void Entity::InitText(sf::Text& text, int x, int y,
+                      int character_size, sf::Color color) const {
+  const sf::Font& font_ =
+      State::GetFontResourceManager().GetOrLoadResource("assets/font/default.ttf");
   text.setFont(font_);
   text.setFillColor(color);
   text.setOutlineColor(sf::Color::White);
-  text.setCharacterSize(10);
+  text.setCharacterSize(static_cast<unsigned int>(character_size));
   text.move(x, y);
 }
