@@ -31,6 +31,12 @@ class Entity : public Widget {
   void InitText(sf::Text&, int, int, int character_size = 12,
                 sf::Color color = sf::Color::White) const;
 
+  double GetCenterX() const;
+
+  double GetCenterY() const;
+
+  void SetSpriteCenter(double, double);
+
  protected:
   sf::Sprite sprite_;
   sf::Sprite icon_sprite_;

@@ -20,14 +20,14 @@ Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim, int x, int y,
 
 bool Projectile::Pointing() {
   assert(aim_ptr_ != nullptr);
-  Point d = Point(aim_ptr_->GetX(), aim_ptr_->GetY()) - position_;
+  Point d = Point(aim_ptr_->GetCenterX(), aim_ptr_->GetCenterY()) - position_;
   if (d.Length() < speed_ * speed_) {
     aim_ptr_->DecreaseHealth(damage_);
     return true;
   } else {
     d *= speed_ * speed_ / d.Length();
     position_ += d;
-    sprite_.setRotation((d * Point(-1, -1)).AngleInDegree() + 180);
+    sprite_.setRotation(d.AngleInDegree() + 180);
     sprite_.setPosition(position_.x, position_.y);
     return false;
   }

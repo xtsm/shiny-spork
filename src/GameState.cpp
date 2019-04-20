@@ -181,7 +181,7 @@ void GameState::RemoveProjectile(int64_t id) {
 
 std::shared_ptr<Enemy> GameState::FindAim(int x, int y, int range) {
   for (const auto& enemy : enemies_) {
-    Point d(enemy.second->GetX() - x, enemy.second->GetY() - y);
+    Point d(enemy.second->GetCenterX() - x, enemy.second->GetCenterY() - y);
     if (d.Length() <= range * range) {
       return enemy.second;
     }

@@ -31,7 +31,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   range_circle_.setOutlineThickness(1);
   range_circle_.setOutlineColor(sf::Color::Black);
   range_circle_.setFillColor(sf::Color(255, 255, 255, 64));
-  InitText(text_, x + 10, y - 40);
+  InitText(text_, x_ + 10, y_ - 40);
 
   getline(fin_, tower_name_);
   fin_ >> max_level_;
@@ -75,14 +75,16 @@ void Tower::Shot() {
     return;
   }
   std::shared_ptr<Enemy> aim =
-      state_.GetStateManager().game_ptr_->FindAim(x_ + 30, y_ + 30, range_);
+      state_.GetStateManager().game_ptr_->FindAim(
+          x_ + 30, y_ + 30, range_);
   if (aim == nullptr) {
     return;
   }
   timer_ = cooldown_;
   std::shared_ptr<Projectile>
-      projectile(new Projectile(state_, aim, x_ + 30, y_ + 30, damage_,
-                                "assets/projectiles/" + projectile_path_));
+      projectile(new Projectile(
+      state_, aim, x_ + 30, y_ + 30, damage_,
+      "assets/projectiles/" + projectile_path_));
   state_.GetStateManager().game_ptr_->AddProjectile(projectile);
 }
 

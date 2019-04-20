@@ -72,3 +72,15 @@ void Entity::InitText(sf::Text& text, int x, int y,
   text.setCharacterSize(static_cast<unsigned int>(character_size));
   text.move(x, y);
 }
+
+double Entity::GetCenterX() const {
+  return x_ + sprite_.getGlobalBounds().width / 2;
+}
+
+double Entity::GetCenterY() const {
+  return y_ + sprite_.getGlobalBounds().height / 2;
+}
+
+void Entity::SetSpriteCenter(double x, double y) {
+  sprite_.setPosition(x - sprite_.getGlobalBounds().width / 2, y - sprite_.getGlobalBounds().height / 2);
+}
