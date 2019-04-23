@@ -2,6 +2,7 @@
 
 #include "StateManager.h"
 #include "State.h"
+#include <memory>
 
 State::State(StateManager& states) :
     states_(states),
@@ -19,7 +20,7 @@ void State::CleanMouseFlags() {
     clicked_ = nullptr;
   }
   if (hovered_ != nullptr) {
-    hovered_->MouseOut();
+    hovered_->MouseOut(0, 0);
     hovered_ = nullptr;
   }
 }
@@ -42,7 +43,7 @@ void State::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 void State::ProcessEvents(sf::RenderWindow& window) {
-  sf::Event event;
+  sf::Event event{};
   while (window.pollEvent(event)) {
     switch (event.type) {
       case sf::Event::MouseButtonPressed: {
@@ -50,7 +51,7 @@ void State::ProcessEvents(sf::RenderWindow& window) {
           throw std::logic_error("pressed_ isn't nullptr on mouse press event, "
                                  "do you have two mouses or something?");
         }
-        for (Widget* widget : draw_queue_) {
+        for (const std::shared_ptr<Widget>& widget : draw_queue_) {
           sf::Vector2u click_point(event.mouseButton.x, event.mouseButton.y);
           sf::Vector2u size = window.getSize();
           click_point.x /= size.x / 800.0;
@@ -58,7 +59,7 @@ void State::ProcessEvents(sf::RenderWindow& window) {
           if (widget->PointCheck(click_point.x, click_point.y)) {
             clicked_ = widget;
             clicked_->SetClicked(true);
-            clicked_->MouseIn();
+            clicked_->MouseIn(click_point.x, click_point.y);
             break;
           }
         }
@@ -72,8 +73,10 @@ void State::ProcessEvents(sf::RenderWindow& window) {
           click_point.x /= size.x / 800.0;
           click_point.y /= size.y / 600.0;
           if (clicked_->PointCheck(click_point.x, click_point.y)) {
-            clicked_->Click();
-            if (this == states_.active_state) clicked_->MouseIn();
+            clicked_->Click(click_point.x, click_point.y);
+            if (states_.active_state_ptr_.get() == this) {
+              clicked_->MouseIn(click_point.x, click_point.y);
+            }
           }
           clicked_ = nullptr;
         }
@@ -85,25 +88,23 @@ void State::ProcessEvents(sf::RenderWindow& window) {
         sf::Vector2u size = window.getSize();
         hover_point.x /= size.x / 800.0;
         hover_point.y /= size.y / 600.0;
-        if (hovered_ != nullptr &&
-            hovered_->PointCheck(hover_point.x, hover_point.y)) {
-          break;
-        }
-        Widget* new_hovered = nullptr;
-        for (Widget* widget : draw_queue_) {
+        std::shared_ptr<Widget> new_hovered = nullptr;
+        for (const std::shared_ptr<Widget>& widget : draw_queue_) {
           if (widget->PointCheck(hover_point.x, hover_point.y)) {
             new_hovered = widget;
             break;
           }
         }
-        if (hovered_ != nullptr) hovered_->MouseOut();
+        if (hovered_ != nullptr) hovered_->MouseOut(hover_point.x, hover_point.y);
         hovered_ = new_hovered;
-        if (hovered_ != nullptr) hovered_->MouseIn();
+        if (hovered_ != nullptr) {
+          hovered_->MouseIn(hover_point.x, hover_point.y);
+          hovered_->MouseMove(hover_point.x, hover_point.y);
+        }
         break;
       }
 
-      case sf::Event::MouseLeft:
-        if (hovered_ != nullptr) hovered_->MouseOut();
+      case sf::Event::MouseLeft:if (hovered_ != nullptr) hovered_->MouseOut(-1, -1);
         hovered_ = nullptr;
         break;
 
@@ -129,11 +130,12 @@ void State::Close() {
   closed_ = true;
 }
 
+State::~State() = default;
+
 ResourceManager<sf::Image> State::images_manager_;
 ResourceManager<sf::Font> State::fonts_manager_;
 ResourceManager<sf::Texture> State::textures_manager_;
 
-State::~State() {}
 StateManager& State::GetStateManager() {
   return states_;
 }

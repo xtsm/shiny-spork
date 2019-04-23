@@ -3,11 +3,11 @@
 #include "StateManager.h"
 
 NewGameButton::NewGameButton(State& state, int x, int y) :
-    Button(state, x, y, "New Game") {
+    Button(state, 5, x, y, "New Game") {
 }
 
-void NewGameButton::NewGameButton::Click() {
+void NewGameButton::NewGameButton::Click(int, int) {
   StateManager& states = state_.GetStateManager();
-  states.ChangeState(states.game);
-  states.game->Load("assets/levels/1.txt");
+  states.ChangeState(states.game_ptr_);
+  states.game_ptr_->Load("assets/levels/1");
 }

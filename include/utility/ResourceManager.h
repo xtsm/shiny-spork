@@ -10,7 +10,7 @@
 template<typename T>
 class ResourceManager {
  public:
-  ResourceManager()
+  ResourceManager() noexcept
       : resources_() {
     assert(typeid(T) == typeid(sf::Image)
                       || typeid(T) == typeid(sf::Texture)

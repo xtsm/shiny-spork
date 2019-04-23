@@ -2,8 +2,8 @@
 #include "PauseButton.h"
 
 PauseButton::PauseButton(State& state, int x, int y)
-    : Button(state, x, y, "Pause") {}
+    : Button(state, 1005, x, y, "Pause") {}
 
-void PauseButton::Click() {
-  state_.GetStateManager().game->Pause();
+void PauseButton::Click(int, int) {
+  state_.GetStateManager().game_ptr_->Pause();
 }

@@ -7,12 +7,12 @@ SettingsState::SettingsState(StateManager& states) :
     State(states),
     width_(0),
     height_(0),
-    main_menu_button_(*this, 50, 350),
-    background_(*this) {
-  draw_queue_.insert(&main_menu_button_);
-  background_.LoadFromFile("assets/bg/1.png");
-  background_.SetSize(800, 600);
-  draw_queue_.insert(&background_);
+    main_menu_button_ptr_(new MainMenuButton(*this, 50, 350)),
+    background_ptr_(new Background(*this, 5)) {
+  draw_queue_.insert(main_menu_button_ptr_);
+  background_ptr_->LoadFromFile("assets/ui/main_menu.png");
+  background_ptr_->SetSize(800, 600);
+  draw_queue_.insert(background_ptr_);
 }
 
 void SettingsState::Tick() {
