@@ -198,7 +198,7 @@ void GameState::AddNewEnemy(const std::string& path, double x, double y,
                             const Direction& move_direction) {
   std::shared_ptr<Enemy> enemy(
       new Enemy(path, x, y,
-                map_ptr_->GetTile(static_cast<int>(x), static_cast<int>(y)),
+                map_ptr_->GetTile(static_cast<int>(x) / 60, static_cast<int>(y) / 60),
                 move_direction, *this, 120));
   enemies_.emplace(enemy->GetID(), enemy);
   draw_queue_.insert(enemy);

@@ -1,6 +1,7 @@
 #include "utility/Map.h"
 #include <fstream>
 #include <tuple>
+#include <iomanip>
 #include <queue>
 
 Map::Map(std::vector<std::vector<Tile>> map) :
@@ -54,7 +55,7 @@ void Map::SetIsFree(int x, int y, bool value) {
 }
 
 Tile Map::GetTile(int x, int y) const {
-  return map_[y / 60][x / 60];
+  return map_[y][x];
 }
 
 Tile::Tile(int x, int y, int number)

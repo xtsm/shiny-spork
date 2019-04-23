@@ -50,9 +50,6 @@ void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 void Enemy::DoMove() {
   std::vector<std::pair<Tile, Direction>> possible_moves =
       GetAvailableMoves(x_, y_);
-//  std::cerr << "Do some move and cur == dest is " << std::boolalpha
-//            << (current_tile_ == destination_tile_) << std::endl;
-//  std::cerr << "Destination is " << destination_tile_ << std::endl;
   if (current_tile_ == destination_tile_) {
     if (possible_moves.empty()) return;
 
@@ -81,23 +78,23 @@ void Enemy::DoMove() {
 }
 
 void Enemy::DoMove(const Direction& direction) {
-  std::cerr << direction << std::endl;
   switch (direction) {
     case Direction::North:
       position_.y -= speed_;
-      y_ = static_cast<int>(std::floor(position_.y + sprite_.getTextureRect().height));
+      y_ = static_cast<int>(std::ceil(position_.y + sprite_.getTextureRect().height));
       break;
     case Direction::East:
       position_.x += speed_;
-      x_ = static_cast<int>(std::floor(position_.x));
+      x_ = static_cast<int>(std::ceil(position_.x));
       break;
     case Direction::West:
       position_.x -= speed_;
-      x_ = static_cast<int>(std::floor(position_.x + sprite_.getTextureRect().width));
+      x_ = static_cast<int>(std::ceil(position_.x + sprite_.getTextureRect().width));
       break;
     case Direction::South:
       position_.y += speed_;
-      y_ = static_cast<int>(std::floor(position_.y));
+      y_ = static_cast<int>(std::ceil(position_.y))
+          ;
       break;
     default:
       break;
@@ -110,7 +107,7 @@ void Enemy::DoMove(const Direction& direction) {
 //  std::cerr << position_.x << " " << position_.y << std::endl;
   ChangeCurrentSpriteRect();
   Tile tile_after_move = state_.GetStateManager().game_ptr_->
-      GetMap()->GetTile(x_, y_);
+      GetMap()->GetTile(x_ / 60, y_ / 60);
   ChangeDirectionTile(tile_after_move);
 }
 
