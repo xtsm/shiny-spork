@@ -63,8 +63,10 @@ void Enemy::DoMove() {
     std::uniform_int_distribution<int> distribution_of_index(
         0, static_cast<int>(possible_moves.size() - 1));
 
-    auto[new_destination, direction] =
-    possible_moves[distribution_of_index(generator)];
+    Tile new_destination;
+    Direction direction;
+    std::tie(new_destination, direction) =
+        possible_moves[distribution_of_index(generator)];
     destination_tile_ = new_destination;
     direction_of_move_ = direction;
   }
@@ -154,7 +156,10 @@ Enemy::Enemy(const std::string& path, double x, double y,
                                      sprite_.getTexture()->getSize().y / frames_));
 }
 
-EnemyCreator::EnemyCreator(State& state) : state_(state) {}
+EnemyCreator::EnemyCreator(State& state) :
+    state_(state),
+    spawn_points_(),
+    enemy_types_() {}
 
 void EnemyCreator::Load(const std::string& level_path) {
   LoadSpawnPointsAndDirections(level_path + "/spawn_points.txt");

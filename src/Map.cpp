@@ -17,13 +17,13 @@ bool Map::IsMoveAvailable(const Direction& direction, int x, int y) const {
       return (y / 60 != 0 && map_[y / 60 - 1][x / 60].GetNumber()
           < map_[y / 60][x / 60].GetNumber());
     case Direction::East:
-      return (x / 60 != (map_[0].size() - 1) && map_[y / 60][x / 60 + 1].GetNumber()
+      return (x / 60 != static_cast<int>(map_[0].size() - 1) && map_[y / 60][x / 60 + 1].GetNumber()
           < map_[y / 60][x / 60].GetNumber());
     case Direction::West:
       return (x / 60 != 0 && map_[y / 60][x / 60 - 1].GetNumber()
           < map_[y / 60][x / 60].GetNumber());
     case Direction::South:
-      return (y / 60 != (map_.size() - 1) && map_[y / 60 + 1][x / 60].GetNumber()
+      return (y / 60 != static_cast<int>(map_.size() - 1) && map_[y / 60 + 1][x / 60].GetNumber()
           < map_[y / 60][x / 60].GetNumber());
     default:
       return false;
@@ -36,8 +36,8 @@ bool Map::IsFree(int x, int y) const {
 
 void Map::LoadMapFromFile(const std::string& file_name) {
   std::ifstream reader(file_name);
-  for (int i = 0; i < map_.size(); ++i) {
-    for (int j = 0; j < map_[i].size(); ++j) {
+  for (size_t i = 0; i < map_.size(); ++i) {
+    for (size_t j = 0; j < map_[i].size(); ++j) {
       int number = 0;
       reader >> number;
       if (number == 0) {
