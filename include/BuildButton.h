@@ -8,12 +8,15 @@ class BuildButton : public Button {
  public:
   explicit BuildButton(State&, int, int, std::string);
 
+  void draw(sf::RenderTarget&, sf::RenderStates) const override;
+
   void Click(int, int) override;
 
  private:
   std::string tower_name_;
   std::string source_;
   sf::Sprite tower_sprite_;
+  sf::Sprite icon_tower_sprite_;
   int range_;
 };
 

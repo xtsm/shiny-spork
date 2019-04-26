@@ -49,14 +49,18 @@ void GameState::Load(const std::string& level_path) {
   std::ifstream fin(level_path + "/towers.txt");
   int towers_number = 0;
   std::string tower_path;
-  int x = 650, y = 0;
+  int x = 600, y = 0;
   fin >> towers_number;
   build_button_ptrs_.resize(static_cast<unsigned long long int>(towers_number));
   for (auto& build_button_ptr : build_button_ptrs_) {
     fin >> tower_path;
-    build_button_ptr = std::make_shared<BuildButton>(*this, x, y, tower_path);
+    build_button_ptr = std::make_shared<BuildButton>(*this, x + 1, y, tower_path);
     draw_queue_.insert(build_button_ptr);
-    y += 50;
+    x += 50;
+    if (x == 800) {
+      x = 600;
+      y += 50;
+    }
   }
 
   creator_of_enemies_.Load(level_path);
