@@ -52,7 +52,7 @@ class Map {
 
   void SetIsFree(int x, int y, bool value);
 
-  Tile GetTile(int x, int y) const;
+  Tile& GetTile(int x, int y);
 
   void LoadMapFromFile(const std::string& file_name);
 

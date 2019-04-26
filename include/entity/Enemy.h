@@ -41,6 +41,8 @@ class Enemy : public Entity {
 
   bool IsAlive() const;
 
+  Tile GetTile() const;
+
  private:
   std::string name_;
   int frames_;

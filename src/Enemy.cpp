@@ -325,6 +325,10 @@ bool Enemy::IsAlive() const {
   return is_alive_;
 }
 
+Tile Enemy::GetTile() const {
+  return current_tile_;
+}
+
 void Enemy::DecreaseHealth(int delta) {
   if (health_ > 0 && health_ - delta >= 0) {
     health_ -= delta;

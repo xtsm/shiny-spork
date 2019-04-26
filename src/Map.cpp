@@ -57,7 +57,7 @@ void Map::SetIsFree(int x, int y, bool value) {
   map_[y][x].SetIsFree(value);
 }
 
-Tile Map::GetTile(int x, int y) const {
+Tile& Map::GetTile(int x, int y) {
   return map_[y][x];
 }
 
