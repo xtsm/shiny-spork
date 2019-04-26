@@ -17,6 +17,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     fin_(source + "/config.txt"),
     timer_(0),
     tower_name_(),
+    aim_(nullptr),
     max_level_(0),
     level_(0),
     range_(0),
@@ -74,22 +75,28 @@ void Tower::Shot() {
     timer_--;
     return;
   }
-  std::shared_ptr<Enemy> aim =
-      state_.GetStateManager().game_ptr_->FindAim(
-          x_ + 30, y_ + 30, range_);
-  if (aim == nullptr) {
+  if (aim_ == nullptr || !aim_->IsAlive() || !InRange(aim_)) {
+    aim_ = state_.GetStateManager().game_ptr_->FindAim(
+        x_ + 30, y_ + 30, range_);
+  }
+  if (aim_ == nullptr) {
     return;
   }
   timer_ = cooldown_;
   std::shared_ptr<Projectile>
       projectile(new Projectile(
-      state_, aim, x_ + 30, y_ + 30, damage_,
+      state_, aim_, x_ + 30, y_ + 30, damage_,
       "assets/projectiles/" + projectile_path_));
   state_.GetStateManager().game_ptr_->AddProjectile(projectile);
 }
 
 bool Tower::Updatable() const {
   return level_ < max_level_;
+}
+
+bool Tower::InRange(std::shared_ptr<Enemy> enemy) const {
+  Point d(enemy->GetCenterX() - x_ - 30, enemy->GetCenterY() - y_ - 30);
+  return d.Length() <= range_ * range_;
 }
 
 std::vector<sf::Text> Tower::GetInfo() const {

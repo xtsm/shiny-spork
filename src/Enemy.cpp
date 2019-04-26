@@ -353,3 +353,7 @@ std::vector<sf::Text> Enemy::GetInfo() const {
 bool Enemy::IsAlive() const {
   return is_alive_;
 }
+
+Tile Enemy::GetTile() const {
+  return current_tile_;
+}

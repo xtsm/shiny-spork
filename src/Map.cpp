@@ -5,7 +5,7 @@
 #include <queue>
 
 std::mt19937 Tile::twister(std::chrono::steady_clock::now().time_since_epoch().count());
-std::uniform_int_distribution<int> Tile::dis(25, 59);
+std::uniform_int_distribution<int> Tile::dis(30, 59);
 
 Map::Map(std::vector<std::vector<Tile>> map) :
     map_(std::move(map)) {
@@ -57,7 +57,7 @@ void Map::SetIsFree(int x, int y, bool value) {
   map_[y][x].SetIsFree(value);
 }
 
-Tile Map::GetTile(int x, int y) const {
+Tile& Map::GetTile(int x, int y) {
   return map_[y][x];
 }
 

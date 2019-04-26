@@ -171,7 +171,6 @@ bool GameState::IsFree(int x, int y) const {
 void GameState::AddProjectile(const std::shared_ptr<Projectile>& projectile) {
   projectiles_.emplace(projectile->GetID(), projectile);
   draw_queue_.insert(projectile);
-  // TODO(Nicksechko): Выстрел по цели
 }
 
 void GameState::RemoveProjectile(int64_t id) {
@@ -180,14 +179,16 @@ void GameState::RemoveProjectile(int64_t id) {
 }
 
 std::shared_ptr<Enemy> GameState::FindAim(int x, int y, int range) {
+  int min_number(100'000'000);
+  std::shared_ptr<Enemy> aim(nullptr);
   for (const auto& enemy : enemies_) {
     Point d(enemy.second->GetCenterX() - x, enemy.second->GetCenterY() - y);
-    if (d.Length() <= range * range) {
-      return enemy.second;
+    if (d.Length() <= range * range && enemy.second->GetTile().GetNumber() < min_number) {
+      min_number = enemy.second->GetTile().GetNumber();
+      aim = enemy.second;
     }
   }
-  return nullptr;
-  // TODO(Nicksechko): Поск цели
+  return aim;
 }
 
 int64_t GameState::GetAmountOfEnemies() const {

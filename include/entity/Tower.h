@@ -18,8 +18,8 @@ class Tower : public Entity {
   void Shot();
   // Проверяет можно ли обновить башню
   bool Updatable() const;
-  // Инициализириует текст
-
+  //Проверяет вхождение врага в дальнобойность
+  bool InRange(std::shared_ptr<Enemy> enemy) const;
   std::vector<sf::Text> GetInfo() const override;
 
  protected:
@@ -33,6 +33,8 @@ class Tower : public Entity {
   int timer_;
   // Название башни
   std::string tower_name_;
+  // Указатель на цель
+  std::shared_ptr<Enemy> aim_;
   // Максимальный возможный уровель башни
   int max_level_;
   // Уровень башни
