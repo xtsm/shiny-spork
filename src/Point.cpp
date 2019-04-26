@@ -2,6 +2,9 @@
 
 const double pi = 3.14159265358979323846;
 const double from_radian_to_degree = 180 / pi;
+const double eps = 1e-8;
+
+Point::Point() : x(0), y(0) {}
 
 Point::Point(double x, double y) : x(x), y(y) {}
 
@@ -18,7 +21,7 @@ Point operator-(const Point& lhs, const Point& rhs) {
 }
 
 bool operator==(const Point& lhs, const Point& rhs) {
-  return lhs.x == rhs.x && lhs.y == rhs.y;
+  return fabs(lhs.x - rhs.x) < eps && fabs(lhs.y - rhs.y) < eps;
 }
 
 Point& operator+=(Point& lhs, const Point& rhs) {

@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <random>
+#include <chrono>
 #include "utility/Direction.h"
 #include "utility/Point.h"
 
@@ -20,6 +22,8 @@ class Tile {
 
   int GetX() const;
   int GetY() const;
+  double RandomX() const;
+  double RandomY() const;
 
   bool IsPointOnTile(double x, double y) const;
 
@@ -33,6 +37,8 @@ class Tile {
   Point coordinates_;
   int number_;
   bool is_free_;
+  static std::mt19937 twister;
+  static std::uniform_int_distribution<int> dis;
 };
 
 class Map {

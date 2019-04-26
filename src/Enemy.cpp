@@ -48,9 +48,9 @@ void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 void Enemy::DoMove() {
-  std::vector<std::pair<Tile, Direction>> possible_moves =
-      GetAvailableMoves(x_, y_);
-  if (current_tile_ == destination_tile_) {
+  std::vector<std::pair<Point, Direction>> possible_moves =
+      GetAvailableMoves(static_cast<int>(position_.x), static_cast<int>(position_.y));
+  if (position_ == destination_point_) {
     if (possible_moves.empty()) return;
 
     std::mt19937 generator(
@@ -60,43 +60,38 @@ void Enemy::DoMove() {
     std::uniform_int_distribution<int> distribution_of_index(
         0, static_cast<int>(possible_moves.size() - 1));
 
-    Tile new_destination;
+    Point new_destination;
     Direction direction;
     std::tie(new_destination, direction) =
         possible_moves[distribution_of_index(generator)];
-    destination_tile_ = new_destination;
+    destination_point_ = new_destination;
     direction_of_move_ = direction;
   }
-
-  if (state_.GetStateManager().game_ptr_->GetMap()->
-      IsMoveAvailable(direction_of_move_, x_, y_)) {
-    DoMove(direction_of_move_);
-  } else {
-    destination_tile_ = current_tile_;
-    if (!possible_moves.empty()) {
-      DoMove();
-    }
-  }
+  DoMove(direction_of_move_);
+//  if (state_.GetStateManager().game_ptr_->GetMap()->
+//      IsMoveAvailable(direction_of_move_, static_cast<int>(position_.x), static_cast<int>(position_.y))) {
+//    DoMove(direction_of_move_);
+//  } else {
+//    destination_point_ = position_;
+//    if (!possible_moves.empty()) {
+//      DoMove();
+//    }
+//  }
 }
 
 void Enemy::DoMove(const Direction& direction) {
   switch (direction) {
-    case Direction::North:
-      position_.y -= speed_;
-      y_ = static_cast<int>(std::ceil(position_.y + sprite_.getTextureRect().height));
+    case Direction::North:position_.y = std::max(destination_point_.y, position_.y - speed_);
+      y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
       break;
-    case Direction::East:
-      position_.x += speed_;
-      x_ = static_cast<int>(std::ceil(position_.x));
+    case Direction::East:position_.x = std::min(destination_point_.x, position_.x + speed_);
+      x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
       break;
-    case Direction::West:
-      position_.x -= speed_;
-      x_ = static_cast<int>(std::ceil(position_.x + sprite_.getTextureRect().width));
+    case Direction::West:position_.x = std::max(destination_point_.x, position_.x - speed_);
+      x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
       break;
-    case Direction::South:
-      position_.y += speed_;
-      y_ = static_cast<int>(std::ceil(position_.y))
-          ;
+    case Direction::South:position_.y = std::min(destination_point_.y, position_.y + speed_);
+      y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
       break;
     default:
       break;
@@ -105,11 +100,10 @@ void Enemy::DoMove(const Direction& direction) {
   CheckAndChangeCoordinates();
   health_bar_.setPosition(x_, y_);
   damage_bar_.setPosition(x_, y_);
-  sprite_.setPosition(static_cast<float>(position_.x), static_cast<float>(position_.y));
-//  std::cerr << position_.x << " " << position_.y << std::endl;
+  sprite_.setPosition(static_cast<float>(x_), static_cast<float>(y_));
   ChangeCurrentSpriteRect();
   Tile tile_after_move = state_.GetStateManager().game_ptr_->
-      GetMap()->GetTile(x_ / 60, y_ / 60);
+      GetMap()->GetTile(static_cast<int>(position_.x) / 60, static_cast<int>(position_.y) / 60);
   ChangeDirectionTile(tile_after_move);
 }
 
@@ -124,22 +118,28 @@ Enemy::Enemy(const std::string& path, double x, double y,
       delay_for_sprite_change_(max_delay_for_sprite_change_),
       current_tile_(current_tile),
       direction_of_move_(direction),
-      destination_tile_(current_tile),
+      destination_point_(),
       max_health_(0),
       health_(0),
       health_bar_(),
       damage_bar_(),
       speed_(0),
       power_(0),
-      position_{x, y},
+      position_(),
       is_alive_(true) {
-  x_ = static_cast<int>(x);
-  y_ = static_cast<int>(y);
   LoadSprite(path + "/sprite.png");
   std::ifstream reader(path + "/config.txt");
   getline(reader, name_);
   reader >> frames_;
   reader >> health_ >> speed_ >> power_;
+  icon_sprite_.setPosition(650, 230);
+  sprite_.setTextureRect(sf::IntRect(0, 0, sprite_.getTexture()->getSize().x,
+                                     sprite_.getTexture()->getSize().y / frames_));
+  position_ = Point(x, y);
+  destination_point_ = position_;
+  x_ = static_cast<int>(x - sprite_.getGlobalBounds().width);
+  y_ = static_cast<int>(y - sprite_.getGlobalBounds().height);
+  sprite_.setPosition(static_cast<float>(x_), static_cast<float>(y_));
   max_health_ = health_;
   health_bar_.setFillColor(sf::Color(0, 255, 0));
   health_bar_.setPosition(x_, y_);
@@ -147,10 +147,6 @@ Enemy::Enemy(const std::string& path, double x, double y,
   damage_bar_.setFillColor(sf::Color(255, 0, 0));
   damage_bar_.setPosition(x_, y_);
   damage_bar_.setSize(sf::Vector2f(30, 3));
-  icon_sprite_.setPosition(650, 230);
-  sprite_.setPosition(static_cast<float>(x), static_cast<float>(y));
-  sprite_.setTextureRect(sf::IntRect(0, 0, sprite_.getTexture()->getSize().x,
-                                     sprite_.getTexture()->getSize().y / frames_));
 }
 
 EnemyCreator::EnemyCreator(State& state) :
@@ -172,11 +168,11 @@ void EnemyCreator::Load(const std::string& level_path) {
 
 void EnemyCreator::LoadSpawnPointsAndDirections(const std::string& path_to_file) {
   std::ifstream reader(path_to_file);
-  Point spawn_point(0, 0);
+  int x, y;
   Direction direction;
-  while (reader >> spawn_point) {
+  while (reader >> x >> y) {
     reader >> direction;
-    spawn_points_.emplace_back(spawn_point, direction);
+    spawn_points_.emplace_back(std::make_pair(x, y), direction);
   }
   reader.close();
 }
@@ -193,12 +189,15 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
 
   for (int64_t i = 0; i < count; ++i) {
     int type = distribution_of_type(generator);
-
+    std::shared_ptr<Map> map = state_.GetStateManager().game_ptr_->GetMap();
     auto point_of_spawn_with_direction = spawn_points_[distribution_of_points(generator)];
+    const Tile& spawn_tile = map->GetTile(
+        point_of_spawn_with_direction.first.first,
+        point_of_spawn_with_direction.first.second);
     state_.GetStateManager().
         game_ptr_->AddNewEnemy("assets/enemies/" + enemy_types_[type],
-                               point_of_spawn_with_direction.first.x * 60,
-                               point_of_spawn_with_direction.first.y * 60,
+                               spawn_tile.RandomX(),
+                               spawn_tile.RandomY(),
                                point_of_spawn_with_direction.second);
   }
 
@@ -229,31 +228,21 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
 
 int EnemyCreator::GetHealthFromType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:
-      return 1000;
-    case EnemyType::High:
-      return 500;
-    case EnemyType::Middle:
-      return 250;
-    case EnemyType::Low:
-      return 100;
-    default:
-      return 0;
+    case EnemyType::VeryHigh:return 1000;
+    case EnemyType::High:return 500;
+    case EnemyType::Middle:return 250;
+    case EnemyType::Low:return 100;
+    default:return 0;
   }
 }
 
 double EnemyCreator::GetSpeedByType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:
-      return 0.2;
-    case EnemyType::High:
-      return 0.4;
-    case EnemyType::Middle:
-      return 0.8;
-    case EnemyType::Low:
-      return 1;
-    default:
-      return 0;
+    case EnemyType::VeryHigh:return 0.2;
+    case EnemyType::High:return 0.4;
+    case EnemyType::Middle:return 0.8;
+    case EnemyType::Low:return 1;
+    default:return 0;
   }
 }
 
@@ -274,25 +263,25 @@ void Enemy::DoDamage(Enemy& other_entity) {
   other_entity.DecreaseHealth(power_);
 }
 
-std::vector<std::pair<Tile, Direction>> Enemy::GetAvailableMoves(int x, int y) const {
-  std::vector<std::pair<Tile, Direction>> available_moves;
+std::vector<std::pair<Point, Direction>> Enemy::GetAvailableMoves(int x, int y) const {
+  std::vector<std::pair<Point, Direction>> available_moves;
 
   std::shared_ptr<Map> map = state_.GetStateManager().game_ptr_->GetMap();
 
   if (map->IsMoveAvailable(Direction::North, x, y)) {
-    available_moves.emplace_back(map->GetTile(x / 60, y / 60 - 1), Direction::North);
+    available_moves.emplace_back(Point(position_.x, map->GetTile(x / 60, y / 60 - 1).RandomY()), Direction::North);
   }
 
   if (map->IsMoveAvailable(Direction::West, x, y)) {
-    available_moves.emplace_back(map->GetTile(x / 60 - 1, y / 60), Direction::West);
+    available_moves.emplace_back(Point(map->GetTile(x / 60 - 1, y / 60).RandomX(), position_.y), Direction::West);
   }
 
   if (map->IsMoveAvailable(Direction::East, x, y)) {
-    available_moves.emplace_back(map->GetTile(x / 60 + 1, y / 60), Direction::East);
+    available_moves.emplace_back(Point(map->GetTile(x / 60 + 1, y / 60).RandomX(), position_.y), Direction::East);
   }
 
   if (map->IsMoveAvailable(Direction::South, x, y)) {
-    available_moves.emplace_back(map->GetTile(x / 60, y / 60 + 1), Direction::South);
+    available_moves.emplace_back(Point(position_.x, map->GetTile(x / 60, y / 60 + 1).RandomY()), Direction::South);
   }
 
   return available_moves;

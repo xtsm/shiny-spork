@@ -5,6 +5,8 @@
 #include <cmath>
 
 struct Point {
+  Point();
+
   explicit Point(double x, double y);
 
   double Length();

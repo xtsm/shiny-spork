@@ -4,6 +4,9 @@
 #include <iomanip>
 #include <queue>
 
+std::mt19937 Tile::twister(std::chrono::steady_clock::now().time_since_epoch().count());
+std::uniform_int_distribution<int> Tile::dis(25, 60);
+
 Map::Map(std::vector<std::vector<Tile>> map) :
     map_(std::move(map)) {
   map_.resize(10);
@@ -45,7 +48,7 @@ void Map::LoadMapFromFile(const std::string& file_name) {
         number = 1000;
       }
       // i -- y coordinate, j -- x coordinate
-      map_[i][j] = Tile(j, i, number);
+      map_[i][j] = Tile(j * 60, i * 60, number);
     }
   }
 }
@@ -95,6 +98,14 @@ int Tile::GetX() const {
 
 int Tile::GetY() const {
   return static_cast<int>(coordinates_.y);
+}
+
+double Tile::RandomX() const {
+  return coordinates_.x + dis(twister);
+}
+
+double Tile::RandomY() const {
+  return coordinates_.y + dis(twister);
 }
 
 Tile::Tile() : Tile(0, 0, 0) {}

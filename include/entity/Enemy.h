@@ -49,7 +49,7 @@ class Enemy : public Entity {
   int delay_for_sprite_change_;
   Tile current_tile_;
   Direction direction_of_move_;
-  Tile destination_tile_;
+  Point destination_point_;
   int max_health_;
   int health_;
   sf::RectangleShape health_bar_;
@@ -60,7 +60,7 @@ class Enemy : public Entity {
   bool is_alive_;
   void DoMove(const Direction& direction);
   void ChangeDirectionTile(const Tile& new_direction_tile);
-  std::vector<std::pair<Tile, Direction>> GetAvailableMoves(int x, int y) const;
+  std::vector<std::pair<Point, Direction>> GetAvailableMoves(int x, int y) const;
   void ChangeCurrentSpriteRect();
   void CheckAndChangeCoordinates();
 };
@@ -78,7 +78,7 @@ class EnemyCreator {
 
  private:
   State& state_;
-  std::vector<std::pair<Point, Direction>> spawn_points_;
+  std::vector<std::pair<std::pair<int, int>, Direction>> spawn_points_;
   std::vector<std::string> enemy_types_;
 
   int GetHealthFromType(const EnemyType& type);
