@@ -9,8 +9,11 @@
 class Entity : public Widget {
  public:
   Entity(State& state, const DrawPriority& priority);
+  Entity(State& state, const DrawPriority& priority, int health, int max_health);
 
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+  virtual void DecreaseHealth(int delta);
 
   void Click(int, int) override;
 
@@ -20,7 +23,7 @@ class Entity : public Widget {
 
   bool PointCheck(int, int) const override;
 
-  void LoadSprite(const std::string& file_name);
+  virtual void LoadSprite(const std::string& file_name);
   //Устанавливает флаг отображения информации
   virtual void SetInfo(bool value);
 
@@ -38,6 +41,10 @@ class Entity : public Widget {
   void SetSpriteCenter(double, double);
 
  protected:
+  int max_health_;
+  int health_;
+  sf::RectangleShape health_bar_;
+  sf::RectangleShape damage_bar_;
   sf::Sprite sprite_;
   sf::Sprite icon_sprite_;
   sf::Color default_sprite_color_;

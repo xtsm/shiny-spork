@@ -5,7 +5,7 @@
 #include <queue>
 
 std::mt19937 Tile::twister(std::chrono::steady_clock::now().time_since_epoch().count());
-std::uniform_int_distribution<int> Tile::dis(25, 59);
+std::uniform_int_distribution<int> Tile::dis(35, 45);
 
 Map::Map(std::vector<std::vector<Tile>> map) :
     map_(std::move(map)) {

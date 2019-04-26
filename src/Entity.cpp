@@ -4,12 +4,7 @@
 #include "GameState.h"
 
 Entity::Entity(State& state, const DrawPriority& priority)
-    : Widget(state, priority),
-      sprite_(),
-      icon_sprite_(),
-      default_sprite_color_(sf::Color(255, 255, 255)),
-      is_mouse_in_(false),
-      is_info_(false) {}
+    : Entity(state, priority, 0, 0) {}
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(sprite_, states);
@@ -84,3 +79,24 @@ double Entity::GetCenterY() const {
 void Entity::SetSpriteCenter(double x, double y) {
   sprite_.setPosition(x - sprite_.getGlobalBounds().width / 2, y - sprite_.getGlobalBounds().height / 2);
 }
+
+void Entity::DecreaseHealth(int delta) {
+  if (health_ > 0 && health_ - delta >= 0) {
+    health_ -= delta;
+  } else {
+    health_ = 0;
+  }
+  health_bar_.setSize(sf::Vector2f(static_cast<float>(health_) / max_health_ * 30, 3));
+}
+
+Entity::Entity(State& state, const DrawPriority& priority, int health, int max_health)
+    : Widget(state, priority),
+      max_health_(max_health),
+      health_(health),
+      health_bar_(),
+      damage_bar_(),
+      sprite_(),
+      icon_sprite_(),
+      default_sprite_color_(sf::Color(255, 255, 255)),
+      is_mouse_in_(false),
+      is_info_(false) {}

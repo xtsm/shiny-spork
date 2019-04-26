@@ -31,11 +31,11 @@ class Enemy : public Entity {
 
   void DoMove();
 
-  void DecreaseHealth(int delta);
-
   void Click(int, int) override;
 
-  void DoDamage(Enemy& other_entity);
+  void DecreaseHealth(int delta) override;
+
+  void DoDamage(const std::shared_ptr<Entity>& other_entity);
 
   std::vector<sf::Text> GetInfo() const override;
 

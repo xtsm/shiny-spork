@@ -16,29 +16,8 @@ void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   Entity::draw(target, states);
   target.draw(damage_bar_, states);
   target.draw(health_bar_, states);
-  if (clicked_) {
-    sf::Font font = State::GetFontResourceManager().GetOrLoadResource(
-        "assets/font/default.ttf");
-    sf::Text name_of_enemy(name_, font, 20);
-    const int text_position_x = 600;
-    name_of_enemy.setFillColor(sf::Color::Cyan);
-    name_of_enemy.setPosition(text_position_x, 150);
-    std::ostringstream converter;
-    converter << health_;
-    sf::Text health_level(sf::String(converter.str()), font, 20);
-    health_level.setFillColor(sf::Color::Blue);
-    health_level.setPosition(text_position_x, 200);
-    converter.clear();
-    converter << std::setprecision(2) << position_.x << " " << position_.y;
-    sf::Text position_of_enemy(sf::String(converter.str()), font, 20);
-    position_of_enemy.setFillColor(sf::Color::Black);
-    position_of_enemy.setPosition(text_position_x, 250);
-    target.draw(name_of_enemy, states);
-    target.draw(health_level, states);
-    target.draw(position_of_enemy, states);
-  }
   if (is_mouse_in_) {
-    sf::Font font = State::GetFontResourceManager().GetOrLoadResource(
+    const sf::Font& font = State::GetFontResourceManager().GetOrLoadResource(
         "assets/font/default.ttf");
     sf::Text name_of_enemy(name_, font, 10);
     name_of_enemy.setFillColor(sf::Color::Red);
@@ -51,21 +30,27 @@ void Enemy::DoMove() {
   std::vector<std::pair<Point, Direction>> possible_moves =
       GetAvailableMoves(static_cast<int>(position_.x), static_cast<int>(position_.y));
   if (position_ == destination_point_) {
-    if (possible_moves.empty()) return;
+    if (possible_moves.empty()) {
+      if (x_ >= 540 && y_ <= 180) {
+        std::shared_ptr<Base> base_ptr = state_.GetStateManager().game_ptr_->GetBase();
+        DoDamage(base_ptr);
+        return;
+      }
+    } else {
+      std::mt19937 generator(
+          static_cast<unsigned int>(std::chrono::steady_clock::now()
+              .time_since_epoch().count()));
 
-    std::mt19937 generator(
-        static_cast<unsigned int>(std::chrono::steady_clock::now()
-            .time_since_epoch().count()));
+      std::uniform_int_distribution<int> distribution_of_index(
+          0, static_cast<int>(possible_moves.size() - 1));
 
-    std::uniform_int_distribution<int> distribution_of_index(
-        0, static_cast<int>(possible_moves.size() - 1));
-
-    Point new_destination;
-    Direction direction;
-    std::tie(new_destination, direction) =
-        possible_moves[distribution_of_index(generator)];
-    destination_point_ = new_destination;
-    direction_of_move_ = direction;
+      Point new_destination;
+      Direction direction;
+      std::tie(new_destination, direction) =
+          possible_moves[distribution_of_index(generator)];
+      destination_point_ = new_destination;
+      direction_of_move_ = direction;
+    }
   }
   DoMove(direction_of_move_);
 //  if (state_.GetStateManager().game_ptr_->GetMap()->
@@ -81,16 +66,20 @@ void Enemy::DoMove() {
 
 void Enemy::DoMove(const Direction& direction) {
   switch (direction) {
-    case Direction::North:position_.y = std::max(destination_point_.y, position_.y - speed_);
+    case Direction::North:
+      position_.y = std::max(destination_point_.y, position_.y - speed_);
       y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
       break;
-    case Direction::East:position_.x = std::min(destination_point_.x, position_.x + speed_);
+    case Direction::East:
+      position_.x = std::min(destination_point_.x, position_.x + speed_);
       x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
       break;
-    case Direction::West:position_.x = std::max(destination_point_.x, position_.x - speed_);
+    case Direction::West:
+      position_.x = std::max(destination_point_.x, position_.x - speed_);
       x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
       break;
-    case Direction::South:position_.y = std::min(destination_point_.y, position_.y + speed_);
+    case Direction::South:
+      position_.y = std::min(destination_point_.y, position_.y + speed_);
       y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
       break;
     default:
@@ -228,39 +217,36 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
 
 int EnemyCreator::GetHealthFromType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:return 1000;
-    case EnemyType::High:return 500;
-    case EnemyType::Middle:return 250;
-    case EnemyType::Low:return 100;
-    default:return 0;
+    case EnemyType::VeryHigh:
+      return 1000;
+    case EnemyType::High:
+      return 500;
+    case EnemyType::Middle:
+      return 250;
+    case EnemyType::Low:
+      return 100;
+    default:
+      return 0;
   }
 }
 
 double EnemyCreator::GetSpeedByType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:return 0.2;
-    case EnemyType::High:return 0.4;
-    case EnemyType::Middle:return 0.8;
-    case EnemyType::Low:return 1;
-    default:return 0;
+    case EnemyType::VeryHigh:
+      return 0.2;
+    case EnemyType::High:
+      return 0.4;
+    case EnemyType::Middle:
+      return 0.8;
+    case EnemyType::Low:
+      return 1;
+    default:
+      return 0;
   }
 }
 
-void Enemy::DecreaseHealth(int delta) {
-  if (health_ > 0 && health_ - delta >= 0) {
-    health_ -= delta;
-  } else {
-    health_ = 0;
-  }
-  if (health_ == 0) {
-    is_alive_ = false;
-    state_.GetStateManager().game_ptr_->RemoveEnemyById(GetID());
-  }
-  health_bar_.setSize(sf::Vector2f(static_cast<float>(health_) / max_health_ * 30, 3));
-}
-
-void Enemy::DoDamage(Enemy& other_entity) {
-  other_entity.DecreaseHealth(power_);
+void Enemy::DoDamage(const std::shared_ptr<Entity>& other_entity) {
+  other_entity->DecreaseHealth(power_);
 }
 
 std::vector<std::pair<Point, Direction>> Enemy::GetAvailableMoves(int x, int y) const {
@@ -333,23 +319,21 @@ std::vector<sf::Text> Enemy::GetInfo() const {
   damage_text.setString("Damage: " + std::to_string(power_));
 
   return std::vector<sf::Text>{name_text, health_text, damage_text};
-//  std::ostringstream health_converter;
-//  health_converter << "Health: " << health_ << "/" << max_health_;
-//  sf::Text health_text(sf::String(health_converter.str()), font, 20);
-//  health_text.setFillColor(sf::Color::Red);
-//  health_text.setPosition(700, 100 + sprite_.getGlobalBounds().height);
-//
-//  std::ostringstream damage_converter;
-//  damage_converter << "Damage: " << power_;
-//  (sf::String(damage_converter.str()), font, 20);
-//  damage_text.setFillColor(sf::Color::Red);
-//  damage_text.setPosition(700, 150 + sprite_.getGlobalBounds().height);
-//
-//  (sf::String(name_), font, 20);
-//  name_text.setFillColor(sf::Color::Red);
-//  name_text.setPosition(700, 50 + sprite_.getGlobalBounds().height);
 }
 
 bool Enemy::IsAlive() const {
   return is_alive_;
+}
+
+void Enemy::DecreaseHealth(int delta) {
+  if (health_ > 0 && health_ - delta >= 0) {
+    health_ -= delta;
+  } else {
+    health_ = 0;
+  }
+  if (health_ == 0) {
+    is_alive_ = false;
+    state_.GetStateManager().game_ptr_->RemoveEnemyById(GetID());
+  }
+  health_bar_.setSize(sf::Vector2f(static_cast<float>(health_) / max_health_ * 30, 3));
 }

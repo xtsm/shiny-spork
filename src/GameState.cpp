@@ -29,11 +29,18 @@ GameState::GameState(StateManager& states) :
     towers_{},
     projectiles_{},
     enemies_{},
+    base_ptr_(new Base(*this, DrawPriority(500, this),
+                       1000, map_ptr_->GetTile(8, 8))),
     creator_of_enemies_(*this),
     is_enemies_produce_(false),
     current_delay_(1000),
     delay_(1000),
-    is_info_displayed_(false) {
+    is_info_displayed_(false),
+    level_number_(0),
+    amount_of_waves_for_level_(10),
+    amount_of_enemies_for_wave_(1),
+    is_level_end_(false),
+    is_game_end_(false) {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -42,6 +49,7 @@ void GameState::Load(const std::string& level_path) {
   draw_queue_.clear();
 
   background_ptr_->LoadFromFile(level_path + "/bg.png");
+  base_ptr_->LoadSprite("assets/base/1/base.png");
   draw_queue_.insert(background_ptr_);
   draw_queue_.insert(panel_side_ptr_);
   draw_queue_.insert(info_);
@@ -65,6 +73,7 @@ void GameState::Load(const std::string& level_path) {
 
   draw_queue_.insert(pause_button_ptr_);
   draw_queue_.insert(start_game_button_ptr_);
+  draw_queue_.insert(base_ptr_);
 }
 
 void GameState::Tick() {
@@ -80,9 +89,10 @@ void GameState::Tick() {
     current_delay_ = delay_;
   }
 
-  if (is_enemies_produce_) {
-    CreateSomeEnemies(1);
+  if (is_enemies_produce_ && amount_of_waves_for_level_ > 0) {
+    CreateSomeEnemies(amount_of_enemies_for_wave_);
     is_enemies_produce_ = false;
+    --amount_of_waves_for_level_;
   }
 
   for (const auto& tower : towers_) {
@@ -98,6 +108,18 @@ void GameState::Tick() {
 
   for (const auto& id : removed) {
     RemoveProjectile(id);
+  }
+
+  if (base_ptr_->IsAlive()) {
+    for (const auto& info_str : base_ptr_->GetInfo()) {
+      std::cerr << info_str.getString().toAnsiString() << std::endl;
+    }
+    states_.Close();
+    return;
+  }
+
+  if (amount_of_waves_for_level_ == 0) {
+    Pause();
   }
 }
 
@@ -229,4 +251,23 @@ void GameState::InfoMenuForEnemy(int64_t id) {
   if (enemy->IsAlive()) {
     info_->ChangeEntity(enemy);
   }
+}
+
+void GameState::InfoMenuForBase() {
+  RemoveInfoMenu();
+  info_->ChangeEntity(base_ptr_);
+}
+
+void GameState::IncrementLevelIfAvailable() {
+  if (level_number_ < max_level_number_) {
+    ++level_number_;
+    draw_queue_.clear();
+    Load("assets/levels/" + std::to_string(level_number_));
+  } else {
+    is_game_end_ = true;
+  }
+}
+
+void GameState::GameOver() {
+  states_.Close();
 }
