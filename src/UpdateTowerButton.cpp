@@ -26,6 +26,8 @@ void UpdateTowerButton::draw(sf::RenderTarget& target, sf::RenderStates states) 
 void UpdateTowerButton::Click(int, int) {
   if (!disable_) {
     tower_->Update();
+    state_.GetStateManager().game_ptr_->
+        ChangeBalance(-tower_->GetUpdateCost());
     if (!tower_->Updatable()) {
       SetDisable(true);
     }
