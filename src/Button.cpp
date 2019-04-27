@@ -2,7 +2,7 @@
 #include "Button.h"
 #include "State.h"
 
-Button::Button(State& state, int priority, int x, int y, const sf::String& caption) :
+Button::Button(State& state, int priority, int x, int y, const std::string& caption) :
     Widget(state, DrawPriority(priority, this)),
     bg_sprite_tex_(),
     bg_sprite_(),
@@ -10,6 +10,17 @@ Button::Button(State& state, int priority, int x, int y, const sf::String& capti
     text_(),
     disable_(false) {
   // TODO(tsmx): absolute crap, replace with proper resource manager ASAP
+  bg_sprite_.setPosition(x, y);
+  text_.setPosition(x, y);
+  ChangeText(caption);
+}
+
+void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  target.draw(bg_sprite_, states);
+  target.draw(text_, states);
+}
+
+void Button::ChangeText(const std::string& caption) {
   sf::Image& tex_l = State::GetImageResourceManager()
       .GetOrLoadResource("assets/ui/btn_l.png");
   sf::Image& tex_m = State::GetImageResourceManager()
@@ -29,6 +40,7 @@ Button::Button(State& state, int priority, int x, int y, const sf::String& capti
   int tile_count = static_cast<int>(text_bounds.width + btn_tile.x - 1);
   tile_count /= btn_tile.x;
 
+  bg_sprite_.setTextureRect(sf::IntRect(0, 0, tile_count * btn_tile.x, btn_tile.y));
   bg_sprite_tex_.create(tile_count * btn_tile.x, btn_tile.y);
   for (int i = 1; i < tile_count - 1; i++) {
     bg_sprite_tex_.update(tex_m, i * btn_tile.x, 0);
@@ -37,15 +49,8 @@ Button::Button(State& state, int priority, int x, int y, const sf::String& capti
   bg_sprite_tex_.update(tex_r, (tile_count - 1) * btn_tile.x, 0);
   bg_sprite_.setTexture(bg_sprite_tex_);
 
-  bg_sprite_.move(x, y);
-  text_.setOrigin((text_bounds.width-24 - tile_count * btn_tile.x) / 2,
+  text_.setOrigin((text_bounds.width - 24 - tile_count * btn_tile.x) / 2,
                   (text_bounds.height - btn_tile.y) / 2 + 5);
-  text_.move(x, y);
-}
-
-void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  target.draw(bg_sprite_, states);
-  target.draw(text_, states);
 }
 
 void Button::Click(int, int) {

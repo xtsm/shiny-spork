@@ -24,7 +24,8 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     range_circle_(0),
     cooldown_(0),
     damage_(0),
-    tower_cost_(0) {
+    tower_cost_(0),
+    update_cost_(0) {
   SetPosition(x, y);
 
   icon_sprite_.move(660, 200);
@@ -66,6 +67,9 @@ void Tower::Update() {
   LoadSprite(source_ + "/" + tower_image_ + ".png");
 
   fin_ >> range_ >> cooldown_ >> damage_;
+  if (Updatable()) {
+    fin_ >> update_cost_;
+  }
 
   range_circle_.setPosition(x_ - range_ + 30, y_ - range_ + 30);
   range_circle_.setRadius(range_);
@@ -122,4 +126,8 @@ std::vector<sf::Text> Tower::GetInfo() const {
 
 int Tower::GetCost() const {
   return tower_cost_;
+}
+
+int Tower::GetUpdateCost() const {
+  return update_cost_;
 }

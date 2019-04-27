@@ -56,6 +56,10 @@ void BuildButton::Click(int, int) {
 
 void BuildButton::CheckAvailability(int balance_) {
   SetDisable(cost_ > balance_);
+}
+
+void BuildButton::SetDisable(bool value) {
+  Button::SetDisable(value);
   if (disable_) {
     coins_sprite_.setColor(sf::Color(80, 80, 80));
     icon_tower_sprite_.setColor(sf::Color(80, 80, 80));

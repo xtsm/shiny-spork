@@ -14,7 +14,7 @@
     F 
     COST
     N
-    Sprite1 Projectile1 R1 С1 D1 
+    Sprite1 Projectile1 R1 С1 D1 UPDATE_COST
     ...
     SpriteN ProjectileN RN CN DN
 
@@ -22,4 +22,5 @@
 `COST` - стоимость постройки башни,
 `N` - количество уровней башни,
 `Сi`, `Ri`, `Di`, `Spritei`, `Projectilei` - кулдаун, радиус действия, урон, спрайт и описание снаряда башни на i-м уровне соответственно.
+`UPDATECOST` - стоимость обновления башни до следующего уровня.
 

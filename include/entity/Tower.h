@@ -22,6 +22,7 @@ class Tower : public Entity {
   bool InRange(std::shared_ptr<Enemy> enemy) const;
   std::vector<sf::Text> GetInfo() const override;
   int GetCost() const;
+  int GetUpdateCost() const;
 
  protected:
   std::string projectile_path_;
@@ -48,6 +49,7 @@ class Tower : public Entity {
   // Урон от снаряда
   int damage_;
   int tower_cost_;
+  int update_cost_;
 };
 
 #endif  // INCLUDE_TOWER_H_

@@ -20,8 +20,8 @@ GameState::GameState(StateManager& states) :
     panel_side_ptr_(new Background(*this, 1000)),
     build_button_ptrs_(),
     pause_button_ptr_(new PauseButton(*this, 690, 550)),
-    update_tower_button_ptr_(new UpdateTowerButton(*this, 650, 450, nullptr)),
-    remove_tower_button_ptr_(new RemoveTowerButton(*this, 650, 400, nullptr)),
+    update_tower_button_ptr_(new UpdateTowerButton(*this, 600, 360, nullptr)),
+    remove_tower_button_ptr_(new RemoveTowerButton(*this, 600, 410, nullptr)),
     start_game_button_ptr_(new StartGameButton(*this, 625, 500)),
     build_menu_grid_ptr_(new BuildMenuGrid(*this)),
     map_ptr_(new Map({})),
@@ -112,6 +112,8 @@ void GameState::Tick() {
   for (const auto& build_button_ptr : build_button_ptrs_) {
     build_button_ptr->CheckAvailability(balance);
   }
+
+  update_tower_button_ptr_->CheckAvailability(balance);
 }
 
 void GameState::Pause() {

@@ -14,6 +14,8 @@ class BuildButton : public Button {
 
   void CheckAvailability(int balance);
 
+  void SetDisable(bool value) override;
+
  private:
   std::string tower_name_;
   std::string source_;
