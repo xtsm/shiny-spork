@@ -38,6 +38,7 @@ GameState::GameState(StateManager& states) :
     delay_(1000),
     is_info_displayed_(false),
     level_number_(0),
+    max_level_number_(0),
     amount_of_waves_for_level_(10),
     amount_of_enemies_for_wave_(1),
     is_level_end_(false),
