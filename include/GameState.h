@@ -60,6 +60,10 @@ class GameState: public State {
                    const Direction& move_direction);
   // Удаляет врага с карты
   void RemoveEnemyById(int64_t id);
+  //Возвращает баланс
+  int GetBalance() const;
+  //Изменяет баланс на delta
+  void ChangeBalance(int delta);
 
  protected:
   int width_, height_;
@@ -81,6 +85,7 @@ class GameState: public State {
   int current_delay_;
   const int delay_;
   bool is_info_displayed_;
+  int balance_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_

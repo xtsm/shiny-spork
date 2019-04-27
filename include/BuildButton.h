@@ -12,6 +12,8 @@ class BuildButton : public Button {
 
   void Click(int, int) override;
 
+  void CheckAvailability(int);
+
  private:
   std::string tower_name_;
   std::string source_;
@@ -19,6 +21,7 @@ class BuildButton : public Button {
   sf::Sprite icon_tower_sprite_;
   sf::Sprite coins_sprite_;
   int range_;
+  int cost_;
 };
 
 #endif  // INCLUDE_BUILDBUTTON_H_

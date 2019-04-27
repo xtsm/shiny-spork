@@ -10,11 +10,13 @@ BuildButton::BuildButton(State& state, int x, int y, std::string source) :
     tower_sprite_(),
     icon_tower_sprite_(),
     coins_sprite_(),
-    range_(0) {
+    range_(0),
+    cost_(0) {
   std::ifstream fin(source_ + "/config.txt");
   int tmp = 0;
   std::string sprite_name, projectile_sprite_name;
   getline(fin, tower_name_);
+  fin >> cost_;
   fin >> tmp;
   fin >> sprite_name;
   fin >> projectile_sprite_name;
@@ -33,16 +35,24 @@ BuildButton::BuildButton(State& state, int x, int y, std::string source) :
       tower_sprite_.getGlobalBounds().height, tower_sprite_.getGlobalBounds().width);
   icon_tower_sprite_.setScale(48 / max_side, 48 / max_side);
   icon_tower_sprite_.setPosition(x + 24 - icon_tower_sprite_.getGlobalBounds().width / 2, y);
+  text_.setCharacterSize(12);
+  text_.setPosition(x, y + 28);
+  text_.setString(std::to_string(cost_));
 }
 
 void BuildButton::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(bg_sprite_, states);
-  target.draw(coins_sprite_);
   target.draw(icon_tower_sprite_);
+  target.draw(coins_sprite_);
+  target.draw(text_);
 }
 
 void BuildButton::Click(int, int) {
   StateManager& states = state_.GetStateManager();
   states.game_ptr_->LoadBuildMenu(source_, tower_sprite_, range_);
+}
+
+void BuildButton::CheckAvailability(int balance_) {
+  SetDisable(cost_ > balance_);
 }
 

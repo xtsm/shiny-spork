@@ -50,6 +50,7 @@ void GameState::Load(const std::string& level_path) {
   int towers_number = 0;
   std::string tower_path;
   int x = 600, y = 0;
+  fin >> balance_;
   fin >> towers_number;
   build_button_ptrs_.resize(static_cast<unsigned long long int>(towers_number));
   for (auto& build_button_ptr : build_button_ptrs_) {
@@ -103,6 +104,10 @@ void GameState::Tick() {
   for (const auto& id : removed) {
     RemoveProjectile(id);
   }
+
+  for (const auto& build_button_ptr : build_button_ptrs_) {
+    build_button_ptr->CheckAvailability(balance_);
+  }
 }
 
 void GameState::Pause() {
@@ -131,6 +136,7 @@ void GameState::ProcessEvent(sf::Event& event) {
 void GameState::BuildTower(const std::string& tower_path, int x, int y) {
   map_ptr_->SetIsFree(x / 60, y / 60, false);
   std::shared_ptr<Tower> tower(new Tower(*this, tower_path, x, y));
+  ChangeBalance(-tower->GetCost());
   towers_[tower->GetID()] = tower;
   draw_queue_.insert(tower);
 }
@@ -234,4 +240,13 @@ void GameState::InfoMenuForEnemy(int64_t id) {
   if (enemy->IsAlive()) {
     info_->ChangeEntity(enemy);
   }
+}
+
+int GameState::GetBalance() const {
+  return balance_;
+}
+
+void GameState::ChangeBalance(int delta) {
+  balance_ += delta;
+
 }

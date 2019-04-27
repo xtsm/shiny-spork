@@ -23,7 +23,8 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     range_(0),
     range_circle_(0),
     cooldown_(0),
-    damage_(0) {
+    damage_(0),
+    tower_cost_(0) {
   SetPosition(x, y);
 
   icon_sprite_.move(660, 200);
@@ -35,6 +36,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
   InitText(text_, x_ + 10, y_ - 40);
 
   getline(fin_, tower_name_);
+  fin_ >> tower_cost_;
   fin_ >> max_level_;
   Update();
 }
@@ -116,4 +118,8 @@ std::vector<sf::Text> Tower::GetInfo() const {
   cooldown_text.setString("Cooldown: " + std::to_string(cooldown_));
   damage_text.setString("Damage: " + std::to_string(damage_));
   return std::vector<sf::Text>{tower_name, level_text, range_text, cooldown_text, damage_text};
+}
+
+int Tower::GetCost() const {
+  return tower_cost_;
 }
