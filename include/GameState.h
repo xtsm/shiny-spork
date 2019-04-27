@@ -9,6 +9,7 @@
 #include "entity/Enemy.h"
 #include "Background.h"
 #include "entity/Tower.h"
+#include "entity/Base.h"
 #include "StartGameButton.h"
 #include "BuildButton.h"
 #include "PauseButton.h"
@@ -28,6 +29,7 @@ class GameState: public State {
   void Tick() override;
   void ProcessEvent(sf::Event&) override;
   std::shared_ptr<Map> GetMap() const { return map_ptr_; }
+  std::shared_ptr<Base> GetBase() const { return base_ptr_; }
   // Строит башню с характеристиками из файла
   void BuildTower(const std::string&, int, int);
   // Вызывает меню постройки башни
@@ -36,6 +38,8 @@ class GameState: public State {
   void InfoMenuForTower(int64_t id);
   // Отображает информацию о враге
   void InfoMenuForEnemy(int64_t id);
+  // Отображает информацию о базе
+  void InfoMenuForBase();
   //Удаляет башню
   void RemoveTower(const std::shared_ptr<Tower>&);
   //Удаляет меню постройки
@@ -65,6 +69,10 @@ class GameState: public State {
   int GetBalance() const;
   //Изменяет баланс на delta
   void ChangeBalance(int delta);
+  // Переходит на следующий уровень, если level_number + 1 <= max_level_number_
+  void IncrementLevelIfAvailable();
+
+  void GameOver();
 
  protected:
   int width_, height_;
@@ -81,12 +89,19 @@ class GameState: public State {
   std::map<int64_t, std::shared_ptr<Tower>> towers_;
   std::map<int64_t, std::shared_ptr<Projectile>> projectiles_;
   std::map<int64_t, std::shared_ptr<Enemy>> enemies_;
+  std::shared_ptr<Base> base_ptr_;
   EnemyCreator creator_of_enemies_;
   bool is_enemies_produce_;
   // Задержка между спавном врагов
   int current_delay_;
   const int delay_;
   bool is_info_displayed_;
+  int level_number_;
+  int max_level_number_;
+  int amount_of_waves_for_level_;
+  int amount_of_enemies_for_wave_;
+  bool is_level_end_;
+  bool is_game_end_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_
