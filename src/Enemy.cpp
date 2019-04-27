@@ -125,12 +125,14 @@ Enemy::Enemy(const std::string& path, double x, double y,
       damage_bar_(),
       speed_(0),
       power_(0),
+      drop_(0),
       position_(),
       is_alive_(true) {
   LoadSprite(path + "/sprite.png");
   std::ifstream reader(path + "/config.txt");
   getline(reader, name_);
   reader >> frames_;
+  reader >> drop_;
   reader >> health_ >> speed_ >> power_;
   icon_sprite_.setPosition(650, 230);
   sprite_.setTextureRect(sf::IntRect(0, 0, sprite_.getTexture()->getSize().x,
@@ -254,6 +256,7 @@ void Enemy::DecreaseHealth(int delta) {
   }
   if (health_ == 0) {
     is_alive_ = false;
+    state_.GetStateManager().game_ptr_->ChangeBalance(drop_);
     state_.GetStateManager().game_ptr_->RemoveEnemyById(GetID());
   }
   health_bar_.setSize(sf::Vector2f(static_cast<float>(health_) / max_health_ * 30, 3));

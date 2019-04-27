@@ -1,4 +1,11 @@
 100
-2
+9
+assets/tower/1
+assets/tower/1
+assets/tower/1
+assets/tower/1
+assets/tower/1
+assets/tower/1
+assets/tower/1
 assets/tower/1
 assets/tower/1

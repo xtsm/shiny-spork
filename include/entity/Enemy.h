@@ -58,6 +58,7 @@ class Enemy : public Entity {
   sf::RectangleShape damage_bar_;
   double speed_;
   int power_;
+  int drop_;
   Point position_;
   bool is_alive_;
   void DoMove(const Direction& direction);

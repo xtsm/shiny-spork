@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 #include <memory>
-#include <GameState.h>
 #include <sstream>
 
 #include "UpdateTowerButton.h"
