@@ -11,6 +11,7 @@
 #include "StateManager.h"
 #include "GameState.h"
 #include "utility/Point.h"
+#include "BalanceLabel.h"
 
 GameState::GameState(StateManager& states) :
     State(states),
@@ -26,6 +27,7 @@ GameState::GameState(StateManager& states) :
     build_menu_grid_ptr_(new BuildMenuGrid(*this)),
     map_ptr_(new Map({})),
     info_(new EntityInfo(*this)),
+    balance_ptr_(new BalanceLabel(*this, 0, 0, 0)),
     towers_{},
     projectiles_{},
     enemies_{},
@@ -49,8 +51,11 @@ void GameState::Load(const std::string& level_path) {
   std::ifstream fin(level_path + "/towers.txt");
   int towers_number = 0;
   std::string tower_path;
-  int x = 600, y = 0;
-  fin >> balance_;
+  int x = 600, y = 20;
+  int balance;
+  fin >> balance;
+  balance_ptr_ = std::make_shared<BalanceLabel>(*this, 600, 0, balance);
+  draw_queue_.insert(balance_ptr_);
   fin >> towers_number;
   build_button_ptrs_.resize(static_cast<unsigned long long int>(towers_number));
   for (auto& build_button_ptr : build_button_ptrs_) {
@@ -60,7 +65,7 @@ void GameState::Load(const std::string& level_path) {
     x += 50;
     if (x == 800) {
       x = 600;
-      y += 50;
+      y += 60;
     }
   }
 
@@ -104,9 +109,9 @@ void GameState::Tick() {
   for (const auto& id : removed) {
     RemoveProjectile(id);
   }
-
+  int balance = balance_ptr_->GetBalance();
   for (const auto& build_button_ptr : build_button_ptrs_) {
-    build_button_ptr->CheckAvailability(balance_);
+    build_button_ptr->CheckAvailability(balance);
   }
 }
 
@@ -243,10 +248,9 @@ void GameState::InfoMenuForEnemy(int64_t id) {
 }
 
 int GameState::GetBalance() const {
-  return balance_;
+  return balance_ptr_->GetBalance();
 }
 
 void GameState::ChangeBalance(int delta) {
-  balance_ += delta;
-
+  balance_ptr_->ChangeBalance(delta);
 }

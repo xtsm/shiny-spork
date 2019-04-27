@@ -18,6 +18,7 @@
 #include "UpdateTowerButton.h"
 #include "RemoveTowerButton.h"
 #include "EntityInfo.h"
+#include "BalanceLabel.h"
 
 class GameState: public State {
  public:
@@ -76,6 +77,7 @@ class GameState: public State {
   std::shared_ptr<BuildMenuGrid> build_menu_grid_ptr_;
   std::shared_ptr<Map> map_ptr_;
   std::shared_ptr<EntityInfo> info_;
+  std::shared_ptr<BalanceLabel> balance_ptr_;
   std::map<int64_t, std::shared_ptr<Tower>> towers_;
   std::map<int64_t, std::shared_ptr<Projectile>> projectiles_;
   std::map<int64_t, std::shared_ptr<Enemy>> enemies_;
@@ -85,7 +87,6 @@ class GameState: public State {
   int current_delay_;
   const int delay_;
   bool is_info_displayed_;
-  int balance_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_

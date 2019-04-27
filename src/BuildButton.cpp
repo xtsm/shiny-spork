@@ -48,11 +48,22 @@ void BuildButton::draw(sf::RenderTarget& target, sf::RenderStates states) const 
 }
 
 void BuildButton::Click(int, int) {
-  StateManager& states = state_.GetStateManager();
-  states.game_ptr_->LoadBuildMenu(source_, tower_sprite_, range_);
+  if (!disable_) {
+    StateManager& states = state_.GetStateManager();
+    states.game_ptr_->LoadBuildMenu(source_, tower_sprite_, range_);
+  }
 }
 
 void BuildButton::CheckAvailability(int balance_) {
   SetDisable(cost_ > balance_);
+  if (disable_) {
+    coins_sprite_.setColor(sf::Color(80, 80, 80));
+    icon_tower_sprite_.setColor(sf::Color(80, 80, 80));
+    text_.setFillColor(sf::Color(80, 80, 80));
+  } else {
+    coins_sprite_.setColor(sf::Color::White);
+    icon_tower_sprite_.setColor(sf::Color::White);
+    text_.setFillColor(sf::Color::White);
+  }
 }
 

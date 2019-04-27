@@ -12,7 +12,7 @@ class BuildButton : public Button {
 
   void Click(int, int) override;
 
-  void CheckAvailability(int);
+  void CheckAvailability(int balance);
 
  private:
   std::string tower_name_;
