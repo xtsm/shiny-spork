@@ -8,6 +8,8 @@ BuildButton::BuildButton(State& state, int x, int y, std::string source) :
     tower_name_(),
     source_(std::move(source)),
     tower_sprite_(),
+    icon_tower_sprite_(),
+    coins_sprite_(),
     range_(0) {
   std::ifstream fin(source_ + "/config.txt");
   int tmp = 0;
@@ -19,9 +21,15 @@ BuildButton::BuildButton(State& state, int x, int y, std::string source) :
   fin >> range_;
   sf::Texture& tower_sprite_tex_ = State::GetTextureResourceManager().
       GetOrLoadResource(source_ + "/" + sprite_name + ".png");
+  coins_sprite_.setTexture(State::GetTextureResourceManager().
+      GetOrLoadResource("assets/ui/coins.png"));
+  double max_side = std::max(
+      coins_sprite_.getGlobalBounds().height, coins_sprite_.getGlobalBounds().width);
+  coins_sprite_.setScale(12 / max_side, 12 / max_side);
+  coins_sprite_.setPosition(x, y + 48);
   tower_sprite_.setTexture(tower_sprite_tex_);
   icon_tower_sprite_ = tower_sprite_;
-  double max_side = std::max(
+  max_side = std::max(
       tower_sprite_.getGlobalBounds().height, tower_sprite_.getGlobalBounds().width);
   icon_tower_sprite_.setScale(48 / max_side, 48 / max_side);
   icon_tower_sprite_.setPosition(x + 24 - icon_tower_sprite_.getGlobalBounds().width / 2, y);
@@ -29,6 +37,7 @@ BuildButton::BuildButton(State& state, int x, int y, std::string source) :
 
 void BuildButton::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(bg_sprite_, states);
+  target.draw(coins_sprite_);
   target.draw(icon_tower_sprite_);
 }
 

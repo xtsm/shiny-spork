@@ -17,6 +17,7 @@ class BuildButton : public Button {
   std::string source_;
   sf::Sprite tower_sprite_;
   sf::Sprite icon_tower_sprite_;
+  sf::Sprite coins_sprite_;
   int range_;
 };
 
