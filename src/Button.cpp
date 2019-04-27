@@ -12,6 +12,11 @@ Button::Button(State& state, int priority, int x, int y, const std::string& capt
   // TODO(tsmx): absolute crap, replace with proper resource manager ASAP
   bg_sprite_.setPosition(x, y);
   text_.setPosition(x, y);
+  font_ = State::GetFontResourceManager()
+      .GetOrLoadResource("assets/font/default.ttf");
+  text_.setFont(font_);
+  text_.setOutlineColor(sf::Color::White);
+  text_.setCharacterSize(22);
   ChangeText(caption);
 }
 
@@ -27,13 +32,8 @@ void Button::ChangeText(const std::string& caption) {
       .GetOrLoadResource("assets/ui/btn_m.png");
   sf::Image& tex_r = State::GetImageResourceManager()
       .GetOrLoadResource("assets/ui/btn_r.png");
-  font_ = State::GetFontResourceManager()
-      .GetOrLoadResource("assets/font/default.ttf");
 
-  text_.setFont(font_);
   text_.setString(caption);
-  text_.setOutlineColor(sf::Color::White);
-  text_.setCharacterSize(22);
   sf::FloatRect text_bounds = text_.getLocalBounds();
   text_bounds.width += 24;
   sf::Vector2u btn_tile = tex_m.getSize();
