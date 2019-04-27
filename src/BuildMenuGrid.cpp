@@ -25,7 +25,6 @@ void BuildMenuGrid::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 }
 
 void BuildMenuGrid::Load(const std::string& source, const sf::Sprite& tower_sprite, int range) {
-  loaded_ = true;
   source_ = source;
   range_ = range;
   range_circle_.setRadius(range);
@@ -34,15 +33,14 @@ void BuildMenuGrid::Load(const std::string& source, const sf::Sprite& tower_spri
 }
 
 void BuildMenuGrid::Click(int x, int y) {
+  StateManager& states = state_.GetStateManager();
   int tower_x = x - x % 60;
   int tower_y = y - y % 60;
-  StateManager& states = state_.GetStateManager();
   if (!states.game_ptr_->IsFree(x / 60, y / 60)) {
     return;
   }
   states.game_ptr_->BuildTower(source_, tower_x, tower_y);
   states.game_ptr_->RemoveBuildMenu();
-  loaded_ = false;
 }
 
 void BuildMenuGrid::MouseMove(int x, int y) {
@@ -61,4 +59,8 @@ void BuildMenuGrid::MouseMove(int x, int y) {
 
 bool BuildMenuGrid::PointCheck(int x, int y) const {
   return loaded_ && x < 600 && y < 600;
+}
+
+void BuildMenuGrid::SetLoaded(bool value) {
+  loaded_ = value;
 }

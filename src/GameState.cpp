@@ -171,6 +171,7 @@ void GameState::BuildTower(const std::string& tower_path, int x, int y) {
 }
 
 void GameState::LoadBuildMenu(const std::string& source, const sf::Sprite& tower, int range) {
+  build_menu_grid_ptr_->SetLoaded(true);
   build_menu_grid_ptr_->Load(source, tower, range);
   draw_queue_.insert(build_menu_grid_ptr_);
 }
@@ -192,6 +193,7 @@ void GameState::RemoveTower(const std::shared_ptr<Tower>& tower_ptr) {
 }
 
 void GameState::RemoveBuildMenu() {
+  build_menu_grid_ptr_->SetLoaded(false);
   draw_queue_.erase(build_menu_grid_ptr_);
 }
 

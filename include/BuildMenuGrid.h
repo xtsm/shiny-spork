@@ -17,6 +17,8 @@ class BuildMenuGrid : public Widget {
 
   bool PointCheck(int x, int y) const override;
 
+  void SetLoaded(bool value);
+
  private:
   bool loaded_;
   std::string source_;

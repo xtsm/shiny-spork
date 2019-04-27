@@ -12,7 +12,9 @@ void Background::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 void Background::Click(int, int) {
-  state_.GetStateManager().game_ptr_->RemoveInfoMenu();
+  std::shared_ptr<GameState> game_ptr = state_.GetStateManager().game_ptr_;
+  game_ptr->RemoveInfoMenu();
+  game_ptr->RemoveBuildMenu();
 }
 
 bool Background::PointCheck(int x, int y) const {
