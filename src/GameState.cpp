@@ -27,6 +27,7 @@ GameState::GameState(StateManager& states) :
     map_ptr_(new Map({})),
     info_(new EntityInfo(*this)),
     balance_ptr_(new BalanceLabel(*this, 0, 0, 0)),
+    image_tower_ptr_(),
     towers_{},
     projectiles_{},
     enemies_{},
@@ -168,11 +169,14 @@ void GameState::BuildTower(const std::string& tower_path, int x, int y) {
   ChangeBalance(-tower->GetCost());
   towers_[tower->GetID()] = tower;
   draw_queue_.insert(tower);
+  RemoveInfoMenu();
 }
 
 void GameState::LoadBuildMenu(const std::string& source, const sf::Sprite& tower, int range) {
   build_menu_grid_ptr_->SetLoaded(true);
   build_menu_grid_ptr_->Load(source, tower, range);
+  image_tower_ptr_ = std::make_shared<Tower>(*this, source, 0, 0);
+  info_->ChangeEntity(image_tower_ptr_);
   draw_queue_.insert(build_menu_grid_ptr_);
 }
 

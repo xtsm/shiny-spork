@@ -86,6 +86,7 @@ class GameState: public State {
   std::shared_ptr<Map> map_ptr_;
   std::shared_ptr<EntityInfo> info_;
   std::shared_ptr<BalanceLabel> balance_ptr_;
+  std::shared_ptr<Tower> image_tower_ptr_;
   std::map<int64_t, std::shared_ptr<Tower>> towers_;
   std::map<int64_t, std::shared_ptr<Projectile>> projectiles_;
   std::map<int64_t, std::shared_ptr<Enemy>> enemies_;
