@@ -1,0 +1,5 @@
+Longshot Tower
+75
+2
+standard standard 200 16 1 80
+standard standard 200 14 1
