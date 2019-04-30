@@ -54,6 +54,7 @@ class GameState: public State {
   void RemoveProjectile(int64_t id);
   //Находит цель для башни
   std::shared_ptr<Enemy> FindAim(int, int, int);
+  void DamageSplash(int, int, int, int);
   // Устанавливает флаг начала волн врагов
   void SetProducing(bool produce);
   // Возвращает количество врагов

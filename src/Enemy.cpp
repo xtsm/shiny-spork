@@ -341,6 +341,7 @@ void Enemy::DecreaseHealth(int delta) {
     is_alive_ = false;
     state_.GetStateManager().game_ptr_->ChangeBalance(drop_);
     state_.GetStateManager().game_ptr_->RemoveEnemyById(GetID());
+    return;
   }
   health_bar_.setSize(sf::Vector2f(static_cast<float>(health_) / max_health_ * 30, 3));
 }

@@ -31,8 +31,8 @@ GameState::GameState(StateManager& states) :
     towers_{},
     projectiles_{},
     enemies_{},
-    base_ptr_(new Base(*this, DrawPriority(500, this),
-                       1000, map_ptr_->GetTile(8, 8))),
+    base_ptr_(new Base(*this, DrawPriority(100, this),
+                       100'000'000, map_ptr_->GetTile(8, 8))),
     creator_of_enemies_(*this),
     is_enemies_produce_(false),
     current_delay_(1000),
@@ -234,6 +234,15 @@ std::shared_ptr<Enemy> GameState::FindAim(int x, int y, int range) {
     }
   }
   return aim;
+}
+
+void GameState::DamageSplash(int x, int y, int damage, int range) {
+  for (const auto& enemy : enemies_) {
+    Point d(enemy.second->GetCenterX() - x, enemy.second->GetCenterY() - y);
+    if (d.Length() <= range * range) {
+      enemy.second->DecreaseHealth(damage);
+    }
+  }
 }
 
 int64_t GameState::GetAmountOfEnemies() const {

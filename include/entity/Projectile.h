@@ -22,6 +22,8 @@ class Projectile : public Entity {
   int damage_;
   //Скорость полёта
   int speed_;
+  int splash_;
+  int range_;
 };
 
 #endif  // INCLUDE_PROJECTILE_H_
