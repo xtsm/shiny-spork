@@ -240,13 +240,15 @@ std::shared_ptr<Enemy> GameState::FindAim(int x, int y, int range) {
   return aim;
 }
 
-void GameState::DamageSplash(int x, int y, int damage, int range) {
+std::vector<std::shared_ptr<Enemy>> GameState::GetEnemiesInRange(int x, int y, int range) {
+  std::vector<std::shared_ptr<Enemy>> enemies;
   for (const auto& enemy : enemies_) {
     Point d(enemy.second->GetCenterX() - x, enemy.second->GetCenterY() - y);
     if (d.Length() <= range * range) {
-      enemy.second->DecreaseHealth(damage);
+      enemies.push_back(enemy.second);
     }
   }
+  return enemies;
 }
 
 int64_t GameState::GetAmountOfEnemies() const {

@@ -13,15 +13,27 @@ Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim, int x, int y,
     splash_(0),
     range_(0),
     poison_(0),
-    poison_cnt(0) {
+    poison_cnt_(0) {
   SetPosition(x, y);
 
   std::ifstream fin(source_ + "/description.txt");
+  int cnt;
   fin >> speed_;
-  fin >> splash_;
-  fin >> range_;
-  fin >> poison_;
-  fin >> poison_cnt;
+  fin >> cnt;
+
+  for (int i = 0; i < cnt; i++) {
+    std::string booster;
+    fin >> booster;
+    if (booster == "splash") {
+      fin >> splash_;
+    } else if (booster == "range") {
+      fin >> range_;
+    } else if (booster == "poison") {
+      fin >> poison_ >> poison_cnt_;
+    } else {
+      std::cerr << "Unknown Booster" << std::endl;
+    }
+  }
 
   LoadSprite(source_ + "/sprite.png");
 }
@@ -30,13 +42,21 @@ bool Projectile::Pointing() {
   assert(aim_ptr_ != nullptr);
   Point d = Point(aim_ptr_->GetCenterX(), aim_ptr_->GetCenterY()) - position_;
   if (d.Length() < speed_ * speed_) {
-    if (range_ != 0 && splash_ != 0) {
-      state_.GetStateManager().game_ptr_->
-          DamageSplash(static_cast<int>(aim_ptr_->GetCenterX()),
-                       static_cast<int>(aim_ptr_->GetCenterY()), splash_, range_);
+    std::vector<std::shared_ptr<Enemy>> enemies;
+    if (range_ != 0) {
+      enemies = state_.GetStateManager().game_ptr_->GetEnemiesInRange(
+          static_cast<int>(aim_ptr_->GetCenterX()),
+          static_cast<int>(aim_ptr_->GetCenterY()),
+          range_);
     }
-    if (poison_ != 0 && poison_cnt != 0) {
-      aim_ptr_->AddPoison(poison_, poison_cnt);
+    if (splash_ != 0) {
+      for (auto& enemy : enemies)
+        if (enemy != aim_ptr_) {
+          enemy->DecreaseHealth(splash_);
+        }
+    }
+    if (poison_ != 0) {
+      aim_ptr_->AddPoison(poison_, poison_cnt_);
     }
     aim_ptr_->DecreaseHealth(damage_);
     return true;
