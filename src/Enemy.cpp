@@ -107,19 +107,21 @@ Enemy::Enemy(const std::string& path, double x, double y,
       health_(0),
       health_bar_(),
       damage_bar_(),
+      default_speed_(0),
       speed_(0),
       power_(0),
       drop_(0),
       position_(),
       is_alive_(true),
-      poisons_timer_(50),
-      poisons_() {
+      poison_booster_(state, 50),
+      freeze_booster_(state, 0) {
   LoadSprite(path + "/sprite.png");
   std::ifstream reader(path + "/config.txt");
   getline(reader, name_);
   reader >> frames_;
   reader >> drop_;
   reader >> health_ >> speed_ >> power_;
+  default_speed_ = speed_;
   icon_sprite_.setPosition(650, 230);
   sprite_.setTextureRect(sf::IntRect(0, 0, sprite_.getTexture()->getSize().x,
                                      sprite_.getTexture()->getSize().y / frames_));
@@ -336,25 +338,23 @@ void Enemy::DecreaseHealth(int delta) {
 }
 
 void Enemy::AddPoison(int poison, int poison_cnt) {
-  if (poisons_.empty()) {
-    poisons_timer_ = 50;
-  }
-  poisons_[poison] = std::max(
-      poisons_[poison], poison_cnt * 50 + state_.GetStateManager().game_ptr_->GetTime());
+  poison_booster_.AddBooster(poison, poison_cnt * poison_booster_.GetCooldown());
+}
+
+void Enemy::AddFreeze(int freeze, int freeze_time) {
+  freeze_booster_.AddBooster(freeze, freeze_time);
 }
 
 void Enemy::Tick() {
-  poisons_timer_--;
-  if (poisons_timer_ == 0) {
-    while (!poisons_.empty() &&
-        poisons_.rbegin()->second < state_.GetStateManager().game_ptr_->GetTime()) {
-      poisons_.erase(poisons_.rbegin()->first);
-    }
-    if (!poisons_.empty()) {
-      DecreaseHealth(poisons_.rbegin()->first);
-    }
-    poisons_timer_ = 50;
+  if (poison_booster_.Boost()) {
+    DecreaseHealth(poison_booster_.GetMax());
   }
+  if (freeze_booster_.Boost()) {
+    speed_ = default_speed_ / freeze_booster_.GetMax();
+  } else {
+    speed_ = default_speed_;
+  }
+
 }
 
 

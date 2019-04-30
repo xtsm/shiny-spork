@@ -13,7 +13,9 @@ Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim, int x, int y,
     splash_(0),
     range_(0),
     poison_(0),
-    poison_cnt_(0) {
+    poison_cnt_(0),
+    freeze_(0),
+    freeze_time_(0) {
   SetPosition(x, y);
 
   std::ifstream fin(source_ + "/description.txt");
@@ -30,11 +32,12 @@ Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim, int x, int y,
       fin >> range_;
     } else if (booster == "poison") {
       fin >> poison_ >> poison_cnt_;
+    } else if (booster == "freeze") {
+      fin >> freeze_ >> freeze_time_;
     } else {
       std::cerr << "Unknown Booster" << std::endl;
     }
   }
-
   LoadSprite(source_ + "/sprite.png");
 }
 
@@ -48,12 +51,20 @@ bool Projectile::Pointing() {
           static_cast<int>(aim_ptr_->GetCenterX()),
           static_cast<int>(aim_ptr_->GetCenterY()),
           range_);
-    }
-    if (splash_ != 0) {
-      for (auto& enemy : enemies)
-        if (enemy != aim_ptr_) {
-          enemy->DecreaseHealth(splash_);
+
+      if (splash_ != 0) {
+        for (auto& enemy : enemies) {
+          if (enemy != aim_ptr_) {
+            enemy->DecreaseHealth(splash_);
+          }
         }
+      }
+
+      if (freeze_ != 0) {
+        for (auto& enemy : enemies) {
+          enemy->AddFreeze(freeze_, freeze_time_);
+        }
+      }
     }
     if (poison_ != 0) {
       aim_ptr_->AddPoison(poison_, poison_cnt_);

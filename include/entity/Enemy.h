@@ -8,6 +8,7 @@
 #include "State.h"
 #include "utility/Point.h"
 #include "utility/Map.h"
+#include "Booster.h"
 #include <memory>
 #include <utility>
 #include <string>
@@ -45,6 +46,8 @@ class Enemy : public Entity {
 
   void AddPoison(int poison, int poison_cnt);
 
+  void AddFreeze(int freeze, int freeze_time);
+
   void Tick() override;
 
  private:
@@ -60,13 +63,14 @@ class Enemy : public Entity {
   int health_;
   sf::RectangleShape health_bar_;
   sf::RectangleShape damage_bar_;
+  double default_speed_;
   double speed_;
   int power_;
   int drop_;
   Point position_;
   bool is_alive_;
-  int poisons_timer_;
-  std::map<int, int64_t> poisons_;
+  Booster poison_booster_;
+  Booster freeze_booster_;
   void DoMove(const Direction& direction);
   void ChangeDirectionTile(const Tile& new_direction_tile);
   std::vector<std::pair<Point, Direction>> GetAvailableMoves(int x, int y) const;
