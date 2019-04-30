@@ -14,6 +14,7 @@ class Widget : public sf::Drawable {
   //  Проверяет приналдежность точки виджету
   virtual bool PointCheck(int, int) const { return false; }
 
+  virtual void Tick() {}
   virtual void Click(int, int) {}
   virtual void MouseIn(int, int) {}
   virtual void MouseOut(int, int) {}

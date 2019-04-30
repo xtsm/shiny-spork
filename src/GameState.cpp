@@ -42,6 +42,7 @@ GameState::GameState(StateManager& states) :
     max_level_number_(0),
     amount_of_waves_for_level_(100000),
     amount_of_enemies_for_wave_(1),
+    timer_(0),
     is_level_end_(false),
     is_game_end_(false) {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
@@ -88,9 +89,12 @@ void GameState::Load(const std::string& level_path) {
 }
 
 void GameState::Tick() {
-  for (const auto& enemy : enemies_) {
+  timer_++;
+  auto current_enemies = enemies_;
+  for (const auto& enemy : current_enemies) {
     enemy.second->DoMove();
     draw_queue_.insert(enemy.second);
+    enemy.second->Tick();
 //    draw_queue_.erase(enemy.second);
   }
 
@@ -310,4 +314,8 @@ void GameState::IncrementLevelIfAvailable() {
 
 void GameState::GameOver() {
   states_.Close();
+}
+
+int64_t GameState::GetTime() const {
+  return timer_;
 }

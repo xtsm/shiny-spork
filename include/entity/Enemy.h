@@ -43,6 +43,10 @@ class Enemy : public Entity {
 
   Tile GetTile() const;
 
+  void AddPoison(int poison, int poison_cnt);
+
+  void Tick() override;
+
  private:
   std::string name_;
   int frames_;
@@ -61,6 +65,8 @@ class Enemy : public Entity {
   int drop_;
   Point position_;
   bool is_alive_;
+  int poisons_timer_;
+  std::map<int, int64_t> poisons_;
   void DoMove(const Direction& direction);
   void ChangeDirectionTile(const Tile& new_direction_tile);
   std::vector<std::pair<Point, Direction>> GetAvailableMoves(int x, int y) const;

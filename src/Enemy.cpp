@@ -66,24 +66,19 @@ void Enemy::DoMove() {
 
 void Enemy::DoMove(const Direction& direction) {
   switch (direction) {
-    case Direction::North:
-      position_.y = std::max(destination_point_.y, position_.y - speed_);
+    case Direction::North:position_.y = std::max(destination_point_.y, position_.y - speed_);
       y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
       break;
-    case Direction::East:
-      position_.x = std::min(destination_point_.x, position_.x + speed_);
+    case Direction::East:position_.x = std::min(destination_point_.x, position_.x + speed_);
       x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
       break;
-    case Direction::West:
-      position_.x = std::max(destination_point_.x, position_.x - speed_);
+    case Direction::West:position_.x = std::max(destination_point_.x, position_.x - speed_);
       x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
       break;
-    case Direction::South:
-      position_.y = std::min(destination_point_.y, position_.y + speed_);
+    case Direction::South:position_.y = std::min(destination_point_.y, position_.y + speed_);
       y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
       break;
-    default:
-      break;
+    default:break;
   }
 
   CheckAndChangeCoordinates();
@@ -116,7 +111,9 @@ Enemy::Enemy(const std::string& path, double x, double y,
       power_(0),
       drop_(0),
       position_(),
-      is_alive_(true) {
+      is_alive_(true),
+      poisons_timer_(50),
+      poisons_() {
   LoadSprite(path + "/sprite.png");
   std::ifstream reader(path + "/config.txt");
   getline(reader, name_);
@@ -219,31 +216,21 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
 
 int EnemyCreator::GetHealthFromType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:
-      return 1000;
-    case EnemyType::High:
-      return 500;
-    case EnemyType::Middle:
-      return 250;
-    case EnemyType::Low:
-      return 100;
-    default:
-      return 0;
+    case EnemyType::VeryHigh:return 1000;
+    case EnemyType::High:return 500;
+    case EnemyType::Middle:return 250;
+    case EnemyType::Low:return 100;
+    default:return 0;
   }
 }
 
 double EnemyCreator::GetSpeedByType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:
-      return 0.2;
-    case EnemyType::High:
-      return 0.4;
-    case EnemyType::Middle:
-      return 0.8;
-    case EnemyType::Low:
-      return 1;
-    default:
-      return 0;
+    case EnemyType::VeryHigh:return 0.2;
+    case EnemyType::High:return 0.4;
+    case EnemyType::Middle:return 0.8;
+    case EnemyType::Low:return 1;
+    default:return 0;
   }
 }
 
@@ -345,3 +332,27 @@ void Enemy::DecreaseHealth(int delta) {
   }
   health_bar_.setSize(sf::Vector2f(static_cast<float>(health_) / max_health_ * 30, 3));
 }
+
+void Enemy::AddPoison(int poison, int poison_cnt) {
+  if (poisons_.empty()) {
+    poisons_timer_ = 50;
+  }
+  poisons_[poison] = std::max(
+      poisons_[poison], poison_cnt * 50 + state_.GetStateManager().game_ptr_->GetTime());
+}
+
+void Enemy::Tick() {
+  poisons_timer_--;
+  if (poisons_timer_ == 0) {
+    while (!poisons_.empty() &&
+        poisons_.rbegin()->second < state_.GetStateManager().game_ptr_->GetTime()) {
+      poisons_.erase(poisons_.rbegin()->first);
+    }
+    if (!poisons_.empty()) {
+      DecreaseHealth(poisons_.rbegin()->first);
+    }
+    poisons_timer_ = 50;
+  }
+}
+
+

@@ -4,18 +4,24 @@
 
 Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim, int x, int y,
                        int damage, std::string source) :
-    Entity(state, DrawPriority(101 + y, this)),
+    Entity(state, DrawPriority(900, this)),
     aim_ptr_(std::move(aim)),
     source_(std::move(source)),
     position_(x, y),
     damage_(damage),
-    speed_(0) {
+    speed_(0),
+    splash_(0),
+    range_(0),
+    poison_(0),
+    poison_cnt(0) {
   SetPosition(x, y);
 
   std::ifstream fin(source_ + "/description.txt");
   fin >> speed_;
   fin >> splash_;
   fin >> range_;
+  fin >> poison_;
+  fin >> poison_cnt;
 
   LoadSprite(source_ + "/sprite.png");
 }
@@ -28,6 +34,9 @@ bool Projectile::Pointing() {
       state_.GetStateManager().game_ptr_->
           DamageSplash(static_cast<int>(aim_ptr_->GetCenterX()),
                        static_cast<int>(aim_ptr_->GetCenterY()), splash_, range_);
+    }
+    if (poison_ != 0 && poison_cnt != 0) {
+      aim_ptr_->AddPoison(poison_, poison_cnt);
     }
     aim_ptr_->DecreaseHealth(damage_);
     return true;

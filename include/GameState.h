@@ -75,6 +75,8 @@ class GameState: public State {
 
   void GameOver();
 
+  int64_t GetTime() const;
+
  protected:
   int width_, height_;
   std::shared_ptr<Background> background_ptr_, panel_side_ptr_;
@@ -102,6 +104,7 @@ class GameState: public State {
   int max_level_number_;
   int amount_of_waves_for_level_;
   int amount_of_enemies_for_wave_;
+  int64_t timer_;
   bool is_level_end_;
   bool is_game_end_;
 };

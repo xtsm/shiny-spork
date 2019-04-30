@@ -24,6 +24,8 @@ class Projectile : public Entity {
   int speed_;
   int splash_;
   int range_;
+  int poison_;
+  int poison_cnt;
 };
 
 #endif  // INCLUDE_PROJECTILE_H_
