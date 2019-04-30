@@ -131,10 +131,11 @@ Enemy::Enemy(const std::string& path, double x, double y,
   max_health_ = health_;
   health_bar_.setFillColor(sf::Color(0, 255, 0));
   health_bar_.setPosition(x_, y_);
-  health_bar_.setSize(sf::Vector2f(static_cast<float>(health_) / max_health_ * 30, 3));
+  health_bar_.setSize(sf::Vector2f(
+      static_cast<float>(health_) / max_health_ * sprite_.getTexture()->getSize().x, 3));
   damage_bar_.setFillColor(sf::Color(255, 0, 0));
   damage_bar_.setPosition(x_, y_);
-  damage_bar_.setSize(sf::Vector2f(30, 3));
+  damage_bar_.setSize(sf::Vector2f(sprite_.getTexture()->getSize().x, 3));
 }
 
 EnemyCreator::EnemyCreator(State& state) :
@@ -330,7 +331,8 @@ void Enemy::DecreaseHealth(int delta) {
     state_.GetStateManager().game_ptr_->RemoveEnemyById(GetID());
     return;
   }
-  health_bar_.setSize(sf::Vector2f(static_cast<float>(health_) / max_health_ * 30, 3));
+  health_bar_.setSize(sf::Vector2f(
+      static_cast<float>(health_) / max_health_ * sprite_.getTexture()->getSize().x, 3));
 }
 
 void Enemy::AddPoison(int poison, int poison_cnt) {
