@@ -26,7 +26,7 @@ class Enemy : public Entity {
  public:
   Enemy(const std::string& path, double x, double y,
         const Tile& current_tile, const Direction& direction_of_move,
-        State& state, int priority);
+        State& state);
 
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 

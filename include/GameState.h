@@ -64,6 +64,7 @@ class GameState: public State {
   // Добавляет врага на карту
   void AddNewEnemy(const std::string&, double, double,
                    const Direction& move_direction);
+  void ChangeEnemyPriority(long long id, DrawPriority new_priority);
   // Удаляет врага с карты
   void RemoveEnemyById(int64_t id);
   //Возвращает баланс

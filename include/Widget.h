@@ -29,6 +29,9 @@ class Widget : public sf::Drawable {
 
   //  Получает проиоритет в очереди рисования и обработки событий
   const DrawPriority& GetPriority() const;
+
+  void ChangePriority(DrawPriority priority);
+
  protected:
   ~Widget() override;
   State& state_;

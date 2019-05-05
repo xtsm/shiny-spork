@@ -35,4 +35,9 @@ int Widget::GetY() const {
   return y_;
 }
 
+void Widget::ChangePriority(DrawPriority priority) {
+  priority_ = priority;
+}
+
 Widget::~Widget() = default;
+

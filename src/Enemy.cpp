@@ -82,6 +82,8 @@ void Enemy::DoMove(const Direction& direction) {
   }
 
   CheckAndChangeCoordinates();
+  state_.GetStateManager().game_ptr_->ChangeEnemyPriority(
+      id_, DrawPriority(static_cast<int>(position_.y + 100), this));
   health_bar_.setPosition(x_, y_);
   damage_bar_.setPosition(x_, y_);
   sprite_.setPosition(static_cast<float>(x_), static_cast<float>(y_));
@@ -93,8 +95,8 @@ void Enemy::DoMove(const Direction& direction) {
 
 Enemy::Enemy(const std::string& path, double x, double y,
              const Tile& current_tile, const Direction& direction,
-             State& state, int priority)
-    : Entity(state, DrawPriority(priority, this)),
+             State& state)
+    : Entity(state, DrawPriority(static_cast<int>(y + 100), this)),
       name_(),
       frames_(0),
       current_sprite_rect_(),
