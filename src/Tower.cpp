@@ -10,7 +10,7 @@
 #include <string>
 
 Tower::Tower(State& state, const std::string& source, int x, int y) :
-    Entity(state, DrawPriority(100 + y, this)),
+    Entity(state, DrawPriority(100, this)),
     projectile_path_(),
     text_(),
     source_(source),
@@ -30,6 +30,7 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
 
   icon_sprite_.move(660, 200);
   sprite_.move(x + 5, y - 40);
+  ChangePriority(DrawPriority(100 + y - 40 + sprite_.getTextureRect().height, this));
 
   range_circle_.setOutlineThickness(1);
   range_circle_.setOutlineColor(sf::Color::Black);
