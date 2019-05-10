@@ -7,7 +7,9 @@ class Booster {
  public:
   Booster(State& state, int cooldown);
 
-  void Save(std::ofstream& fout);
+  void LoadSave(std::istream& in);
+
+  void Save(std::ostream& out);
 
   void AddBooster(int boost, int64_t time);
 
@@ -24,7 +26,7 @@ class Booster {
   std::map<int, int64_t> boosters_;
   int timer_;
   bool boosted_;
-  const int cooldown_;
+  int cooldown_;
 };
 
 #endif //SHINY_SPORK_BOOSTER_H

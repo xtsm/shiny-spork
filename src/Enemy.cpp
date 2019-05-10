@@ -26,17 +26,18 @@ void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   }
 }
 
-void Enemy::Save(std::ofstream& fout) {
-  fout << current_sprite_rect_.left << " " << current_sprite_rect_.top << std::endl;
-  fout << current_sprite_rect_.width << " " << current_sprite_rect_.height << std::endl;
-  fout << delay_for_sprite_change_ << std::endl;
-  current_tile_.Save(fout);
-  fout << direction_of_move_ << " " << destination_point_ << std::endl;
-  fout << x_ << " " << y_ << std::endl;
-  fout << position_ << std::endl;
-  fout << health_ << std::endl;
-  poison_booster_.Save(fout);
-  freeze_booster_.Save(fout);
+void Enemy::Save(std::ostream& out) {
+  out << id_ << std::endl;
+  out << source_ << std::endl;
+  out << position_ << std::endl;
+  out << current_sprite_rect_.left << " " << current_sprite_rect_.top << std::endl;
+  out << current_sprite_rect_.width << " " << current_sprite_rect_.height << std::endl;
+  out << delay_for_sprite_change_ << std::endl;
+  current_tile_.Save(out);
+  out << direction_of_move_ << " " << destination_point_ << std::endl;
+  out << health_ << std::endl;
+  poison_booster_.Save(out);
+  freeze_booster_.Save(out);
 }
 
 void Enemy::DoMove() {
@@ -110,6 +111,7 @@ Enemy::Enemy(const std::string& path, double x, double y,
              const Tile& current_tile, const Direction& direction,
              State& state)
     : Entity(state, DrawPriority(static_cast<int>(y + 100), this)),
+      source_(path),
       name_(),
       frames_(0),
       current_sprite_rect_(),
@@ -130,8 +132,56 @@ Enemy::Enemy(const std::string& path, double x, double y,
       is_alive_(true),
       poison_booster_(state, 50),
       freeze_booster_(state, 0) {
-  LoadSprite(path + "/sprite.png");
-  std::ifstream reader(path + "/config.txt");
+  position_ = Point(x, y);
+  Init();
+}
+
+Enemy::Enemy(State& state, std::istream& in) :
+    Entity(state, DrawPriority(static_cast<int>(100), this)),
+    source_(),
+    name_(),
+    frames_(0),
+    current_sprite_rect_(),
+    max_delay_for_sprite_change_(10),
+    delay_for_sprite_change_(max_delay_for_sprite_change_),
+    current_tile_(),
+    direction_of_move_(),
+    destination_point_(),
+    max_health_(0),
+    health_(0),
+    health_bar_(),
+    damage_bar_(),
+    default_speed_(0),
+    speed_(0),
+    power_(0),
+    drop_(0),
+    position_(),
+    is_alive_(true),
+    poison_booster_(state, 50),
+    freeze_booster_(state, 0) {
+  in >> id_;
+  in >> source_;
+  in >> position_;
+
+  Init();
+
+  int left(0), top(0), width(0), height(0);
+  in >> left >> top;
+  in >> width >> height;
+  current_sprite_rect_ = sf::IntRect(left, top, width, height);
+  sprite_.setTextureRect(current_sprite_rect_);
+
+  in >> delay_for_sprite_change_;
+  current_tile_ = Tile(in);
+  in >> direction_of_move_ >> destination_point_;
+  in >> health_;
+  poison_booster_.LoadSave(in);
+  freeze_booster_.LoadSave(in);
+}
+
+void Enemy::Init() {
+  LoadSprite(source_ + "/sprite.png");
+  std::ifstream reader(source_ + "/config.txt");
   getline(reader, name_);
   reader >> frames_;
   reader >> drop_;
@@ -140,10 +190,10 @@ Enemy::Enemy(const std::string& path, double x, double y,
   icon_sprite_.setPosition(650, 230);
   sprite_.setTextureRect(sf::IntRect(0, 0, sprite_.getTexture()->getSize().x,
                                      sprite_.getTexture()->getSize().y / frames_));
-  position_ = Point(x, y);
+
   destination_point_ = position_;
-  x_ = static_cast<int>(x - sprite_.getGlobalBounds().width);
-  y_ = static_cast<int>(y - sprite_.getGlobalBounds().height);
+  x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
+  y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
   sprite_.setPosition(static_cast<float>(x_), static_cast<float>(y_));
   max_health_ = health_;
   health_bar_.setFillColor(sf::Color(0, 255, 0));
@@ -251,6 +301,8 @@ double EnemyCreator::GetSpeedByType(const EnemyType& type) {
     default:return 0;
   }
 }
+
+void EnemyCreator::LoadSave(std::istream&) {}
 
 void Enemy::DoDamage(const std::shared_ptr<Entity>& other_entity) {
   other_entity->DecreaseHealth(power_);

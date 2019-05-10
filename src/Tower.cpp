@@ -27,10 +27,49 @@ Tower::Tower(State& state, const std::string& source, int x, int y) :
     tower_cost_(0),
     update_cost_(0) {
   SetPosition(x, y);
+  Init();
+}
 
+Tower::Tower(State& state, std::istream& in) :
+    Entity(state, DrawPriority(100, this)),
+    projectile_path_(),
+    text_(),
+    source_(),
+    fin_(),
+    timer_(0),
+    tower_name_(),
+    aim_(nullptr),
+    max_level_(0),
+    level_(0),
+    range_(0),
+    range_circle_(0),
+    cooldown_(0),
+    damage_(0),
+    tower_cost_(0),
+    update_cost_(0) {
+  in >> id_;
+  in >> x_ >> y_;
+  in >> projectile_path_;
+
+  in >> source_;
+  fin_ = std::ifstream(source_);
+
+  Init();
+
+  in >> timer_;
+
+  int updates(0);
+  in >> updates;
+  while (updates > 1) {
+    Update();
+    updates--;
+  }
+}
+
+void Tower::Init() {
   icon_sprite_.move(660, 200);
-  sprite_.move(x + 5, y - 40);
-  ChangePriority(DrawPriority(100 + y - 40 + sprite_.getTextureRect().height, this));
+  sprite_.move(x_ + 5, y_ - 40);
+  ChangePriority(DrawPriority(100 + y_ - 40 + sprite_.getTextureRect().height, this));
 
   range_circle_.setOutlineThickness(1);
   range_circle_.setOutlineColor(sf::Color::Black);
@@ -53,12 +92,13 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(sprite_, states);
 }
 
-void Tower::Save(std::ofstream& fout) {
-  fout << projectile_path_ << std::endl;
-  fout << source_ << std::endl;
-  fout << x_ << " " << y_ << std::endl;
-  fout << timer_ << std::endl;
-  fout << level_ << std::endl;
+void Tower::Save(std::ostream& out) {
+  out << id_ << std::endl;
+  out << x_ << " " << y_ << std::endl;
+  out << projectile_path_ << std::endl;
+  out << source_ << std::endl;
+  out << timer_ << std::endl;
+  out << level_ << std::endl;
 }
 
 void Tower::Click(int x, int y) {

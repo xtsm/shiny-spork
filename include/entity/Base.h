@@ -11,7 +11,11 @@ class Base : public Entity {
  public:
   Base(State& state, const DrawPriority& priority, int health, const Tile& top);
 
-  void Save(std::ofstream& fout) override;
+  Base(State& state, std::istream& in);
+
+  void Init();
+
+  void Save(std::ostream& out) override;
 
   void Load(const std::string& base_path);
 

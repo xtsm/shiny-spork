@@ -28,9 +28,13 @@ class Enemy : public Entity {
         const Tile& current_tile, const Direction& direction_of_move,
         State& state);
 
+  Enemy(State& state, std::istream& in);
+
+  void Init();
+
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-  void Save(std::ofstream& fout) override;
+  void Save(std::ostream& out) override;
 
   void DoMove();
 
@@ -53,6 +57,7 @@ class Enemy : public Entity {
   void Tick() override;
 
  private:
+  std::string source_;
   std::string name_;
   int frames_;
   sf::IntRect current_sprite_rect_;
@@ -85,7 +90,9 @@ class EnemyCreator {
 
   explicit EnemyCreator(State&);
 
-  void Save(std::ofstream&) {}
+  void LoadSave(std::istream& in);
+
+  void Save(std::ostream&) {}
 
   void Load(const std::string&);
 

@@ -22,8 +22,10 @@ class Widget : public sf::Drawable {
 
   void SetClicked(bool);
   virtual void SetPosition(int, int);
+  void SetLastID(int64_t);
 
   int64_t GetID() const;
+  int64_t GetLastID() const;
   int GetX() const;
   int GetY() const;
 

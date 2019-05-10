@@ -25,6 +25,7 @@ class GameState: public State {
  public:
   explicit GameState(StateManager& states);
   void SaveGame();
+  void LoadSave();
   void Load(const std::string&);
   void Pause();
   void Tick() override;
@@ -79,6 +80,8 @@ class GameState: public State {
 
   int64_t GetTime() const;
 
+  std::shared_ptr<Enemy> GetEnemyByID(int64_t id);
+
  protected:
   int width_, height_;
   std::shared_ptr<Background> background_ptr_, panel_side_ptr_;
@@ -100,7 +103,7 @@ class GameState: public State {
   bool is_enemies_produce_;
   // Задержка между спавном врагов
   int current_delay_;
-  const int delay_;
+  int delay_;
   bool is_info_displayed_;
   std::string level_path_;
   int level_number_;

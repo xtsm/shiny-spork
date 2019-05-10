@@ -12,9 +12,11 @@ class Tile {
  public:
   Tile();
 
+  explicit Tile(std::istream& in);
+
   Tile(int x, int y, int number);
 
-  void Save(std::ofstream& fout);
+  void Save(std::ostream& out);
 
   void SetIsFree(bool is_free_now);
   bool IsFree() const;
@@ -48,7 +50,9 @@ class Map {
 
   explicit Map(std::vector<std::vector<Tile>> map);
 
-  void Save(std::ofstream& fout);
+  explicit Map(std::istream& in);
+
+  void Save(std::ostream& out);
 
   bool IsMoveAvailable(const Direction& direction, int x, int y) const;
 

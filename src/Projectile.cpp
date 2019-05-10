@@ -18,6 +18,35 @@ Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim, int x, int y,
     freeze_time_(0) {
   SetPosition(x, y);
 
+  Init();
+}
+
+Projectile::Projectile(State& state, std::istream& in) :
+    Entity(state, DrawPriority(900, this)),
+    aim_ptr_(),
+    source_(),
+    position_(),
+    damage_(0),
+    speed_(0),
+    splash_(0),
+    range_(0),
+    poison_(0),
+    poison_cnt_(0),
+    freeze_(0),
+    freeze_time_(0) {
+  in >> id_;
+  int64_t aim_id(0);
+  in >> aim_id;
+  aim_ptr_ = state_.GetStateManager().game_ptr_->GetEnemyByID(aim_id);
+
+  in >> source_;
+  in >> position_;
+  SetPosition(static_cast<int>(position_.x), static_cast<int>(position_.y));
+
+  Init();
+}
+
+void Projectile::Init() {
   std::ifstream fin(source_ + "/description.txt");
   int cnt(0);
   fin >> speed_;
@@ -41,10 +70,15 @@ Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim, int x, int y,
   LoadSprite(source_ + "/sprite.png");
 }
 
-void Projectile::Save(std::ofstream& fout) {
-  fout << aim_ptr_->GetID() << std::endl;
-  fout << source_ << std::endl;
-  fout << position_ << std::endl;
+void Projectile::Save(std::ostream& out) {
+  out << id_ << std::endl;
+  out << aim_ptr_->GetID() << std::endl;
+  out << source_ << std::endl;
+  out << position_ << std::endl;
+}
+
+bool Projectile::Aimed() {
+  return aim_ptr_ != nullptr;
 }
 
 bool Projectile::Pointing() {
@@ -85,3 +119,4 @@ bool Projectile::Pointing() {
     return false;
   }
 }
+

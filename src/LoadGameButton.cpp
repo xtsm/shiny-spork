@@ -9,5 +9,5 @@ LoadGameButton::LoadGameButton(State& state, int x, int y) :
 void LoadGameButton::LoadGameButton::Click(int, int) {
   StateManager& states = state_.GetStateManager();
   states.ChangeState(states.game_ptr_);
-  states.game_ptr_->Load("save.txt");
+  states.game_ptr_->LoadSave();
 }

@@ -10,8 +10,10 @@
 class Tower : public Entity {
  public:
   explicit Tower(State&, const std::string& source, int, int);
+  explicit Tower(State& state, std::istream& in);
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
-  void Save(std::ofstream& fout) override;
+  void Save(std::ostream& out) override;
+  void Init();
   void Click(int x, int y) override;
   // Считывает данные обновления
   void Update();

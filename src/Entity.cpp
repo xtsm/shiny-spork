@@ -101,4 +101,4 @@ Entity::Entity(State& state, const DrawPriority& priority, int health, int max_h
       is_mouse_in_(false),
       is_info_(false) {}
 
-void Entity::Save(std::ofstream& fout) {}
+void Entity::Save(std::ostream&) {}

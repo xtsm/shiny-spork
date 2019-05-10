@@ -5,14 +5,27 @@ Base::Base(State& state, const DrawPriority& priority, int health, const Tile& t
     Entity(state, priority, health, health),
     top_left_(top),
     source_() {
+  Init();
+}
+
+Base::Base(State& state, std::istream& in) :
+    Entity(state, DrawPriority(100, this)),
+    top_left_(),
+    source_() {
+  in >> health_ >> max_health_;
+  top_left_ = Tile(in);
+  in >> source_;
+}
+
+void Base::Init() {
   sprite_.setPosition(480, 0);
   icon_sprite_.setPosition(630, 220);
 }
 
-void Base::Save(std::ofstream& fout) {
-  fout << health_ << " " << max_health_ << std::endl;
-  top_left_.Save(fout);
-  fout << source_ << std::endl;
+void Base::Save(std::ostream& out) {
+  out << health_ << " " << max_health_ << std::endl;
+  top_left_.Save(out);
+  out << source_ << std::endl;
 }
 
 void Base::Load(const std::string& base_path) {

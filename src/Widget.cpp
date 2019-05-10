@@ -39,5 +39,13 @@ void Widget::ChangePriority(DrawPriority priority) {
   priority_ = priority;
 }
 
+void Widget::SetLastID(int64_t new_last_id) {
+  last_id_ = std::max(last_id_, new_last_id);
+}
+
+int64_t Widget::GetLastID() const {
+  return last_id_;
+}
+
 Widget::~Widget() = default;
 

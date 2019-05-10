@@ -53,6 +53,9 @@ GameState::GameState(StateManager& states) :
 void GameState::SaveGame() {
   std::ofstream fout("assets/save.txt");
 
+  fout << level_path_ << std::endl;
+  fout << background_ptr_->GetLastID() << std::endl;
+
   map_ptr_->Save(fout);
   balance_ptr_->Save(fout);
 
@@ -61,14 +64,14 @@ void GameState::SaveGame() {
     tower.second->Save(fout);
   }
 
-  fout << projectiles_.size() << std::endl;
-  for (auto& projectile : projectiles_) {
-    projectile.second->Save(fout);
-  }
-
   fout << enemies_.size() << std::endl;
   for (auto& enemy : enemies_) {
     enemy.second->Save(fout);
+  }
+
+  fout << projectiles_.size() << std::endl;
+  for (auto& projectile : projectiles_) {
+    projectile.second->Save(fout);
   }
 
   base_ptr_->Save(fout);
@@ -76,7 +79,54 @@ void GameState::SaveGame() {
 
   fout << current_delay_ << std::endl;
   fout << delay_ << std::endl;
-  fout << level_path_ << std::endl;
+}
+
+void GameState::LoadSave() {
+  std::ifstream fin("assets/save.txt");
+
+  std::string level_path;
+  fin >> level_path;
+  Load(level_path);
+
+  int last_id(0);
+  fin >> last_id;
+  background_ptr_->SetLastID(last_id);
+
+  map_ptr_ = std::make_shared<Map>(fin);
+  balance_ptr_ = std::make_shared<BalanceLabel>(*this, fin);
+
+  int cnt(0);
+  fin >> cnt;
+  towers_.clear();
+  while (cnt--) {
+    std::shared_ptr<Tower> tower(new Tower(*this, fin));
+    towers_[tower->GetID()] = tower;
+    draw_queue_.insert(tower);
+  }
+
+  fin >> cnt;
+  enemies_.clear();
+  while (cnt--) {
+    std::shared_ptr<Enemy> enemy(new Enemy(*this, fin));
+    enemies_[enemy->GetID()] = enemy;
+    draw_queue_.insert(enemy);
+  }
+
+  fin >> cnt;
+  projectiles_.clear();
+  while (cnt--) {
+    std::shared_ptr<Projectile> projectile(new Projectile(*this, fin));
+    if (projectile->Aimed()) {
+      projectiles_[projectile->GetID()] = projectile;
+      draw_queue_.insert(projectile);
+    }
+  }
+
+  base_ptr_ = std::make_shared<Base>(*this, fin);
+  creator_of_enemies_.LoadSave(fin);
+
+  fin >> current_delay_;
+  fin >> delay_;
 }
 
 void GameState::Load(const std::string& level_path) {
@@ -87,7 +137,6 @@ void GameState::Load(const std::string& level_path) {
   base_ptr_->Load("assets/base/1/config.txt");
   draw_queue_.insert(background_ptr_);
   draw_queue_.insert(panel_side_ptr_);
-  draw_queue_.insert(info_);
 
   std::ifstream fin(level_path + "/towers.txt");
   int towers_number = 0;
@@ -358,4 +407,12 @@ void GameState::GameOver() {
 
 int64_t GameState::GetTime() const {
   return timer_;
+}
+
+std::shared_ptr<Enemy> GameState::GetEnemyByID(int64_t id) {
+  if (!enemies_.count(id)) {
+    return nullptr;
+  } else {
+    return enemies_[id];
+  }
 }

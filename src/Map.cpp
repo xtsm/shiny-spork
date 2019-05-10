@@ -15,16 +15,28 @@ Map::Map(std::vector<std::vector<Tile>> map) :
   }
 }
 
-void Map::Save(std::ofstream& fout) {
-  fout << map_.size() << " ";
+Map::Map(std::istream& in) : map_() {
+  int rows(0), cols(0);
+  in >> rows >> cols;
+  map_.resize(rows);
+  for (auto& row : map_) {
+    row.resize(cols);
+    for (auto& tile : row) {
+      tile = Tile(in);
+    }
+  }
+}
+
+void Map::Save(std::ostream& out) {
+  out << map_.size() << " ";
   if (!map_.empty()) {
-    fout << map_[0].size() << std::endl;
+    out << map_[0].size() << std::endl;
   } else {
-    fout << 0 << std::endl;
+    out << 0 << std::endl;
   }
   for (auto& row : map_) {
     for (auto& tile : row) {
-      tile.Save(fout);
+      tile.Save(out);
     }
   }
 }
@@ -125,8 +137,12 @@ double Tile::RandomY() const {
 
 Tile::Tile() : Tile(0, 0, 0) {}
 
-void Tile::Save(std::ofstream& fout) {
-  fout << coordinates_ << " " << number_ << " " << is_free_ << std::endl;
+Tile::Tile(std::istream& in) : Tile(0, 0, 0) {
+  in >> coordinates_ >> number_ >> is_free_;
+}
+
+void Tile::Save(std::ostream& out) {
+  out << coordinates_ << " " << number_ << " " << is_free_ << std::endl;
 }
 
 bool Tile::IsPointOnTile(double x, double y) const {

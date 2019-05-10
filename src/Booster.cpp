@@ -9,13 +9,27 @@ Booster::Booster(State& state, int cooldown) :
     boosted_(false),
     cooldown_(cooldown) {}
 
-void Booster::Save(std::ofstream& fout) {
-  fout << boosters_.size() << std::endl;
-  for (auto& booster : boosters_) {
-    fout << booster.first << " " << booster.second << std::endl;
+void Booster::LoadSave(std::istream& in) {
+  int cnt(0);
+  in >> cnt;
+  while (cnt--) {
+    std::pair<int, int64_t> booster;
+    in >> booster.first >> booster.second;
+    boosters_.insert(booster);
   }
-  fout << timer_ << std::endl;
-  fout << boosted_ << std::endl;
+  in >> timer_;
+  in >> boosted_;
+  in >> cooldown_;
+}
+
+void Booster::Save(std::ostream& out) {
+  out << boosters_.size() << std::endl;
+  for (auto& booster : boosters_) {
+    out << booster.first << " " << booster.second << std::endl;
+  }
+  out << timer_ << std::endl;
+  out << boosted_ << std::endl;
+  out << cooldown_ << std::endl;
 }
 
 void Booster::AddBooster(int boost, int64_t time) {

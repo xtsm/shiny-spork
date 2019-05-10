@@ -7,9 +7,13 @@ class BalanceLabel : public Widget {
  public:
   BalanceLabel(State&, int, int, int);
 
+  BalanceLabel(State& state, std::istream& in);
+
+  void Init();
+
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
 
-  void Save(std::ofstream& fout);
+  void Save(std::ostream& out);
 
   int GetBalance() const;
 
