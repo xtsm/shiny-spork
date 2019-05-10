@@ -34,7 +34,7 @@ void Enemy::Save(std::ostream& out) {
   out << current_sprite_rect_.width << " " << current_sprite_rect_.height << std::endl;
   out << delay_for_sprite_change_ << std::endl;
   current_tile_.Save(out);
-  out << direction_of_move_ << " " << destination_point_ << std::endl;
+  out << static_cast<int>(direction_of_move_) << " " << destination_point_ << std::endl;
   out << health_ << std::endl;
   poison_booster_.Save(out);
   freeze_booster_.Save(out);
@@ -95,6 +95,7 @@ void Enemy::DoMove(const Direction& direction) {
     default:break;
   }
 
+//  std::cout << direction_of_move_ << std::endl;
   CheckAndChangeCoordinates();
   state_.GetStateManager().game_ptr_->ChangeEnemyPriority(
       id_, DrawPriority(static_cast<int>(position_.y + 100), this));
@@ -173,7 +174,9 @@ Enemy::Enemy(State& state, std::istream& in) :
 
   in >> delay_for_sprite_change_;
   current_tile_ = Tile(in);
-  in >> direction_of_move_ >> destination_point_;
+  int move_id(0);
+  in >> move_id >> destination_point_;
+  direction_of_move_ = static_cast<Direction>(move_id);
   in >> health_;
   poison_booster_.LoadSave(in);
   freeze_booster_.LoadSave(in);

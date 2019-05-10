@@ -93,7 +93,10 @@ void GameState::LoadSave() {
   background_ptr_->SetLastID(last_id);
 
   map_ptr_ = std::make_shared<Map>(fin);
+
+  draw_queue_.erase(balance_ptr_);
   balance_ptr_ = std::make_shared<BalanceLabel>(*this, fin);
+  draw_queue_.insert(balance_ptr_);
 
   int cnt(0);
   fin >> cnt;
@@ -137,6 +140,7 @@ void GameState::Load(const std::string& level_path) {
   base_ptr_->Load("assets/base/1/config.txt");
   draw_queue_.insert(background_ptr_);
   draw_queue_.insert(panel_side_ptr_);
+  draw_queue_.insert(info_);
 
   std::ifstream fin(level_path + "/towers.txt");
   int towers_number = 0;

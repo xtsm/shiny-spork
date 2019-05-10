@@ -52,7 +52,7 @@ Tower::Tower(State& state, std::istream& in) :
   in >> projectile_path_;
 
   in >> source_;
-  fin_ = std::ifstream(source_);
+  fin_ = std::ifstream(source_ + "/config.txt");
 
   Init();
 

@@ -15,6 +15,8 @@ Base::Base(State& state, std::istream& in) :
   in >> health_ >> max_health_;
   top_left_ = Tile(in);
   in >> source_;
+  Init();
+  Load(source_);
 }
 
 void Base::Init() {
