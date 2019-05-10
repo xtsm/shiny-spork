@@ -13,7 +13,6 @@ class ChangeLevelState : public State {
 
   void Tick() override;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-  void ProcessEvent(sf::Event& event) override;
 
  private:
   std::shared_ptr<ChangeLevelButton> change_level_;

@@ -9,6 +9,8 @@ class Projectile : public Entity {
   Projectile(State&, std::shared_ptr<Enemy>,
              int, int, int, std::string);
 
+  void Save(std::ofstream& fout) override;
+
   bool Pointing();
 
  protected:

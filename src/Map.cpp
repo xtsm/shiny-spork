@@ -15,6 +15,21 @@ Map::Map(std::vector<std::vector<Tile>> map) :
   }
 }
 
+void Map::Save(std::ofstream& fout) {
+  fout << map_.size() << " ";
+  if (!map_.empty()) {
+    fout << map_[0].size() << std::endl;
+  } else {
+    fout << 0 << std::endl;
+  }
+  for (auto& row : map_) {
+    for (auto& tile : row) {
+      tile.Save(fout);
+    }
+  }
+}
+
+
 bool Map::IsMoveAvailable(const Direction& direction, int x, int y) const {
   switch (direction) {
     case Direction::North:
@@ -109,6 +124,10 @@ double Tile::RandomY() const {
 }
 
 Tile::Tile() : Tile(0, 0, 0) {}
+
+void Tile::Save(std::ofstream& fout) {
+  fout << coordinates_ << " " << number_ << " " << is_free_ << std::endl;
+}
 
 bool Tile::IsPointOnTile(double x, double y) const {
   return (x >= coordinates_.x && x <= coordinates_.x + 10) &&

@@ -26,6 +26,19 @@ void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   }
 }
 
+void Enemy::Save(std::ofstream& fout) {
+  fout << current_sprite_rect_.left << " " << current_sprite_rect_.top << std::endl;
+  fout << current_sprite_rect_.width << " " << current_sprite_rect_.height << std::endl;
+  fout << delay_for_sprite_change_ << std::endl;
+  current_tile_.Save(fout);
+  fout << direction_of_move_ << " " << destination_point_ << std::endl;
+  fout << x_ << " " << y_ << std::endl;
+  fout << position_ << std::endl;
+  fout << health_ << std::endl;
+  poison_booster_.Save(fout);
+  freeze_booster_.Save(fout);
+}
+
 void Enemy::DoMove() {
   std::vector<std::pair<Point, Direction>> possible_moves =
       GetAvailableMoves(static_cast<int>(position_.x), static_cast<int>(position_.y));

@@ -11,6 +11,7 @@ class Tower : public Entity {
  public:
   explicit Tower(State&, const std::string& source, int, int);
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
+  void Save(std::ofstream& fout) override;
   void Click(int x, int y) override;
   // Считывает данные обновления
   void Update();
@@ -19,7 +20,7 @@ class Tower : public Entity {
   // Проверяет можно ли обновить башню
   bool Updatable() const;
   //Проверяет вхождение врага в дальнобойность
-  bool InRange(std::shared_ptr<Enemy> enemy) const;
+  bool InRange(const std::shared_ptr<Enemy>& enemy) const;
   std::vector<sf::Text> GetInfo() const override;
   int GetCost() const;
   int GetUpdateCost() const;
@@ -37,7 +38,7 @@ class Tower : public Entity {
   std::string tower_name_;
   // Указатель на цель
   std::shared_ptr<Enemy> aim_;
-  // Максимальный возможный уровель башни
+  // Максимальный возможный уровень башни
   int max_level_;
   // Уровень башни
   int level_;

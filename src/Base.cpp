@@ -1,10 +1,26 @@
 #include "entity/Base.h"
 #include "StateManager.h"
 
-Base::Base(State& state, const DrawPriority& priority, int health, const Tile& top)
-    : Entity(state, priority, health, health), top_left_(top) {
+Base::Base(State& state, const DrawPriority& priority, int health, const Tile& top) :
+    Entity(state, priority, health, health),
+    top_left_(top),
+    source_() {
   sprite_.setPosition(480, 0);
   icon_sprite_.setPosition(630, 220);
+}
+
+void Base::Save(std::ofstream& fout) {
+  fout << health_ << " " << max_health_ << std::endl;
+  top_left_.Save(fout);
+  fout << source_ << std::endl;
+}
+
+void Base::Load(const std::string& base_path) {
+  source_ = base_path;
+  std::ifstream fin(base_path);
+  std::string sprite_path;
+  fin >> sprite_path;
+  LoadSprite(sprite_path);
 }
 
 std::vector<sf::Text> Base::GetInfo() const {

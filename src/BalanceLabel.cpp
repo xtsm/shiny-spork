@@ -19,6 +19,10 @@ BalanceLabel::BalanceLabel(State& state, int x, int y, int balance) :
   text_.setString(std::to_string(balance));
 }
 
+void BalanceLabel::Save(std::ofstream& fout) {
+  fout << balance_ << std::endl;
+}
+
 void BalanceLabel::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(coins_sprite_, states);
   target.draw(text_, states);

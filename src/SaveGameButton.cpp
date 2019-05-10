@@ -7,5 +7,5 @@ SaveGameButton::SaveGameButton(State& state, int x, int y) :
 
 void SaveGameButton::Click(int, int) {
   StateManager& states = state_.GetStateManager();
-  states.ChangeState(states.game_ptr_);
+  states.game_ptr_->SaveGame();
 }

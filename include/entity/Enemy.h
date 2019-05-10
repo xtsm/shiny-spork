@@ -30,6 +30,8 @@ class Enemy : public Entity {
 
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+  void Save(std::ofstream& fout) override;
+
   void DoMove();
 
   void Click(int, int) override;
@@ -82,6 +84,8 @@ class EnemyCreator {
  public:
 
   explicit EnemyCreator(State&);
+
+  void Save(std::ofstream&) {}
 
   void Load(const std::string&);
 

@@ -38,6 +38,7 @@ GameState::GameState(StateManager& states) :
     current_delay_(1000),
     delay_(1000),
     is_info_displayed_(false),
+    level_path_(),
     level_number_(0),
     max_level_number_(0),
     amount_of_waves_for_level_(100000),
@@ -49,11 +50,41 @@ GameState::GameState(StateManager& states) :
   panel_side_ptr_->SetPosition(600, 0);
 }
 
+void GameState::SaveGame() {
+  std::ofstream fout("assets/save.txt");
+
+  map_ptr_->Save(fout);
+  balance_ptr_->Save(fout);
+
+  fout << towers_.size() << std::endl;
+  for (auto& tower : towers_) {
+    tower.second->Save(fout);
+  }
+
+  fout << projectiles_.size() << std::endl;
+  for (auto& projectile : projectiles_) {
+    projectile.second->Save(fout);
+  }
+
+  fout << enemies_.size() << std::endl;
+  for (auto& enemy : enemies_) {
+    enemy.second->Save(fout);
+  }
+
+  base_ptr_->Save(fout);
+  creator_of_enemies_.Save(fout);
+
+  fout << current_delay_ << std::endl;
+  fout << delay_ << std::endl;
+  fout << level_path_ << std::endl;
+}
+
 void GameState::Load(const std::string& level_path) {
   draw_queue_.clear();
 
+  level_path_ = level_path;
   background_ptr_->LoadFromFile(level_path + "/bg.png");
-  base_ptr_->LoadSprite("assets/base/1/base.png");
+  base_ptr_->Load("assets/base/1/config.txt");
   draw_queue_.insert(background_ptr_);
   draw_queue_.insert(panel_side_ptr_);
   draw_queue_.insert(info_);

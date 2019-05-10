@@ -9,6 +9,8 @@ class BalanceLabel : public Widget {
 
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
 
+  void Save(std::ofstream& fout);
+
   int GetBalance() const;
 
   void ChangeBalance(int delta);

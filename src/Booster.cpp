@@ -9,6 +9,15 @@ Booster::Booster(State& state, int cooldown) :
     boosted_(false),
     cooldown_(cooldown) {}
 
+void Booster::Save(std::ofstream& fout) {
+  fout << boosters_.size() << std::endl;
+  for (auto& booster : boosters_) {
+    fout << booster.first << " " << booster.second << std::endl;
+  }
+  fout << timer_ << std::endl;
+  fout << boosted_ << std::endl;
+}
+
 void Booster::AddBooster(int boost, int64_t time) {
   if (boosters_.empty()) {
     timer_ = cooldown_;

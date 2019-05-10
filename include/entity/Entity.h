@@ -11,6 +11,8 @@ class Entity : public Widget {
   Entity(State& state, const DrawPriority& priority);
   Entity(State& state, const DrawPriority& priority, int health, int max_health);
 
+  virtual void Save(std::ofstream& fout);
+
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
   virtual void DecreaseHealth(int delta);

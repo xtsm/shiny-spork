@@ -19,7 +19,7 @@ Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim, int x, int y,
   SetPosition(x, y);
 
   std::ifstream fin(source_ + "/description.txt");
-  int cnt;
+  int cnt(0);
   fin >> speed_;
   fin >> cnt;
 
@@ -39,6 +39,12 @@ Projectile::Projectile(State& state, std::shared_ptr<Enemy> aim, int x, int y,
     }
   }
   LoadSprite(source_ + "/sprite.png");
+}
+
+void Projectile::Save(std::ofstream& fout) {
+  fout << aim_ptr_->GetID() << std::endl;
+  fout << source_ << std::endl;
+  fout << position_ << std::endl;
 }
 
 bool Projectile::Pointing() {

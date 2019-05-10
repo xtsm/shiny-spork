@@ -24,6 +24,7 @@
 class GameState: public State {
  public:
   explicit GameState(StateManager& states);
+  void SaveGame();
   void Load(const std::string&);
   void Pause();
   void Tick() override;
@@ -101,6 +102,7 @@ class GameState: public State {
   int current_delay_;
   const int delay_;
   bool is_info_displayed_;
+  std::string level_path_;
   int level_number_;
   int max_level_number_;
   int amount_of_waves_for_level_;

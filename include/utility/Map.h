@@ -14,6 +14,8 @@ class Tile {
 
   Tile(int x, int y, int number);
 
+  void Save(std::ofstream& fout);
+
   void SetIsFree(bool is_free_now);
   bool IsFree() const;
 
@@ -45,6 +47,8 @@ class Map {
  public:
 
   explicit Map(std::vector<std::vector<Tile>> map);
+
+  void Save(std::ofstream& fout);
 
   bool IsMoveAvailable(const Direction& direction, int x, int y) const;
 

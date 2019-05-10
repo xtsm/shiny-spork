@@ -29,4 +29,6 @@ struct Point {
 
 std::istream& operator>>(std::istream& in, Point& point);
 
+std::ostream& operator<<(std::ostream& out, const Point& point);
+
 #endif //SHINY_SPORK_POINT_H

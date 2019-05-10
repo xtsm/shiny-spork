@@ -8,6 +8,3 @@ void ChangeLevelState::draw(sf::RenderTarget& target, sf::RenderStates states) c
   State::draw(target, states);
 }
 
-void ChangeLevelState::ProcessEvent(sf::Event& event) {
-
-}

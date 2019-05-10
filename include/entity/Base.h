@@ -11,6 +11,10 @@ class Base : public Entity {
  public:
   Base(State& state, const DrawPriority& priority, int health, const Tile& top);
 
+  void Save(std::ofstream& fout) override;
+
+  void Load(const std::string& base_path);
+
   std::vector<sf::Text> GetInfo() const override;
 
   void Click(int i, int i1) override;
@@ -21,6 +25,7 @@ class Base : public Entity {
 
  private:
   Tile top_left_;
+  std::string source_;
 };
 
 #endif //SHINY_SPORK_BASE_H

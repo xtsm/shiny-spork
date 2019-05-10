@@ -7,6 +7,8 @@ class Booster {
  public:
   Booster(State& state, int cooldown);
 
+  void Save(std::ofstream& fout);
+
   void AddBooster(int boost, int64_t time);
 
   int Boost();

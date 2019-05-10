@@ -53,6 +53,14 @@ void Tower::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(sprite_, states);
 }
 
+void Tower::Save(std::ofstream& fout) {
+  fout << projectile_path_ << std::endl;
+  fout << source_ << std::endl;
+  fout << x_ << " " << y_ << std::endl;
+  fout << timer_ << std::endl;
+  fout << level_ << std::endl;
+}
+
 void Tower::Click(int x, int y) {
   Entity::Click(x, y);
   state_.GetStateManager().game_ptr_->InfoMenuForTower(id_);
@@ -101,7 +109,7 @@ bool Tower::Updatable() const {
   return level_ < max_level_;
 }
 
-bool Tower::InRange(std::shared_ptr<Enemy> enemy) const {
+bool Tower::InRange(const std::shared_ptr<Enemy>& enemy) const {
   Point d(enemy->GetCenterX() - x_ - 30, enemy->GetCenterY() - y_ - 30);
   return d.Length() <= range_ * range_;
 }
