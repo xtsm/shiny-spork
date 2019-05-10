@@ -8,13 +8,15 @@ PauseState::PauseState(StateManager& states) :
     State(states),
     background_ptr_(new Background(*this, 3)),
     continue_button_ptr_(new ContinueButton(*this, 50, 200)),
-    main_menu_ptr_(new MainMenuButton(*this, 50, 250)),
-    exit_button_ptr_(new ExitButton(*this, 50, 300)) {
+    save_button_ptr_(new SaveGameButton(*this, 50, 250)),
+    main_menu_ptr_(new MainMenuButton(*this, 50, 300)),
+    exit_button_ptr_(new ExitButton(*this, 50, 350)) {
   background_ptr_->SetDim(true);
   draw_queue_.insert(background_ptr_);
   draw_queue_.insert(main_menu_ptr_);
   draw_queue_.insert(exit_button_ptr_);
   draw_queue_.insert(continue_button_ptr_);
+  draw_queue_.insert(save_button_ptr_);
 }
 
 void PauseState::Tick() {
