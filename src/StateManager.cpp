@@ -7,6 +7,7 @@ StateManager::StateManager() :
     game_ptr_(new GameState(*this)),
     pause_ptr_(new PauseState(*this)),
     settings_ptr_(new SettingsState(*this)),
+    change_level_ptr_(new ChangeLevelState(*this)),
     active_state_ptr_(main_menu_ptr_),
     closed_(false) {
 }

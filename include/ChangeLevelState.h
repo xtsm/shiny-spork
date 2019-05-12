@@ -3,19 +3,23 @@
 
 #include <memory>
 #include "State.h"
-#include "StateManager.h"
+#include "Background.h"
 #include "ChangeLevelButton.h"
 #include "MainMenuButton.h"
 
 class ChangeLevelState : public State {
  public:
-  ChangeLevelState(StateManager& manager);
+  explicit ChangeLevelState(StateManager& manager);
 
   void Tick() override;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void ProcessEvent(sf::Event& event) override;
+
+  void ChangeBackground(const sf::Texture& texture);
 
  private:
   std::shared_ptr<ChangeLevelButton> change_level_;
+  std::shared_ptr<Background> background_;
   std::shared_ptr<MainMenuButton> menu_;
 };
 

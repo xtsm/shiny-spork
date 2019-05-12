@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "PauseState.h"
 #include "SettingsState.h"
+#include "ChangeLevelState.h"
 #include <memory>
 
 class StateManager {
@@ -19,6 +20,7 @@ class StateManager {
   std::shared_ptr<GameState> game_ptr_;
   std::shared_ptr<PauseState> pause_ptr_;
   std::shared_ptr<SettingsState> settings_ptr_;
+  std::shared_ptr<ChangeLevelState> change_level_ptr_;
   std::shared_ptr<State> active_state_ptr_;
   StateManager(const StateManager&) = delete;
   StateManager& operator=(const StateManager&) = delete;

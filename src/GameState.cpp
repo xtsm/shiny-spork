@@ -39,9 +39,9 @@ GameState::GameState(StateManager& states) :
     delay_(1000),
     is_info_displayed_(false),
     level_path_(),
-    level_number_(0),
-    max_level_number_(0),
-    amount_of_waves_for_level_(100000),
+    level_number_(1),
+    max_level_number_(2),
+    amount_of_waves_for_level_(2),
     amount_of_enemies_for_wave_(1),
     timer_(0),
     is_level_end_(false),
@@ -86,7 +86,8 @@ void GameState::LoadSave() {
 
   std::string level_path;
   fin >> level_path;
-  Load(level_path);
+  level_number_ = std::atoi(level_path.substr(level_path.find_last_of('/') + 1).c_str());
+  Load();
 
   int last_id(0);
   fin >> last_id;
@@ -132,17 +133,20 @@ void GameState::LoadSave() {
   fin >> delay_;
 }
 
-void GameState::Load(const std::string& level_path) {
+void GameState::Load() {
   draw_queue_.clear();
+  towers_.clear();
+  enemies_.clear();
+  projectiles_.clear();
 
-  level_path_ = level_path;
-  background_ptr_->LoadFromFile(level_path + "/bg.png");
-  base_ptr_->Load("assets/base/1/config.txt");
+  level_path_ = "assets/levels/" + std::to_string(level_number_);
+  background_ptr_->LoadFromFile(level_path_ + "/bg.png");
+  base_ptr_->Load("assets/base/" + std::to_string(level_number_) + "/config.txt");
   draw_queue_.insert(background_ptr_);
   draw_queue_.insert(panel_side_ptr_);
   draw_queue_.insert(info_);
 
-  std::ifstream fin(level_path + "/towers.txt");
+  std::ifstream fin(level_path_ + "/towers.txt");
   int towers_number = 0;
   std::string tower_path;
   int x = 600, y = 20;
@@ -163,9 +167,9 @@ void GameState::Load(const std::string& level_path) {
     }
   }
 
-  creator_of_enemies_.Load(level_path);
+  creator_of_enemies_.Load(level_path_);
 
-  map_ptr_->LoadMapFromFile(level_path + "/map.txt");
+  map_ptr_->LoadMapFromFile(level_path_ + "/map.txt");
 
   draw_queue_.insert(pause_button_ptr_);
   draw_queue_.insert(start_game_button_ptr_);
@@ -224,7 +228,12 @@ void GameState::Tick() {
   }
 
   if (amount_of_waves_for_level_ == 0) {
-    Pause();
+    if (IsIncrementLevelIsAvailable()) {
+      states_.change_level_ptr_->ChangeBackground(render_.getTexture());
+      states_.ChangeState(states_.change_level_ptr_);
+    } else {
+      GameOver();
+    }
   }
 }
 
@@ -241,11 +250,13 @@ void GameState::ProcessEvent(sf::Event& event) {
           Pause();
           break;
         }
-        default:break;
+        default:
+          break;
       }
       break;
     }
-    default:break;
+    default:
+      break;
   }
 }
 
@@ -395,14 +406,11 @@ void GameState::InfoMenuForBase() {
   info_->ChangeEntity(base_ptr_);
 }
 
-void GameState::IncrementLevelIfAvailable() {
-  if (level_number_ < max_level_number_) {
-    ++level_number_;
-    draw_queue_.clear();
-    Load("assets/levels/" + std::to_string(level_number_));
-  } else {
-    is_game_end_ = true;
-  }
+void GameState::IncrementLevel() {
+  ++level_number_;
+  draw_queue_.clear();
+  Load();
+  states_.ChangeState(states_.game_ptr_);
 }
 
 void GameState::GameOver() {
@@ -419,4 +427,20 @@ std::shared_ptr<Enemy> GameState::GetEnemyByID(int64_t id) {
   } else {
     return enemies_[id];
   }
+}
+
+void GameState::RemoveStartButton() {
+  draw_queue_.erase(start_game_button_ptr_);
+}
+
+bool GameState::IsIncrementLevelIsAvailable() const {
+  return level_number_ < max_level_number_;
+}
+
+void GameState::SetAmountOfWaves(int amount) {
+  amount_of_waves_for_level_ = amount > 0 ? amount : 0;
+}
+
+void GameState::SetAmountOfEnemiesPerWave(int amount) {
+  amount_of_enemies_for_wave_ = amount > 0 ? amount : 0;
 }

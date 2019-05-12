@@ -26,7 +26,7 @@ class GameState: public State {
   explicit GameState(StateManager& states);
   void SaveGame();
   void LoadSave();
-  void Load(const std::string&);
+  void Load();
   void Pause();
   void Tick() override;
   void ProcessEvent(sf::Event&) override;
@@ -59,6 +59,8 @@ class GameState: public State {
   std::vector<std::shared_ptr<Enemy>> GetEnemiesInRange(int, int, int);
   // Устанавливает флаг начала волн врагов
   void SetProducing(bool produce);
+  // Удаляет кнопку Start Game с поля
+  void RemoveStartButton();
   // Возвращает количество врагов
   int64_t GetAmountOfEnemies() const;
   // Создаёт count врагов
@@ -73,8 +75,11 @@ class GameState: public State {
   int GetBalance() const;
   //Изменяет баланс на delta
   void ChangeBalance(int delta);
+  bool IsIncrementLevelIsAvailable() const;
   // Переходит на следующий уровень, если level_number + 1 <= max_level_number_
-  void IncrementLevelIfAvailable();
+  void IncrementLevel();
+  void SetAmountOfWaves(int amount);
+  void SetAmountOfEnemiesPerWave(int amount);
 
   void GameOver();
 

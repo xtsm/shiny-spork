@@ -217,6 +217,12 @@ void EnemyCreator::Load(const std::string& level_path) {
   LoadSpawnPointsAndDirections(level_path + "/spawn_points.txt");
 
   std::ifstream fin(level_path + "/enemies.txt");
+  int amount_of_waves;
+  fin >> amount_of_waves;
+  int amount_of_enemies_per_wave;
+  fin >> amount_of_enemies_per_wave;
+  state_.GetStateManager().game_ptr_->SetAmountOfEnemiesPerWave(amount_of_enemies_per_wave);
+  state_.GetStateManager().game_ptr_->SetAmountOfWaves(amount_of_waves);
   int count_of_types;
   fin >> count_of_types;
   enemy_types_.resize(static_cast<unsigned long long int>(count_of_types));
@@ -259,30 +265,6 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
                                spawn_tile.RandomY(),
                                point_of_spawn_with_direction.second);
   }
-
-//  std::uniform_int_distribution<int> distribution_of_type(0, 50);
-//
-//  for (int64_t i = 0; i < count; ++i) {
-//    int type = distribution_of_type(generator);
-//    EnemyType health;
-//    if (type >= 0 && type < 5) {
-//      health = EnemyType::VeryHigh;
-//    } else if (type >= 5 && type < 15) {
-//      health = EnemyType::High;
-//    } else if (type >= 15 && type < 30) {
-//      health = EnemyType::Middle;
-//    } else {
-//      health = EnemyType::Low;
-//    }
-//
-//    auto point_of_spawn_with_direction = spawn_points_[distribution_of_points(generator)];
-//    state_.GetStateManager().
-//        game_ptr_->AddNewEnemy(
-//        GetHealthFromType(health), GetSpeedByType(health),
-//        point_of_spawn_with_direction.first.x * 60,
-//        point_of_spawn_with_direction.first.y * 60,
-//        point_of_spawn_with_direction.second);
-//  }
 }
 
 int EnemyCreator::GetHealthFromType(const EnemyType& type) {

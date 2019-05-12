@@ -2,8 +2,8 @@
 #include "ChangeLevelButton.h"
 
 ChangeLevelButton::ChangeLevelButton(State& state)
-    : Button(state, 25, 400, 300, "Next level") {}
+    : Button(state, 25, 500, 400, "Next level") {}
 
 void ChangeLevelButton::Click(int, int) {
-  state_.GetStateManager().game_ptr_->IncrementLevelIfAvailable();
+  state_.GetStateManager().game_ptr_->IncrementLevel();
 }

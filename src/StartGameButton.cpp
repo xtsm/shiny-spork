@@ -7,6 +7,7 @@ StartGameButton::StartGameButton(State& state, int x, int y)
 
 void StartGameButton::Click(int, int) {
   state_.GetStateManager().game_ptr_->SetProducing(true);
+  state_.GetStateManager().game_ptr_->RemoveStartButton();
 }
 
 
