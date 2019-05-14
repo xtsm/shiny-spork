@@ -2,6 +2,7 @@
 #define INCLUDE_UTILITY_RESOURCEMANAGER_H_
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <map>
 #include <string>
 #include <stdexcept>
@@ -14,7 +15,8 @@ class ResourceManager {
       : resources_() {
     assert(typeid(T) == typeid(sf::Image)
                       || typeid(T) == typeid(sf::Texture)
-                      || typeid(T) == typeid(sf::Font));
+                      || typeid(T) == typeid(sf::Font)
+                      || typeid(T) == typeid(sf::SoundBuffer));
   }
 
   std::map<std::string, T> GetAllResources() const {
