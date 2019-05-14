@@ -2,6 +2,7 @@
 #define SHINY_SPORK_ENTITY_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <memory>
 #include "Widget.h"
 #include "utility/Point.h"
@@ -53,6 +54,7 @@ class Entity : public Widget {
   // Флаг, указывающий находится ли указатель над башней
   bool is_mouse_in_;
   bool is_info_;
+  sf::Sound sound_of_entity_;
 };
 
 #endif //SHINY_SPORK_ENTITY_HPP

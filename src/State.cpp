@@ -135,6 +135,7 @@ State::~State() = default;
 ResourceManager<sf::Image> State::images_manager_;
 ResourceManager<sf::Font> State::fonts_manager_;
 ResourceManager<sf::Texture> State::textures_manager_;
+ResourceManager<sf::SoundBuffer> State::sound_manager_;
 
 StateManager& State::GetStateManager() {
   return states_;
@@ -150,6 +151,10 @@ ResourceManager<sf::Font>& State::GetFontResourceManager() {
 
 ResourceManager<sf::Texture>& State::GetTextureResourceManager() {
   return textures_manager_;
+}
+
+ResourceManager<sf::SoundBuffer>& State::GetSoundResourceManager() {
+  return sound_manager_;
 }
 
 MockState::MockState(StateManager& manager) : State(manager) {

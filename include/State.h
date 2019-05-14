@@ -1,6 +1,7 @@
 #ifndef INCLUDE_STATE_H_
 #define INCLUDE_STATE_H_
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <set>
 #include <memory>
 #include "Widget.h"
@@ -39,6 +40,8 @@ class State : public sf::Drawable {
 
   static ResourceManager<sf::Texture>& GetTextureResourceManager();
 
+  static ResourceManager<sf::SoundBuffer>& GetSoundResourceManager();
+
  protected:
 //  Компаратор для очереди рисования
   struct QueueCmp {
@@ -62,6 +65,7 @@ class State : public sf::Drawable {
   static ResourceManager<sf::Texture> textures_manager_;
   static ResourceManager<sf::Font> fonts_manager_;
   static ResourceManager<sf::Image> images_manager_;
+  static ResourceManager<sf::SoundBuffer> sound_manager_;
 };
 
 class MockState : public State {

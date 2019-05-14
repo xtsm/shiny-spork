@@ -99,6 +99,7 @@ Entity::Entity(State& state, const DrawPriority& priority, int health, int max_h
       icon_sprite_(),
       default_sprite_color_(sf::Color(255, 255, 255)),
       is_mouse_in_(false),
-      is_info_(false) {}
+      is_info_(false),
+      sound_of_entity_() {}
 
 void Entity::Save(std::ostream&) {}
