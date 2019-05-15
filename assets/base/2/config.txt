@@ -1,1 +1,1 @@
-assets/base/1/base.png
+assets/base/2/base.png

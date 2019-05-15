@@ -26,6 +26,8 @@ Base::Base(State& state, std::istream& in) :
 void Base::Init() {
   x_ = top_left_.GetX();
   y_ = top_left_.GetY();
+  sound_of_entity_.setBuffer(State::GetSoundResourceManager()
+                                 .GetOrLoadResource("assets/sounds/base.wav"));
   state_.GetStateManager().game_ptr_->SetIsFree(x_ / 60, y_ / 60, false);
   state_.GetStateManager().game_ptr_->SetIsFree(x_ / 60 + 1, y_ / 60, false);
   state_.GetStateManager().game_ptr_->SetIsFree(x_ / 60, y_ / 60 + 1, false);
@@ -69,8 +71,11 @@ void Base::Click(int x, int y) {
 }
 
 void Base::DecreaseHealth(int delta) {
+  if (sound_of_entity_.getStatus() != sf::Sound::Playing) {
+    sound_of_entity_.play();
+  }
   Entity::DecreaseHealth(delta);
-
+//  sound_of_entity_.resetBuffer();
   if (health_ == 0) {
     state_.GetStateManager().game_ptr_->GameOver();
   }

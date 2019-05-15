@@ -110,6 +110,7 @@ bool Projectile::Pointing() {
       aim_ptr_->AddPoison(poison_, poison_cnt_);
     }
     aim_ptr_->DecreaseHealth(damage_);
+//    sound_of_entity_.resetBuffer();
     return true;
   } else {
     d *= speed_ * speed_ / d.Length();
