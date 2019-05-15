@@ -3,7 +3,6 @@
 #include <sstream>
 #include <iomanip>
 #include <chrono>
-#include <entity/Enemy.h>
 
 #include "entity/Enemy.h"
 #include "Widget.h"
@@ -67,21 +66,9 @@ void Enemy::DoMove() {
     }
   }
   DoMove(direction_of_move_);
-//  if (state_.GetStateManager().game_ptr_->GetMap()->
-//      IsMoveAvailable(direction_of_move_, static_cast<int>(position_.x), static_cast<int>(position_.y))) {
-//    DoMove(direction_of_move_);
-//  } else {
-//    destination_point_ = position_;
-//    if (!possible_moves.empty()) {
-//      DoMove();
-//    }
-//  }
 }
 
 void Enemy::DoMove(const Direction& direction) {
-//  if (sound_of_entity_.getStatus() != sf::Sound::Playing) {
-//    sound_of_entity_.play();
-//  }
   direction_of_move_ = direction;
   switch (direction) {
     case Direction::North:
@@ -104,7 +91,6 @@ void Enemy::DoMove(const Direction& direction) {
       break;
   }
 
-//  std::cout << direction_of_move_ << std::endl;
   CheckAndChangeCoordinates();
   state_.GetStateManager().game_ptr_->ChangeEnemyPriority(
       id_, DrawPriority(static_cast<int>(position_.y + 100), this));
@@ -116,7 +102,6 @@ void Enemy::DoMove(const Direction& direction) {
       GetMap()->GetTile(static_cast<int>(position_.x) / 60, static_cast<int>(position_.y) / 60);
   ChangeDirectionTile(tile_after_move);
   previous_direction_ = direction;
-//  sound_of_entity_.resetBuffer();
 }
 
 Enemy::Enemy(const std::string& path, double x, double y,
@@ -148,6 +133,10 @@ Enemy::Enemy(const std::string& path, double x, double y,
       is_alive_(true),
       poison_booster_(state, 50),
       freeze_booster_(state, 0),
+      moving_up_sprite_(),
+      moving_down_sprite_(),
+      moving_right_sprite_(),
+      moving_left_sprite_(),
       previous_direction_() {
   position_ = Point(x, y);
   Init();
@@ -207,7 +196,6 @@ Enemy::Enemy(State& state, std::istream& in) :
 }
 
 void Enemy::Init() {
-//  LoadSprite(source_ + "/sprite.png");
   LoadSpritesForMoving(source_);
   sound_of_entity_.setBuffer(State::GetSoundResourceManager()
                                  .GetOrLoadResource("assets/sounds/enemy.wav"));
