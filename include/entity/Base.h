@@ -9,7 +9,7 @@
 
 class Base : public Entity {
  public:
-  Base(State& state, const DrawPriority& priority, int health, const Tile& top);
+  Base(State& state, const std::string& source, int health, const Tile& top);
 
   Base(State& state, std::istream& in);
 

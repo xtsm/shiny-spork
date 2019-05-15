@@ -50,6 +50,7 @@ class GameState: public State {
   void RemoveInfoMenu();
   //Проверяет свободна ли клетка
   bool IsFree(int, int) const;
+  void SetIsFree(int, int, bool);
   //Создаёт Projectile летящий в цель
   void AddProjectile(const std::shared_ptr<Projectile>& projectile);
   //Удаляет из очереди отрисовки

@@ -1,38 +1,47 @@
 #include "entity/Base.h"
 #include "StateManager.h"
 
-Base::Base(State& state, const DrawPriority& priority, int health, const Tile& top) :
-    Entity(state, priority, health, health),
+Base::Base(State& state, const std::string& source, int health, const Tile& top) :
+    Entity(state, DrawPriority(160 + top.GetY(), this)),
     top_left_(top),
-    source_() {
+    source_(source) {
+  health_ = health;
+  max_health_ = health;
   Init();
+  Load(source);
 }
 
 Base::Base(State& state, std::istream& in) :
     Entity(state, DrawPriority(100, this)),
     top_left_(),
     source_() {
-  in >> health_ >> max_health_;
   top_left_ = Tile(in);
+  ChangePriority(DrawPriority(160 + top_left_.GetY(), this));
   in >> source_;
   Init();
   Load(source_);
+  in >> health_;
 }
 
 void Base::Init() {
-  sprite_.setPosition(480, 0);
+  x_ = top_left_.GetX();
+  y_ = top_left_.GetY();
+  state_.GetStateManager().game_ptr_->SetIsFree(x_ / 60, y_ / 60, false);
+  state_.GetStateManager().game_ptr_->SetIsFree(x_ / 60 + 1, y_ / 60, false);
+  state_.GetStateManager().game_ptr_->SetIsFree(x_ / 60, y_ / 60 + 1, false);
+  state_.GetStateManager().game_ptr_->SetIsFree(x_ / 60 + 1, y_ / 60 + 1, false);
+  sprite_.setPosition(x_, y_);
   icon_sprite_.setPosition(630, 220);
 }
 
 void Base::Save(std::ostream& out) {
-  out << health_ << " " << max_health_ << std::endl;
   top_left_.Save(out);
   out << source_ << std::endl;
+  out << health_ << std::endl;
 }
 
 void Base::Load(const std::string& base_path) {
-  source_ = base_path;
-  std::ifstream fin(base_path);
+  std::ifstream fin(base_path + "/config.txt");
   std::string sprite_path;
   fin >> sprite_path;
   LoadSprite(sprite_path);

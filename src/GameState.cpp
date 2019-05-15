@@ -31,8 +31,7 @@ GameState::GameState(StateManager& states) :
     towers_{},
     projectiles_{},
     enemies_{},
-    base_ptr_(new Base(*this, DrawPriority(100, this),
-                       100'000'000, map_ptr_->GetTile(8, 8))),
+    base_ptr_(),
     creator_of_enemies_(*this),
     is_enemies_produce_(false),
     current_delay_(1000),
@@ -141,7 +140,6 @@ void GameState::Load() {
 
   level_path_ = "assets/levels/" + std::to_string(level_number_);
   background_ptr_->LoadFromFile(level_path_ + "/bg.png");
-  base_ptr_->Load("assets/base/" + std::to_string(level_number_) + "/config.txt");
   draw_queue_.insert(background_ptr_);
   draw_queue_.insert(panel_side_ptr_);
   draw_queue_.insert(info_);
@@ -166,11 +164,19 @@ void GameState::Load() {
       y += 60;
     }
   }
-
   creator_of_enemies_.Load(level_path_);
 
   map_ptr_->LoadMapFromFile(level_path_ + "/map.txt");
 
+  fin.close();
+  fin.open(level_path_ + "/base.txt");
+  std::string base_path;
+  int health(0);
+  int base_x(0), base_y(0);
+  fin >> base_path;
+  fin >> health;
+  fin >> base_x >> base_y;
+  base_ptr_ = std::make_shared<Base>(*this, base_path, health, map_ptr_->GetTile(base_x, base_y));
   draw_queue_.insert(pause_button_ptr_);
   draw_queue_.insert(start_game_button_ptr_);
   draw_queue_.insert(base_ptr_);
@@ -304,6 +310,10 @@ void GameState::RemoveInfoMenu() {
   update_tower_button_ptr_->ChangeTower(nullptr);
   remove_tower_button_ptr_->ChangeTower(nullptr);
   info_->Clear();
+}
+
+void GameState::SetIsFree(int x, int y, bool value) {
+  map_ptr_->SetIsFree(x, y, value);
 }
 
 bool GameState::IsFree(int x, int y) const {
