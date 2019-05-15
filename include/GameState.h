@@ -81,6 +81,8 @@ class GameState: public State {
   void IncrementLevel();
   void SetAmountOfWaves(int amount);
   void SetAmountOfEnemiesPerWave(int amount);
+  int GetAmountOfWaves() const;
+  int GetAmountOfEnemiesPerWave() const;
 
   void GameOver();
 

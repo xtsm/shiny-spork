@@ -1,5 +1,5 @@
 Poisoned Tower
 200
 2
-standard poison 100 72 18 228
-standard poison 110 68 18
+poisoned1 poison 100 72 18 228
+poisoned1 poison 110 68 18

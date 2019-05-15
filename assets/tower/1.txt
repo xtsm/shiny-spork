@@ -1,3 +1,0 @@
-2
-50 30 100 10 assets/tower/tower1.png assets/projectiles/Projectile.png
-25 30 200 20 assets/tower/tower1.png assets/projectiles/Projectile.png

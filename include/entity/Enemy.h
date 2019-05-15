@@ -24,7 +24,7 @@ enum class EnemyType {
 
 class Enemy : public Entity {
  public:
-  Enemy(const std::string& path, double x, double y,
+  Enemy(std::string path, double x, double y,
         const Tile& current_tile, const Direction& direction_of_move,
         State& state);
 
@@ -103,7 +103,7 @@ class EnemyCreator {
 
   void LoadSave(std::istream& in);
 
-  void Save(std::ostream&) {}
+  void Save(std::ostream& out);
 
   void Load(const std::string&);
 
@@ -115,6 +115,9 @@ class EnemyCreator {
   State& state_;
   std::vector<std::pair<std::pair<int, int>, Direction>> spawn_points_;
   std::vector<std::string> enemy_types_;
+  int current_cooldown_;
+  int cooldown_;
+  int delta_;
 
   int GetHealthFromType(const EnemyType& type);
   double GetSpeedByType(const EnemyType& type);

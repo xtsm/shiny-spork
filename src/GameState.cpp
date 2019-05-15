@@ -80,6 +80,8 @@ void GameState::SaveGame() {
   fout << current_delay_ << std::endl;
   fout << delay_ << std::endl;
   fout << is_game_started_ << std::endl;
+  fout << amount_of_enemies_for_wave_ << std::endl;
+  fout << amount_of_waves_for_level_ << std::endl;
 }
 
 void GameState::LoadSave() {
@@ -127,7 +129,9 @@ void GameState::LoadSave() {
     }
   }
 
+  draw_queue_.erase(base_ptr_);
   base_ptr_ = std::make_shared<Base>(*this, fin);
+  draw_queue_.insert(base_ptr_);
   creator_of_enemies_.LoadSave(fin);
 
   fin >> current_delay_;
@@ -136,6 +140,8 @@ void GameState::LoadSave() {
   if (is_game_started_) {
     StartGame();
   }
+  fin >> amount_of_enemies_for_wave_;
+  fin >> amount_of_waves_for_level_;
 }
 
 void GameState::Load() {
@@ -463,6 +469,14 @@ void GameState::SetAmountOfWaves(int amount) {
 
 void GameState::SetAmountOfEnemiesPerWave(int amount) {
   amount_of_enemies_for_wave_ = amount > 0 ? amount : 0;
+}
+
+int GameState::GetAmountOfWaves() const {
+  return amount_of_waves_for_level_;
+}
+
+int GameState::GetAmountOfEnemiesPerWave() const {
+  return amount_of_enemies_for_wave_;
 }
 
 void GameState::StartGame() {

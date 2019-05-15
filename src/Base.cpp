@@ -22,13 +22,10 @@ Base::Base(State& state, std::istream& in) :
   top_left_ = Tile(in);
   ChangePriority(DrawPriority(220 + top_left_.GetY(), this));
   in >> source_;
+  in >> health_;
+  in >> max_health_;
   Init();
   Load(source_);
-  in >> health_;
-  health_bar_.setSize(sf::Vector2f(
-      static_cast<float>(health_) / max_health_ * sprite_.getGlobalBounds().width, 3));
-  damage_bar_.setSize(sf::Vector2f(sprite_.getGlobalBounds().width, 3));
-
 }
 
 void Base::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -59,6 +56,7 @@ void Base::Save(std::ostream& out) {
   top_left_.Save(out);
   out << source_ << std::endl;
   out << health_ << std::endl;
+  out << max_health_ << std::endl;
 }
 
 void Base::Load(const std::string& base_path) {

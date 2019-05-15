@@ -1,3 +1,5 @@
+#include <utility>
+
 #include <fstream>
 #include <cmath>
 #include <sstream>
@@ -72,24 +74,19 @@ void Enemy::DoMove() {
 void Enemy::DoMove(const Direction& direction) {
   direction_of_move_ = direction;
   switch (direction) {
-    case Direction::North:
-      position_.y = std::max(destination_point_.y, position_.y - speed_);
+    case Direction::North:position_.y = std::max(destination_point_.y, position_.y - speed_);
       y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
       break;
-    case Direction::East:
-      position_.x = std::min(destination_point_.x, position_.x + speed_);
+    case Direction::East:position_.x = std::min(destination_point_.x, position_.x + speed_);
       x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
       break;
-    case Direction::West:
-      position_.x = std::max(destination_point_.x, position_.x - speed_);
+    case Direction::West:position_.x = std::max(destination_point_.x, position_.x - speed_);
       x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
       break;
-    case Direction::South:
-      position_.y = std::min(destination_point_.y, position_.y + speed_);
+    case Direction::South:position_.y = std::min(destination_point_.y, position_.y + speed_);
       y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
       break;
-    default:
-      break;
+    default:break;
   }
 
   CheckAndChangeCoordinates();
@@ -105,11 +102,11 @@ void Enemy::DoMove(const Direction& direction) {
   previous_direction_ = direction;
 }
 
-Enemy::Enemy(const std::string& path, double x, double y,
+Enemy::Enemy(std::string path, double x, double y,
              const Tile& current_tile, const Direction& direction,
              State& state)
     : Entity(state, DrawPriority(static_cast<int>(y + 100), this)),
-      source_(path),
+      source_(std::move(path)),
       name_(),
       frames_up_(1),
       frames_down_(1),
@@ -228,7 +225,10 @@ void Enemy::Init() {
 EnemyCreator::EnemyCreator(State& state) :
     state_(state),
     spawn_points_(),
-    enemy_types_() {}
+    enemy_types_(),
+    current_cooldown_(0),
+    cooldown_(0),
+    delta_(0) {}
 
 void EnemyCreator::Load(const std::string& level_path) {
   LoadSpawnPointsAndDirections(level_path + "/spawn_points.txt");
@@ -238,6 +238,9 @@ void EnemyCreator::Load(const std::string& level_path) {
   fin >> amount_of_waves;
   int amount_of_enemies_per_wave;
   fin >> amount_of_enemies_per_wave;
+  fin >> cooldown_;
+  fin >> delta_;
+  current_cooldown_ = cooldown_;
   state_.GetStateManager().game_ptr_->SetAmountOfEnemiesPerWave(amount_of_enemies_per_wave);
   state_.GetStateManager().game_ptr_->SetAmountOfWaves(amount_of_waves);
   int count_of_types;
@@ -261,6 +264,12 @@ void EnemyCreator::LoadSpawnPointsAndDirections(const std::string& path_to_file)
 }
 
 void EnemyCreator::CreateSomeEnemies(int64_t count) {
+  current_cooldown_--;
+  if (current_cooldown_ == 0) {
+    int cnt = state_.GetStateManager().game_ptr_->GetAmountOfEnemiesPerWave();
+    state_.GetStateManager().game_ptr_->SetAmountOfEnemiesPerWave(cnt + delta_);
+    current_cooldown_ = cooldown_;
+  }
   std::mt19937 generator(
       static_cast<unsigned int>(std::chrono::steady_clock::now().
           time_since_epoch().count()));
@@ -287,35 +296,31 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
 
 int EnemyCreator::GetHealthFromType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:
-      return 1000;
-    case EnemyType::High:
-      return 500;
-    case EnemyType::Middle:
-      return 250;
-    case EnemyType::Low:
-      return 100;
-    default:
-      return 0;
+    case EnemyType::VeryHigh:return 1000;
+    case EnemyType::High:return 500;
+    case EnemyType::Middle:return 250;
+    case EnemyType::Low:return 100;
+    default:return 0;
   }
 }
 
 double EnemyCreator::GetSpeedByType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:
-      return 0.2;
-    case EnemyType::High:
-      return 0.4;
-    case EnemyType::Middle:
-      return 0.8;
-    case EnemyType::Low:
-      return 1;
-    default:
-      return 0;
+    case EnemyType::VeryHigh:return 0.2;
+    case EnemyType::High:return 0.4;
+    case EnemyType::Middle:return 0.8;
+    case EnemyType::Low:return 1;
+    default:return 0;
   }
 }
 
-void EnemyCreator::LoadSave(std::istream&) {}
+void EnemyCreator::LoadSave(std::istream& in) {
+  in >> current_cooldown_;
+}
+
+void EnemyCreator::Save(std::ostream& out) {
+  out << current_cooldown_ << std::endl;
+}
 
 void Enemy::DoDamage(const std::shared_ptr<Entity>& other_entity) {
   other_entity->DecreaseHealth(power_);
@@ -456,16 +461,11 @@ void Enemy::Tick() {
 
 std::pair<sf::Sprite, int> Enemy::ChooseSpriteFromDirection() {
   switch (direction_of_move_) {
-    case Direction::North:
-      return std::make_pair(moving_up_sprite_, frames_up_);
-    case Direction::South:
-      return std::make_pair(moving_down_sprite_, frames_down_);
-    case Direction::East:
-      return std::make_pair(moving_right_sprite_, frames_right_);
-    case Direction::West:
-      return std::make_pair(moving_left_sprite_, frames_left_);
-    default:
-      return std::make_pair(sprite_, frames_);
+    case Direction::North:return std::make_pair(moving_up_sprite_, frames_up_);
+    case Direction::South:return std::make_pair(moving_down_sprite_, frames_down_);
+    case Direction::East:return std::make_pair(moving_right_sprite_, frames_right_);
+    case Direction::West:return std::make_pair(moving_left_sprite_, frames_left_);
+    default:return std::make_pair(sprite_, frames_);
   }
 }
 
