@@ -237,7 +237,7 @@ void GameState::Tick() {
   }
 
   if (amount_of_waves_for_level_ == 0) {
-    if (IsIncrementLevelIsAvailable()) {
+    if (IsIncrementLevelIsAvailable() && enemies_.empty()) {
       states_.change_level_ptr_->ChangeBackground(render_.getTexture());
       states_.ChangeState(states_.change_level_ptr_);
     } else {

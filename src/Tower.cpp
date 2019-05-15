@@ -67,6 +67,8 @@ Tower::Tower(State& state, std::istream& in) :
 }
 
 void Tower::Init() {
+  sound_of_entity_.setBuffer(State::GetSoundResourceManager()
+                                 .GetOrLoadResource("assets/sounds/projectile.wav"));
   icon_sprite_.move(660, 200);
   sprite_.move(x_ + 5, y_ - 40);
   ChangePriority(DrawPriority(100 + y_ - 40 + sprite_.getTextureRect().height, this));
@@ -143,6 +145,9 @@ void Tower::Shot() {
       state_, aim_, x_ + 30, y_ + 30, damage_,
       "assets/projectiles/" + projectile_path_));
   state_.GetStateManager().game_ptr_->AddProjectile(projectile);
+  if (sound_of_entity_.getStatus() != sf::Sound::Playing) {
+    sound_of_entity_.play();
+  }
 }
 
 bool Tower::Updatable() const {

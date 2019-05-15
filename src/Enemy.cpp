@@ -79,6 +79,9 @@ void Enemy::DoMove() {
 }
 
 void Enemy::DoMove(const Direction& direction) {
+//  if (sound_of_entity_.getStatus() != sf::Sound::Playing) {
+//    sound_of_entity_.play();
+//  }
   direction_of_move_ = direction;
   switch (direction) {
     case Direction::North:
@@ -113,6 +116,7 @@ void Enemy::DoMove(const Direction& direction) {
       GetMap()->GetTile(static_cast<int>(position_.x) / 60, static_cast<int>(position_.y) / 60);
   ChangeDirectionTile(tile_after_move);
   previous_direction_ = direction;
+//  sound_of_entity_.resetBuffer();
 }
 
 Enemy::Enemy(const std::string& path, double x, double y,
@@ -205,8 +209,8 @@ Enemy::Enemy(State& state, std::istream& in) :
 void Enemy::Init() {
 //  LoadSprite(source_ + "/sprite.png");
   LoadSpritesForMoving(source_);
-//  sound_of_entity_.setBuffer(State::GetSoundResourceManager()
-//                                 .GetOrLoadResource("assets/sounds/enemy.ogg"));
+  sound_of_entity_.setBuffer(State::GetSoundResourceManager()
+                                 .GetOrLoadResource("assets/sounds/enemy.wav"));
   std::ifstream reader(source_ + "/config.txt");
   getline(reader, name_);
   reader >> frames_up_ >> frames_down_ >> frames_left_ >> frames_right_;
