@@ -84,6 +84,8 @@ class GameState: public State {
 
   void GameOver();
 
+  void StartGame();
+
   int64_t GetTime() const;
 
   std::shared_ptr<Enemy> GetEnemyByID(int64_t id);
@@ -119,6 +121,7 @@ class GameState: public State {
   int64_t timer_;
   bool is_level_end_;
   bool is_game_end_;
+  bool is_game_started_;
 };
 
 #endif  // INCLUDE_GAMESTATE_H_

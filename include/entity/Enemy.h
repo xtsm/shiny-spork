@@ -59,6 +59,10 @@ class Enemy : public Entity {
  private:
   std::string source_;
   std::string name_;
+  int frames_up_;
+  int frames_down_;
+  int frames_left_;
+  int frames_right_;
   int frames_;
   sf::IntRect current_sprite_rect_;
   int max_delay_for_sprite_change_;
@@ -78,11 +82,18 @@ class Enemy : public Entity {
   bool is_alive_;
   Booster poison_booster_;
   Booster freeze_booster_;
+  sf::Sprite moving_up_sprite_;
+  sf::Sprite moving_down_sprite_;
+  sf::Sprite moving_right_sprite_;
+  sf::Sprite moving_left_sprite_;
+  Direction previous_direction_;
   void DoMove(const Direction& direction);
   void ChangeDirectionTile(const Tile& new_direction_tile);
   std::vector<std::pair<Point, Direction>> GetAvailableMoves(int x, int y) const;
   void ChangeCurrentSpriteRect();
   void CheckAndChangeCoordinates();
+  std::pair<sf::Sprite, int> ChooseSpriteFromDirection();
+  void LoadSpritesForMoving(const std::string& file_name);
 };
 
 class EnemyCreator {

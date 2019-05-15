@@ -33,7 +33,7 @@ bool Entity::PointCheck(int x, int y) const {
   return sprite_.getGlobalBounds().contains(x, y);
 }
 
-void Entity::LoadSprite(const std::string& file_name) {
+void Entity:: LoadSprite(const std::string& file_name) {
   sprite_.setTexture(State::GetTextureResourceManager().GetOrLoadResource(file_name), true);
   icon_sprite_.setTexture(State::GetTextureResourceManager().GetOrLoadResource(file_name));
 }

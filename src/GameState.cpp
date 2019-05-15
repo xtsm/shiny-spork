@@ -44,7 +44,8 @@ GameState::GameState(StateManager& states) :
     amount_of_enemies_for_wave_(1),
     timer_(0),
     is_level_end_(false),
-    is_game_end_(false) {
+    is_game_end_(false),
+    is_game_started_(false) {
   panel_side_ptr_->LoadFromFile("assets/ui/panel_side.png");
   panel_side_ptr_->SetPosition(600, 0);
 }
@@ -192,10 +193,12 @@ void GameState::Tick() {
 //    draw_queue_.erase(enemy.second);
   }
 
-  --current_delay_;
-  if (current_delay_ == 0) {
-    is_enemies_produce_ = true;
-    current_delay_ = delay_;
+  if (is_game_started_) {
+    --current_delay_;
+    if (current_delay_ == 0) {
+      is_enemies_produce_ = true;
+      current_delay_ = delay_;
+    }
   }
 
   if (is_enemies_produce_ && amount_of_waves_for_level_ > 0) {
@@ -453,4 +456,10 @@ void GameState::SetAmountOfWaves(int amount) {
 
 void GameState::SetAmountOfEnemiesPerWave(int amount) {
   amount_of_enemies_for_wave_ = amount > 0 ? amount : 0;
+}
+
+void GameState::StartGame() {
+  is_game_started_ = true;
+  SetProducing(true);
+  RemoveStartButton();
 }

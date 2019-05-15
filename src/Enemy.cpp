@@ -79,20 +79,26 @@ void Enemy::DoMove() {
 }
 
 void Enemy::DoMove(const Direction& direction) {
+  direction_of_move_ = direction;
   switch (direction) {
-    case Direction::North:position_.y = std::max(destination_point_.y, position_.y - speed_);
+    case Direction::North:
+      position_.y = std::max(destination_point_.y, position_.y - speed_);
       y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
       break;
-    case Direction::East:position_.x = std::min(destination_point_.x, position_.x + speed_);
+    case Direction::East:
+      position_.x = std::min(destination_point_.x, position_.x + speed_);
       x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
       break;
-    case Direction::West:position_.x = std::max(destination_point_.x, position_.x - speed_);
+    case Direction::West:
+      position_.x = std::max(destination_point_.x, position_.x - speed_);
       x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
       break;
-    case Direction::South:position_.y = std::min(destination_point_.y, position_.y + speed_);
+    case Direction::South:
+      position_.y = std::min(destination_point_.y, position_.y + speed_);
       y_ = static_cast<int>(position_.y - sprite_.getGlobalBounds().height);
       break;
-    default:break;
+    default:
+      break;
   }
 
 //  std::cout << direction_of_move_ << std::endl;
@@ -106,6 +112,7 @@ void Enemy::DoMove(const Direction& direction) {
   Tile tile_after_move = state_.GetStateManager().game_ptr_->
       GetMap()->GetTile(static_cast<int>(position_.x) / 60, static_cast<int>(position_.y) / 60);
   ChangeDirectionTile(tile_after_move);
+  previous_direction_ = direction;
 }
 
 Enemy::Enemy(const std::string& path, double x, double y,
@@ -114,7 +121,11 @@ Enemy::Enemy(const std::string& path, double x, double y,
     : Entity(state, DrawPriority(static_cast<int>(y + 100), this)),
       source_(path),
       name_(),
-      frames_(0),
+      frames_up_(1),
+      frames_down_(1),
+      frames_left_(1),
+      frames_right_(1),
+      frames_(frames_right_),
       current_sprite_rect_(),
       max_delay_for_sprite_change_(10),
       delay_for_sprite_change_(max_delay_for_sprite_change_),
@@ -132,7 +143,8 @@ Enemy::Enemy(const std::string& path, double x, double y,
       position_(),
       is_alive_(true),
       poison_booster_(state, 50),
-      freeze_booster_(state, 0) {
+      freeze_booster_(state, 0),
+      previous_direction_() {
   position_ = Point(x, y);
   Init();
 }
@@ -141,7 +153,11 @@ Enemy::Enemy(State& state, std::istream& in) :
     Entity(state, DrawPriority(static_cast<int>(100), this)),
     source_(),
     name_(),
-    frames_(0),
+    frames_up_(1),
+    frames_down_(1),
+    frames_left_(1),
+    frames_right_(1),
+    frames_(frames_right_),
     current_sprite_rect_(),
     max_delay_for_sprite_change_(10),
     delay_for_sprite_change_(max_delay_for_sprite_change_),
@@ -159,7 +175,12 @@ Enemy::Enemy(State& state, std::istream& in) :
     position_(),
     is_alive_(true),
     poison_booster_(state, 50),
-    freeze_booster_(state, 0) {
+    freeze_booster_(state, 0),
+    moving_up_sprite_(),
+    moving_down_sprite_(),
+    moving_right_sprite_(),
+    moving_left_sprite_(),
+    previous_direction_() {
   in >> id_;
   in >> source_;
   in >> position_;
@@ -171,7 +192,6 @@ Enemy::Enemy(State& state, std::istream& in) :
   in >> width >> height;
   current_sprite_rect_ = sf::IntRect(left, top, width, height);
   sprite_.setTextureRect(current_sprite_rect_);
-
   in >> delay_for_sprite_change_;
   current_tile_ = Tile(in);
   int move_id(0);
@@ -183,16 +203,20 @@ Enemy::Enemy(State& state, std::istream& in) :
 }
 
 void Enemy::Init() {
-  LoadSprite(source_ + "/sprite.png");
+//  LoadSprite(source_ + "/sprite.png");
+  LoadSpritesForMoving(source_);
+//  sound_of_entity_.setBuffer(State::GetSoundResourceManager()
+//                                 .GetOrLoadResource("assets/sounds/enemy.ogg"));
   std::ifstream reader(source_ + "/config.txt");
   getline(reader, name_);
-  reader >> frames_;
+  reader >> frames_up_ >> frames_down_ >> frames_left_ >> frames_right_;
+  frames_ = frames_up_;
   reader >> drop_;
   reader >> health_ >> speed_ >> power_;
   default_speed_ = speed_;
   icon_sprite_.setPosition(650, 230);
   sprite_.setTextureRect(sf::IntRect(0, 0, sprite_.getTexture()->getSize().x,
-                                     sprite_.getTexture()->getSize().y / frames_));
+                                     sprite_.getTexture()->getSize().y / frames_up_));
 
   destination_point_ = position_;
   x_ = static_cast<int>(position_.x - sprite_.getGlobalBounds().width);
@@ -269,21 +293,31 @@ void EnemyCreator::CreateSomeEnemies(int64_t count) {
 
 int EnemyCreator::GetHealthFromType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:return 1000;
-    case EnemyType::High:return 500;
-    case EnemyType::Middle:return 250;
-    case EnemyType::Low:return 100;
-    default:return 0;
+    case EnemyType::VeryHigh:
+      return 1000;
+    case EnemyType::High:
+      return 500;
+    case EnemyType::Middle:
+      return 250;
+    case EnemyType::Low:
+      return 100;
+    default:
+      return 0;
   }
 }
 
 double EnemyCreator::GetSpeedByType(const EnemyType& type) {
   switch (type) {
-    case EnemyType::VeryHigh:return 0.2;
-    case EnemyType::High:return 0.4;
-    case EnemyType::Middle:return 0.8;
-    case EnemyType::Low:return 1;
-    default:return 0;
+    case EnemyType::VeryHigh:
+      return 0.2;
+    case EnemyType::High:
+      return 0.4;
+    case EnemyType::Middle:
+      return 0.8;
+    case EnemyType::Low:
+      return 1;
+    default:
+      return 0;
   }
 }
 
@@ -322,6 +356,23 @@ void Enemy::ChangeDirectionTile(const Tile& new_tile) {
 }
 
 void Enemy::ChangeCurrentSpriteRect() {
+  if (previous_direction_ != direction_of_move_) {
+    auto sprite_and_amount_of_frames = ChooseSpriteFromDirection();
+    auto position_of_sprite = sprite_.getPosition();
+    sprite_ = sprite_and_amount_of_frames.first;
+    sprite_.setPosition(position_of_sprite);
+    frames_ = sprite_and_amount_of_frames.second;
+    current_sprite_rect_.left = 0;
+    current_sprite_rect_.top = 0;
+    int width = sprite_.getTexture()->getSize().x;
+    int height = sprite_.getTexture()->getSize().y / frames_;
+
+    current_sprite_rect_ = sf::IntRect(current_sprite_rect_.left,
+                                       (current_sprite_rect_.top + height) % (height * frames_), width, height);
+    sprite_.setTextureRect(current_sprite_rect_);
+    icon_sprite_.setTextureRect(current_sprite_rect_);
+    delay_for_sprite_change_ = max_delay_for_sprite_change_;
+  }
   if (delay_for_sprite_change_ == 0) {
     int width = sprite_.getTexture()->getSize().x;
     int height = sprite_.getTexture()->getSize().y / frames_;
@@ -407,6 +458,46 @@ void Enemy::Tick() {
     speed_ = default_speed_;
   }
 
+}
+
+std::pair<sf::Sprite, int> Enemy::ChooseSpriteFromDirection() {
+  switch (direction_of_move_) {
+    case Direction::North:
+      return std::make_pair(moving_up_sprite_, frames_up_);
+    case Direction::South:
+      return std::make_pair(moving_down_sprite_, frames_down_);
+    case Direction::East:
+      return std::make_pair(moving_right_sprite_, frames_right_);
+    case Direction::West:
+      return std::make_pair(moving_left_sprite_, frames_left_);
+    default:
+      return std::make_pair(sprite_, frames_);
+  }
+}
+
+void Enemy::LoadSpritesForMoving(const std::string& file_name) {
+  sprite_.setTexture(
+      State::GetTextureResourceManager()
+          .GetOrLoadResource(file_name + "/sprite_up.png"), true);
+  icon_sprite_.setTexture(
+      State::GetTextureResourceManager()
+          .GetOrLoadResource(file_name + "/sprite_right.png"));
+
+  moving_up_sprite_.setTexture(
+      State::GetTextureResourceManager()
+          .GetOrLoadResource(file_name + "/sprite_up.png"), true);
+
+  moving_down_sprite_.setTexture(
+      State::GetTextureResourceManager()
+          .GetOrLoadResource(file_name + "/sprite_down.png"), true);
+
+  moving_left_sprite_.setTexture(
+      State::GetTextureResourceManager()
+          .GetOrLoadResource(file_name + "/sprite_left.png"), true);
+
+  moving_right_sprite_.setTexture(
+      State::GetTextureResourceManager()
+          .GetOrLoadResource(file_name + "/sprite_right.png"), true);
 }
 
 
