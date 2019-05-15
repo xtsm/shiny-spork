@@ -79,6 +79,7 @@ void GameState::SaveGame() {
 
   fout << current_delay_ << std::endl;
   fout << delay_ << std::endl;
+  fout << is_game_started_ << std::endl;
 }
 
 void GameState::LoadSave() {
@@ -131,6 +132,10 @@ void GameState::LoadSave() {
 
   fin >> current_delay_;
   fin >> delay_;
+  fin >> is_game_started_;
+  if (is_game_started_) {
+    StartGame();
+  }
 }
 
 void GameState::Load() {
@@ -139,6 +144,8 @@ void GameState::Load() {
   enemies_.clear();
   projectiles_.clear();
   RemoveInfoMenu();
+  is_game_started_ = false;
+  SetProducing(false);
 
   level_path_ = "assets/levels/" + std::to_string(level_number_);
   background_ptr_->LoadFromFile(level_path_ + "/bg.png");
@@ -232,7 +239,7 @@ void GameState::Tick() {
     for (const auto& info_str : base_ptr_->GetInfo()) {
       std::cerr << info_str.getString().toAnsiString() << std::endl;
     }
-    states_.Close();
+    states_.ChangeState(states_.main_menu_ptr_);
     return;
   }
 
@@ -427,7 +434,7 @@ void GameState::IncrementLevel() {
 }
 
 void GameState::GameOver() {
-  states_.Close();
+  states_.ChangeState(states_.main_menu_ptr_);
 }
 
 int64_t GameState::GetTime() const {

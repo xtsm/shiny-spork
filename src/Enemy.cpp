@@ -249,6 +249,7 @@ void EnemyCreator::Load(const std::string& level_path) {
 }
 
 void EnemyCreator::LoadSpawnPointsAndDirections(const std::string& path_to_file) {
+  spawn_points_.clear();
   std::ifstream reader(path_to_file);
   int x, y;
   Direction direction;
