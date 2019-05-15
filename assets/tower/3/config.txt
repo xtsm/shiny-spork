@@ -1,5 +1,5 @@
 Cumshot Tower
 100
 2
-standard standard 50 128 40 150
-standard standard 75 120 40
+boom_tower standard 75 128 40 150
+boom_tower standard 85 120 40

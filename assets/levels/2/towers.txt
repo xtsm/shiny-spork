@@ -1,4 +1,4 @@
-100000
+250
 6
 assets/tower/1
 assets/tower/2
