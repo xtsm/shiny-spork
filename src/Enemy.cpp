@@ -45,7 +45,8 @@ void Enemy::DoMove() {
       GetAvailableMoves(static_cast<int>(position_.x), static_cast<int>(position_.y));
   if (position_ == destination_point_) {
     if (possible_moves.empty()) {
-      if (x_ >= 540 && y_ <= 180) {
+      if (state_.GetStateManager().game_ptr_->GetMap()->
+          GetTile(static_cast<int>(position_.x / 60), static_cast<int>(y_ / 60)).GetNumber() == 1) {
         std::shared_ptr<Base> base_ptr = state_.GetStateManager().game_ptr_->GetBase();
         DoDamage(base_ptr);
         return;

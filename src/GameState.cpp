@@ -38,7 +38,7 @@ GameState::GameState(StateManager& states) :
     delay_(1000),
     is_info_displayed_(false),
     level_path_(),
-    level_number_(1),
+    level_number_(2),
     max_level_number_(2),
     amount_of_waves_for_level_(2),
     amount_of_enemies_for_wave_(1),
@@ -137,6 +137,7 @@ void GameState::Load() {
   towers_.clear();
   enemies_.clear();
   projectiles_.clear();
+  RemoveInfoMenu();
 
   level_path_ = "assets/levels/" + std::to_string(level_number_);
   background_ptr_->LoadFromFile(level_path_ + "/bg.png");
