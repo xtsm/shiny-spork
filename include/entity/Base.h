@@ -13,6 +13,8 @@ class Base : public Entity {
 
   Base(State& state, std::istream& in);
 
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
   void Init();
 
   void Save(std::ostream& out) override;
@@ -30,6 +32,9 @@ class Base : public Entity {
  private:
   Tile top_left_;
   std::string source_;
+  sf::RectangleShape health_bar_;
+  sf::RectangleShape damage_bar_;
+
 };
 
 #endif //SHINY_SPORK_BASE_H
