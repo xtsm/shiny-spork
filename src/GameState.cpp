@@ -38,8 +38,8 @@ GameState::GameState(StateManager& states) :
     delay_(1000),
     is_info_displayed_(false),
     level_path_(),
-    level_number_(2),
-    max_level_number_(2),
+    level_number_(1),
+    max_level_number_(3),
     amount_of_waves_for_level_(2),
     amount_of_enemies_for_wave_(1),
     timer_(0),
@@ -201,7 +201,6 @@ void GameState::Tick() {
       current_delay_ = delay_;
     }
   }
-
   if (is_enemies_produce_ && amount_of_waves_for_level_ > 0) {
     CreateSomeEnemies(amount_of_enemies_for_wave_);
     is_enemies_produce_ = false;
@@ -237,8 +236,8 @@ void GameState::Tick() {
     return;
   }
 
-  if (amount_of_waves_for_level_ == 0) {
-    if (IsIncrementLevelIsAvailable() && enemies_.empty()) {
+  if (amount_of_waves_for_level_ == 0 && enemies_.empty()) {
+    if (IsIncrementLevelIsAvailable()) {
       states_.change_level_ptr_->ChangeBackground(render_.getTexture());
       states_.ChangeState(states_.change_level_ptr_);
     } else {
