@@ -76,8 +76,7 @@ void Tower::Init() {
   range_circle_.setOutlineThickness(1);
   range_circle_.setOutlineColor(sf::Color::Black);
   range_circle_.setFillColor(sf::Color(255, 255, 255, 64));
-  InitText(text_, x_ + 10, y_ - 40);
-
+  InitText(text_, x_ + 10, y_ - 40, 12, sf::Color(255, 165, 0));
   getline(fin_, tower_name_);
   fin_ >> tower_cost_;
   fin_ >> max_level_;
