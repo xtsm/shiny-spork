@@ -1,5 +1,8 @@
 Longshot Tower
 75
-2
-longshot1 standard 200 16 1 80
-longshot1 standard 200 16 2
+5
+longshot1 standard 140 18 2 90
+longshot1 standard 155 16 2 105
+longshot1 standard 170 14 3 120
+longshot1 standard 185 12 3 135
+longshot1 standard 200 10 4

@@ -1,5 +1,8 @@
 Splash Tower
 150
-2
-splash splash 100 256 20 200
-splash splash 105 240 20
+5
+splash splash 100 256 32 185
+splash splash 105 240 36 220
+splash splash 110 224 40 255
+splash splash 115 208 44 290
+splash splash 120 192 48 
