@@ -1,8 +1,8 @@
 Archery Tower
 50
 5
-standard standard 100 64 10 60
-standard standard 110 60 12 70
-standard standard 120 55 14 80
-standard standard 130 50 16 90
-standard standard 140 45 18 
+standard1 standard 100 64 10 60
+standard2 standard 110 60 12 70
+standard3 standard 120 55 14 80
+standard4 standard 130 50 16 90
+standard5 standard 140 45 18 

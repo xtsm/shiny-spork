@@ -39,7 +39,7 @@ GameState::GameState(StateManager& states) :
     is_info_displayed_(false),
     level_path_(),
     level_number_(1),
-    max_level_number_(3),
+    max_level_number_(4),
     amount_of_waves_for_level_(2),
     amount_of_enemies_for_wave_(1),
     timer_(0),
@@ -440,6 +440,7 @@ void GameState::IncrementLevel() {
 }
 
 void GameState::GameOver() {
+  level_number_ = 1;
   states_.ChangeState(states_.main_menu_ptr_);
 }
 

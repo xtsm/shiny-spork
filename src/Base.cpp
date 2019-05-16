@@ -2,7 +2,7 @@
 #include "StateManager.h"
 
 Base::Base(State& state, const std::string& source, int health, const Tile& top) :
-    Entity(state, DrawPriority(220 + top.GetY(), this)),
+    Entity(state, DrawPriority(160 + top.GetY(), this)),
     top_left_(top),
     source_(source),
     health_bar_(),
@@ -20,7 +20,7 @@ Base::Base(State& state, std::istream& in) :
     health_bar_(),
     damage_bar_() {
   top_left_ = Tile(in);
-  ChangePriority(DrawPriority(220 + top_left_.GetY(), this));
+  ChangePriority(DrawPriority(160 + top_left_.GetY(), this));
   in >> source_;
   in >> health_;
   in >> max_health_;
