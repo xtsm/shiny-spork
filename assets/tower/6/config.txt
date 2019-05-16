@@ -1,8 +1,8 @@
 Freeze Tower
 75
 5
-freeze freeze 120 58 4 100 
-freeze freeze 140 54 8 150 
-freeze freeze 160 50 12 200
-freeze freeze 180 46 16 250
-freeze freeze 200 42 20
+freeze1 freeze 120 58 4 100 
+freeze2 freeze 140 54 8 150 
+freeze3 freeze 160 50 12 200
+freeze4 freeze 180 46 16 250
+freeze5 freeze 200 42 20

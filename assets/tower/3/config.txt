@@ -1,8 +1,8 @@
 Boom Tower
 150
 5
-boom_tower standard 75 128 40 120
-boom_tower standard 80 120 48 140
-boom_tower standard 85 112 56 160
-boom_tower standard 90 104 64 180
-boom_tower standard 95 96 72
+boom_tower1 standard 75 128 40 170
+boom_tower2 standard 80 120 48 190
+boom_tower3 standard 85 112 56 210
+boom_tower4 standard 90 104 64 230
+boom_tower5 standard 95 96 72
