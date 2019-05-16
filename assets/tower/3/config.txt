@@ -1,5 +1,5 @@
 Boom Tower
-100
+150
 5
 boom_tower standard 75 128 40 120
 boom_tower standard 80 120 48 140
