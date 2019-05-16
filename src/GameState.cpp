@@ -440,6 +440,7 @@ void GameState::IncrementLevel() {
 }
 
 void GameState::GameOver() {
+  level_number_ = 1;
   states_.ChangeState(states_.main_menu_ptr_);
 }
 
