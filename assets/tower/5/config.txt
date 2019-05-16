@@ -1,0 +1,8 @@
+Poisoned Tower
+200
+5
+poisoned1 poison 100 72 16 250
+poisoned1 poison 110 68 20 300
+poisoned1 poison 120 64 24 350
+poisoned1 poison 130 60 28 400
+poisoned1 poison 140 56 32

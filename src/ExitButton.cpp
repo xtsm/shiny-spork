@@ -1,12 +1,13 @@
 #include "ExitButton.h"
 #include "State.h"
+#include "StateManager.h"
 #include <iostream>
 
 ExitButton::ExitButton(State& state, int x, int y) :
-    Button(state, x, y, "Exit") {
+    Button(state, 5, x, y, "Exit") {
 }
 
-void ExitButton::Click() {
+void ExitButton::Click(int, int) {
   std::cerr << "Exit button clicked\n";
-  state_.Close();
+  state_.GetStateManager().Close();
 }

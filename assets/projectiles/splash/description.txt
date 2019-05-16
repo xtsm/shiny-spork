@@ -1,0 +1,4 @@
+12
+2
+splash 5
+range 30

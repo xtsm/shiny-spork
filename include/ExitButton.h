@@ -7,7 +7,7 @@ class ExitButton : public Button {
  public:
   explicit ExitButton(State&, int, int);
 
-  void Click() override;
+  void Click(int, int) override;
 };
 
 #endif  // INCLUDE_EXITBUTTON_H_

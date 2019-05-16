@@ -7,7 +7,7 @@ class NewGameButton : public Button {
  public:
   explicit NewGameButton(State&, int, int);
 
-  void Click() override;
+  void Click(int, int) override;
 };
 
 #endif  // INCLUDE_NEWGAMEBUTTON_H_

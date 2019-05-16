@@ -1,5 +1,5 @@
-#ifndef SHINY_SPORK_MAINMENUBUTTON_H
-#define SHINY_SPORK_MAINMENUBUTTON_H
+#ifndef INCLUDE_MAINMENUBUTTON_H_
+#define INCLUDE_MAINMENUBUTTON_H_
 
 #include <memory>
 #include "Button.h"
@@ -8,7 +8,7 @@ class MainMenuButton : public Button {
  public:
   explicit MainMenuButton(State&, int, int);
 
-  void Click() override;
+  void Click(int, int) override;
 };
 
-#endif //SHINY_SPORK_MAINMENUBUTTON_H
+#endif  // INCLUDE_MAINMENUBUTTON_H_

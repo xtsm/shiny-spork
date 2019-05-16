@@ -3,10 +3,10 @@
 #include "StateManager.h"
 
 MainMenuButton::MainMenuButton(State& state, int x, int y) :
-    Button(state, x, y, "Main Menu") {
+    Button(state, 5, x, y, "Main Menu") {
 }
 
-void MainMenuButton::Click() {
+void MainMenuButton::Click(int, int) {
   StateManager& states = state_.GetStateManager();
-  states.ChangeState(states.main_menu);
+  states.ChangeState(states.main_menu_ptr_);
 }
