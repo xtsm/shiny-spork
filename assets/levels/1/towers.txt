@@ -1,5 +1,4 @@
-250
-3
+100
+2
 assets/tower/1
 assets/tower/2
-assets/tower/3
