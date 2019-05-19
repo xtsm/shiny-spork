@@ -26,5 +26,8 @@ void PauseState::UpdateBackground(const sf::Texture& texture) {
   background_ptr_->LoadFromTexture(texture);
 }
 
-void PauseState::ProcessEvent(sf::Event&) {
+void PauseState::ProcessEvent(sf::Event& evt) {
+  if (evt.type == sf::Event::KeyReleased && evt.key.code == sf::Keyboard::Escape) {
+    states_.ChangeState(states_.game_ptr_);
+  }
 }
