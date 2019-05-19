@@ -15,6 +15,8 @@ class State : public sf::Drawable {
   virtual void Tick() = 0;
   void draw(sf::RenderTarget&, sf::RenderStates) const override;
 
+  static sf::Vector2u ConvertCoordsR2V(sf::Vector2u v, sf::Vector2u sz);
+
   //  Для обработки глобальных событий (т.е. не привязанных к курсору мыши)
   virtual void ProcessEvent(sf::Event& event) = 0;
 

@@ -14,6 +14,13 @@ State::State(StateManager& states) :
   render_.create(800, 600);
 }
 
+sf::Vector2u State::ConvertCoordsR2V(sf::Vector2u v, sf::Vector2u sz) {
+  double factor = std::min(sz.x / 800.0, sz.y / 600.0);
+  return sf::Vector2u(
+      (v.x - sz.x / 2.0) / factor + 400,
+      (v.y - sz.y / 2.0) / factor + 300);
+}
+
 void State::CleanMouseFlags() {
   if (clicked_ != nullptr) {
     clicked_->SetClicked(false);
@@ -38,7 +45,10 @@ void State::Render() {
 void State::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   sf::Sprite sprite(render_.getTexture());
   sf::Vector2u size = target.getSize();
-  sprite.setScale(size.x / 800.0, size.y / 600.0);
+  double factor = std::min(size.x / 800.0, size.y / 600.0);
+  sprite.setScale(factor, factor);
+  sprite.setOrigin(400, 300);
+  sprite.setPosition(size.x / 2, size.y / 2);
   target.draw(sprite, states);
 }
 
@@ -53,9 +63,7 @@ void State::ProcessEvents(sf::RenderWindow& window) {
         }
         for (const std::shared_ptr<Widget>& widget : draw_queue_) {
           sf::Vector2u click_point(event.mouseButton.x, event.mouseButton.y);
-          sf::Vector2u size = window.getSize();
-          click_point.x /= size.x / 800.0;
-          click_point.y /= size.y / 600.0;
+          click_point = ConvertCoordsR2V(click_point, window.getSize());
           if (widget->PointCheck(click_point.x, click_point.y)) {
             clicked_ = widget;
             clicked_->SetClicked(true);
@@ -69,9 +77,7 @@ void State::ProcessEvents(sf::RenderWindow& window) {
         if (clicked_ != nullptr) {
           clicked_->SetClicked(false);
           sf::Vector2u click_point(event.mouseButton.x, event.mouseButton.y);
-          sf::Vector2u size = window.getSize();
-          click_point.x /= size.x / 800.0;
-          click_point.y /= size.y / 600.0;
+          click_point = ConvertCoordsR2V(click_point, window.getSize());
           if (clicked_->PointCheck(click_point.x, click_point.y)) {
             clicked_->Click(click_point.x, click_point.y);
             if (states_.active_state_ptr_.get() == this) {
@@ -85,9 +91,7 @@ void State::ProcessEvents(sf::RenderWindow& window) {
 
       case sf::Event::MouseMoved: {
         sf::Vector2u hover_point(event.mouseMove.x, event.mouseMove.y);
-        sf::Vector2u size = window.getSize();
-        hover_point.x /= size.x / 800.0;
-        hover_point.y /= size.y / 600.0;
+        hover_point = ConvertCoordsR2V(hover_point, window.getSize());
         std::shared_ptr<Widget> new_hovered = nullptr;
         for (const std::shared_ptr<Widget>& widget : draw_queue_) {
           if (widget->PointCheck(hover_point.x, hover_point.y)) {
