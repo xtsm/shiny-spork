@@ -269,7 +269,11 @@ void GameState::ProcessEvent(sf::Event& event) {
     case sf::Event::KeyReleased: {
       switch (event.key.code) {
         case sf::Keyboard::Escape: {
-          Pause();
+          if (build_menu_grid_ptr_->GetLoaded()) {
+            RemoveBuildMenu();
+          } else {
+            Pause();
+          }
           break;
         }
         default:

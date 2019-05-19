@@ -64,3 +64,6 @@ bool BuildMenuGrid::PointCheck(int x, int y) const {
 void BuildMenuGrid::SetLoaded(bool value) {
   loaded_ = value;
 }
+bool BuildMenuGrid::GetLoaded() {
+  return loaded_;
+}
