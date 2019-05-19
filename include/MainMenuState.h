@@ -19,7 +19,7 @@ class MainMenuState: public State {
   std::shared_ptr<LoadGameButton> load_game_button_ptr_;
   std::shared_ptr<SettingsButton> settings_button_ptr_;
   std::shared_ptr<ExitButton> exit_button_ptr_;
-  std::shared_ptr<Background> background_ptr_;
+  std::shared_ptr<Background> background_ptr_, emblem_ptr_;
 };
 
 #endif  // INCLUDE_MAINMENUSTATE_H_
