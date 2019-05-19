@@ -58,7 +58,7 @@ void BuildMenuGrid::MouseMove(int x, int y) {
 }
 
 bool BuildMenuGrid::PointCheck(int x, int y) const {
-  return loaded_ && x < 600 && y < 600;
+  return loaded_ && x < 600 && y < 600 && x >= 0 && y >= 0;
 }
 
 void BuildMenuGrid::SetLoaded(bool value) {
